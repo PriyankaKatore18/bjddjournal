@@ -47,10 +47,11 @@ class IssueController extends Controller
             'downloads_count' => 'nullable|integer',
             'published_paper_url' => 'nullable|url|max:255',
             'published_paper_pdf' => 'nullable|file|mimes:pdf|max:10240',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'paper_certificate' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120', // Added
         ]);
 
-        $data = $request->all();
+        $data = $request->except(['published_paper_pdf', 'paper_certificate', 'cover_image']);
 
         // Handle PDF upload
         if ($request->hasFile('published_paper_pdf')) {
@@ -68,6 +69,10 @@ class IssueController extends Controller
             $filename = 'certificate_' . time() . '_' . $originalName;
             $filePath = $file->storeAs('certificates', $filename, 'public');
             $data['paper_certificate'] = $filePath;
+        }
+
+        if ($request->hasFile('cover_image')) {
+            $data['cover_image'] = $request->file('cover_image')->store('issue-covers', 'public');
         }
 
         Issue::create($data);
@@ -104,10 +109,11 @@ class IssueController extends Controller
             'downloads_count' => 'nullable|integer',
             'published_paper_url' => 'nullable|url|max:255',
             'published_paper_pdf' => 'nullable|file|mimes:pdf|max:10240',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'paper_certificate' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120', // Added
         ]);
 
-        $data = $request->except(['published_paper_pdf', 'paper_certificate']);
+        $data = $request->except(['published_paper_pdf', 'paper_certificate', 'cover_image']);
 
         // Handle PDF upload
         if ($request->hasFile('published_paper_pdf')) {
@@ -135,6 +141,11 @@ class IssueController extends Controller
             $filename = 'certificate_' . time() . '_' . $originalName;
             $filePath = $file->storeAs('certificates', $filename, 'public');
             $data['paper_certificate'] = $filePath;
+        }
+
+        if ($request->hasFile('cover_image')) {
+            // Keep the previous cover file so replacing an image never removes existing data.
+            $data['cover_image'] = $request->file('cover_image')->store('issue-covers', 'public');
         }
 
         $issue->update($data);

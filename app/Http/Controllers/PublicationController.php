@@ -90,6 +90,7 @@ class PublicationController extends Controller
                             'papers' => $papers,
                             'article_count' => $papers->count(),
                             'published_at' => $issueRecord?->publish_date,
+                            'cover_image' => $issueRecord?->cover_image,
                             'is_current' => $currentIssueKeys->has($first->volume . '|' . $first->issue),
                         ];
                     })

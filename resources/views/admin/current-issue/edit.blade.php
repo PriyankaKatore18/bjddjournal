@@ -67,7 +67,7 @@
 
                                 <div class="mb-3">
                                     <label for="home_cover" class="form-label">
-                                        Home Cover Image (JPG, JPEG, PNG | Max 2MB)
+                                        Home Fallback Cover Image (JPG, JPEG, PNG | Max 2MB)
                                     </label>
 
                                     <input type="file"
@@ -75,6 +75,8 @@
                                         id="home_cover"
                                         name="home_cover"
                                         accept=".jpg,.jpeg,.png">
+
+                                    <div class="form-text">For separate covers, use Admin &rarr; Issues &rarr; Edit and upload an Archive Cover Image for each Volume/Issue.</div>
 
                                     <!-- <div class="mt-2">
                                         <img src="{{ asset('storage/app/public/home-cover.png') }}"

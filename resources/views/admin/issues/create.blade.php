@@ -109,6 +109,13 @@
           <input type="file" name="published_paper_pdf" class="form-control" accept=".pdf">
         </div>
 
+        {{-- Archive Cover Image --}}
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-semibold">Archive Cover Image</label>
+          <input type="file" name="cover_image" class="form-control" accept=".jpg,.jpeg,.png,.webp">
+          <small class="text-muted">This cover will appear for this Volume/Issue in the archive. Maximum 5MB.</small>
+        </div>
+
         {{-- Paper Certificate
         <div class="col-md-6 mb-3">
           <label class="form-label fw-semibold">Paper Certificate</label>

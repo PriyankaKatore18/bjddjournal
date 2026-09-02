@@ -49,6 +49,7 @@
           <th>Title</th>
           <th>Volume</th>
           <th>Number</th>
+          <th>Cover</th>
           <th>Publish Date</th>
           <th>Actions</th>
         </tr>
@@ -70,6 +71,15 @@
               {{ $issue->number }}
             </span>
           </td>
+          <td>
+            @if($issue->cover_image)
+              <img src="{{ asset('storage/app/public/' . ltrim($issue->cover_image, '/')) }}"
+                   alt="Issue cover"
+                   style="width:42px; height:54px; object-fit:contain; border:1px solid #dce5df; border-radius:3px; padding:2px; background:#fbfdfb;">
+            @else
+              <span class="text-muted small">Not uploaded</span>
+            @endif
+          </td>
           <td>{{ \Carbon\Carbon::parse($issue->publish_date)->format('M d, Y') }}</td>
           <td>
             <a href="{{ route('admin.issues.edit',$issue) }}" 
@@ -86,7 +96,7 @@
         </tr>
         @empty
         <tr>
-          <td colspan="5" class="text-center" style="color:#cc7a00; font-weight:600;">
+          <td colspan="6" class="text-center" style="color:#cc7a00; font-weight:600;">
             No issues found
           </td>
         </tr>

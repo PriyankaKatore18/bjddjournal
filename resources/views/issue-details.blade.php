@@ -44,6 +44,15 @@
         background: #fbfdfb;
     }
 
+    .issue-cover-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #66746c;
+        font-size: .78rem;
+        text-align: center;
+    }
+
     .issue-kicker {
         display: inline-block;
         color: #06452d;
@@ -274,14 +283,17 @@
     $publishedDate = $issueMeta?->publish_date;
     $issueRange = $firstPaper?->issue_range;
     $issueIssn = $firstPaper?->eissn ?: $issueMeta?->approved_eissn;
-    $coverUrl = ArticleHelper::journalCoverUrl();
 @endphp
 
 <main class="issue-page">
     <a class="issue-back" href="{{ route('archive') }}">Back to Archive</a>
 
     <section class="issue-overview" aria-labelledby="issue-title">
-        <img class="issue-cover" src="{{ $coverUrl }}" alt="BJDD journal cover">
+        @if($issueMeta?->cover_image)
+            <img class="issue-cover" src="{{ ArticleHelper::issueCoverUrl($issueMeta->cover_image) }}" alt="Volume {{ $volume }} Issue {{ $issue }} cover">
+        @else
+            <div class="issue-cover issue-cover-placeholder" role="img" aria-label="No cover uploaded">No cover uploaded</div>
+        @endif
         <div>
             <span class="issue-kicker">Volume {{ $volume }} - Issue {{ $issue }}</span>
             <h1 id="issue-title">{{ $issueRange ?: 'Published Issue' }}</h1>

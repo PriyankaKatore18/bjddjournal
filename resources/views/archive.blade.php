@@ -195,6 +195,15 @@
         padding: 6px;
     }
 
+    .issue-cover-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #66746c;
+        font-size: .72rem;
+        text-align: center;
+    }
+
     .issue-card h3 {
         margin: 0 0 7px;
         color: #06452d;
@@ -312,7 +321,6 @@
 @php
     $totalArticles = $archiveIssues->flatten(1)->sum(fn ($archiveIssue) => $archiveIssue->article_count);
     $totalIssues = $archiveIssues->flatten(1)->count();
-    $coverUrl = \App\Support\ArticleHelper::journalCoverUrl();
 @endphp
 
 <main class="archive-page">
@@ -389,7 +397,11 @@
 
                     @foreach($issuesInYear as $archiveIssue)
                         <article class="issue-card">
-                            <img class="issue-cover" src="{{ $coverUrl }}" alt="BJDD journal cover">
+                            @if($archiveIssue->cover_image)
+                                <img class="issue-cover" src="{{ \App\Support\ArticleHelper::issueCoverUrl($archiveIssue->cover_image) }}" alt="Volume {{ $archiveIssue->volume }} Issue {{ $archiveIssue->issue }} cover">
+                            @else
+                                <div class="issue-cover issue-cover-placeholder" role="img" aria-label="No cover uploaded">No cover uploaded</div>
+                            @endif
 
                             <div>
                                 <div class="issue-labels">

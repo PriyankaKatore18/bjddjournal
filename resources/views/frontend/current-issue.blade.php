@@ -110,6 +110,15 @@
         background: #fbfdfb;
     }
 
+    .current-cover-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #66746c;
+        font-size: .72rem;
+        text-align: center;
+    }
+
     .current-kicker,
     .article-type,
     .legacy-type {
@@ -388,7 +397,7 @@
     $issueNumber = $currentIssue?->issue ?: $firstPublication?->issue;
     $issueDate = $currentIssue?->month_year ?: $firstPublication?->issue_range ?: $firstPublication?->year;
     $issueIssn = $currentIssue?->e_issn ?: $firstPublication?->eissn;
-    $coverUrl = ArticleHelper::journalCoverUrl();
+    $issueRecord = $issues->first();
 @endphp
 
 <main class="current-page">
@@ -428,7 +437,11 @@
 
             @if($issueVolume && $issueNumber)
                 <section class="current-overview" aria-labelledby="current-issue-title">
-                    <img class="current-cover" src="{{ $coverUrl }}" alt="BJDD journal cover">
+                    @if($issueRecord?->cover_image)
+                        <img class="current-cover" src="{{ ArticleHelper::issueCoverUrl($issueRecord->cover_image) }}" alt="Volume {{ $issueVolume }} Issue {{ $issueNumber }} cover">
+                    @else
+                        <div class="current-cover current-cover-placeholder" role="img" aria-label="No cover uploaded">No cover uploaded</div>
+                    @endif
                     <div>
                         <span class="current-kicker">Volume {{ $issueVolume }} - Issue {{ $issueNumber }}</span>
                         <h2 id="current-issue-title">{{ $issueDate ?: 'Current published issue' }}</h2>

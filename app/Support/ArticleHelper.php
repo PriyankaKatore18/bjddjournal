@@ -105,6 +105,19 @@ class ArticleHelper
         return self::$coverUrl = asset('public/assets/img/bjdd logo.png');
     }
 
+    public static function issueCoverUrl(?string $coverImage): ?string
+    {
+        if (! $coverImage) {
+            return null;
+        }
+
+        if (filter_var($coverImage, FILTER_VALIDATE_URL)) {
+            return $coverImage;
+        }
+
+        return asset('storage/app/public/' . ltrim($coverImage, '/'));
+    }
+
     /** @return array<int, string> */
     public static function authors(?string $value): array
     {

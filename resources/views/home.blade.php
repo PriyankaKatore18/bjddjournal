@@ -787,6 +787,14 @@
                 $currentIssue = null;
                 }
 
+                $currentIssueRecord = null;
+                if ($currentIssue && \Illuminate\Support\Facades\Schema::hasTable('issues')) {
+                $currentIssueRecord = \App\Models\Issue::where('volume', $currentIssue->volume)
+                    ->where('number', $currentIssue->issue)
+                    ->latest()
+                    ->first();
+                }
+
                 $homeCover = \App\Models\BusinessSetting::where('key', 'home_cover')->first();
 
                 } catch (Exception $e) {
@@ -796,7 +804,16 @@
 
                 <div style="margin-bottom:20px;">
 
-                    @if($homeCover && $homeCover->value)
+                    @if($currentIssueRecord && $currentIssueRecord->cover_image)
+                    <img src="{{ asset('storage/app/public/' . ltrim($currentIssueRecord->cover_image, '/')) }}"
+                        alt="Current issue cover"
+                        style="
+                        width:100%;
+                        max-width:250px;
+                        object-fit:cover;
+                        border-radius:8px;
+                    ">
+                    @elseif($homeCover && $homeCover->value)
                     <img src="{{ asset('storage/app/public/' . $homeCover->value) }}"
                         alt="Home Cover"
                         style="

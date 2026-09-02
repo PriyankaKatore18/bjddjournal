@@ -25,6 +25,7 @@ class Issue extends Model
         'downloads_count',
         'published_paper_url',
         'published_paper_pdf',
+        'cover_image',
         'paper_certificate', // Added
     ];
 

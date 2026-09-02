@@ -125,6 +125,26 @@
         @endif
       </div>
 
+      {{-- Archive Cover Image --}}
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Archive Cover Image</label>
+        <input type="file" name="cover_image" class="form-control" accept=".jpg,.jpeg,.png,.webp">
+        <small class="text-muted">Upload a cover for this Volume/Issue. Maximum 5MB.</small>
+        @if($issue->cover_image)
+          <div class="mt-2 d-flex align-items-start gap-3">
+            <img src="{{ asset('storage/app/public/' . ltrim($issue->cover_image, '/')) }}"
+                 alt="Current issue cover"
+                 style="width:110px; height:145px; object-fit:contain; border:1px solid #dce5df; border-radius:4px; padding:4px; background:#fbfdfb;">
+            <div>
+              <small class="text-muted d-block">Current cover is saved.</small>
+              <small class="text-muted d-block">Uploading a new cover will keep the previous file.</small>
+            </div>
+          </div>
+        @else
+          <small class="text-muted d-block mt-2">No archive cover uploaded yet.</small>
+        @endif
+      </div>
+
       {{-- Paper Certificate
       <div class="mb-3">
         <label class="form-label fw-semibold">Paper Certificate</label>
