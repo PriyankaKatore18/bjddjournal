@@ -146,9 +146,18 @@ class PublicationController extends Controller
             'keywords' => 'nullable|string',
             'paper_pdf' => 'nullable|mimes:pdf|max:20480',
             'certificate' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        $data = $request->except('download_count');
+        $archiveIssue = $this->matchingIssue($request->volume, $request->issue);
+
+        if ($request->hasFile('cover_image') && ! $archiveIssue) {
+            return back()
+                ->withErrors(['cover_image' => 'Create the matching Issue first before uploading its archive cover.'])
+                ->withInput();
+        }
+
+        $data = $request->except(['download_count', 'paper_pdf', 'certificate', 'cover_image']);
 
         if ($request->hasFile('paper_pdf')) {
             $data['paper_pdf'] = $request->file('paper_pdf')->store('publications', 'public');
@@ -162,13 +171,21 @@ class PublicationController extends Controller
 
         Publication::create($data);
 
+        if ($request->hasFile('cover_image')) {
+            $archiveIssue->update([
+                'cover_image' => $request->file('cover_image')->store('issue-covers', 'public'),
+            ]);
+        }
+
         return redirect()->route('admin.publications.index')
             ->with('success', 'Publication added successfully.');
     }
 
     public function edit(Publication $publication)
     {
-        return view('admin.publications.edit', compact('publication'));
+        $archiveIssue = $this->matchingIssue($publication->volume, $publication->issue);
+
+        return view('admin.publications.edit', compact('publication', 'archiveIssue'));
     }
 
     public function update(Request $request, Publication $publication)
@@ -186,9 +203,18 @@ class PublicationController extends Controller
             'keywords' => 'nullable|string',
             'paper_pdf' => 'nullable|mimes:pdf|max:20480',
             'certificate' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        $data = $request->except('download_count');
+        $archiveIssue = $this->matchingIssue($request->volume, $request->issue);
+
+        if ($request->hasFile('cover_image') && ! $archiveIssue) {
+            return back()
+                ->withErrors(['cover_image' => 'Create the matching Issue first before uploading its archive cover.'])
+                ->withInput();
+        }
+
+        $data = $request->except(['download_count', 'paper_pdf', 'certificate', 'cover_image']);
 
         if ($request->hasFile('paper_pdf')) {
             // Delete old PDF if exists
@@ -206,6 +232,13 @@ class PublicationController extends Controller
         }
 
         $publication->update($data);
+
+        if ($request->hasFile('cover_image')) {
+            // Keep the previous cover file so replacing an image never removes existing data.
+            $archiveIssue->update([
+                'cover_image' => $request->file('cover_image')->store('issue-covers', 'public'),
+            ]);
+        }
 
         return redirect()->route('admin.publications.index')
             ->with('success', 'Publication updated successfully.');
@@ -297,6 +330,18 @@ class PublicationController extends Controller
         $blogs = Blog::latest()->paginate(9);
 
         return view('blogs', compact('blogs'));
+    }
+
+    private function matchingIssue($volume, $issue): ?Issue
+    {
+        if (! Schema::hasTable('issues')) {
+            return null;
+        }
+
+        return Issue::where('volume', (string) $volume)
+            ->where('number', (string) $issue)
+            ->latest('id')
+            ->first();
     }
 
 }

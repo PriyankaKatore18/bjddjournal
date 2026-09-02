@@ -142,6 +142,12 @@
 				</div>
 			</div>
 
+			<div class="mb-4">
+				<label class="form-label fw-semibold">Archive Cover Image</label>
+				<input type="file" name="cover_image" class="form-control" accept=".jpg,.jpeg,.png,.webp">
+				<div class="form-text">Optional: upload the cover for this Volume/Issue. Maximum 5MB. The matching Issue record must exist.</div>
+			</div>
+
 			<div class="d-flex gap-2 justify-content-center">
 				<button class="btn" style="background-color:#00004d; color:#fff; font-weight:600; border-radius:6px; padding:8px 14px; font-size:0.9rem;">Save Publication</button>
 				<a href="{{ route('admin.publications.index') }}" class="btn" style="background-color:#cc7a00; color:#fff; font-weight:600; border-radius:6px; padding:8px 14px; font-size:0.9rem;">Cancel</a>

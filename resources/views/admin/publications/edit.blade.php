@@ -165,6 +165,28 @@
 			</div>
 			{{-- END NEW ROW --}}
 
+			{{-- Archive Cover Image --}}
+			<div class="mb-3">
+				<label class="form-label fw-semibold">Archive Cover Image</label>
+				<input type="file" name="cover_image" class="form-control" accept=".jpg,.jpeg,.png,.webp">
+				<div class="form-text">This cover is shared by the matching Volume/Issue in the publication archive. Maximum 5MB.</div>
+				@if($archiveIssue?->cover_image)
+				<div class="mt-2 d-flex align-items-start gap-3">
+					<img src="{{ asset('storage/app/public/' . ltrim($archiveIssue->cover_image, '/')) }}"
+						 alt="Current archive cover"
+						 style="width:110px; height:145px; object-fit:contain; border:1px solid #dce5df; border-radius:4px; padding:4px; background:#fbfdfb;">
+					<div>
+						<small class="text-muted d-block">Current cover is saved for Volume {{ $publication->volume }}, Issue {{ $publication->issue }}.</small>
+						<small class="text-muted d-block">Uploading a new cover will keep the previous file.</small>
+					</div>
+				</div>
+				@elseif($archiveIssue)
+					<small class="text-muted d-block mt-2">No archive cover uploaded yet.</small>
+				@else
+					<small class="text-danger d-block mt-2">Create the matching Issue record before uploading an archive cover.</small>
+				@endif
+			</div>
+
 
 			{{-- Buttons --}}
 			<div class="d-flex gap-2 justify-content-center">
