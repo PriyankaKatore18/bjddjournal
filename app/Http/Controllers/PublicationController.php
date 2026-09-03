@@ -78,9 +78,11 @@ class PublicationController extends Controller
                     ]))
                     ->map(function ($papers) use ($issueRecords, $currentIssueKeys) {
                         $first = $papers->first();
-                        $issueRecord = $issueRecords
-                            ->get($first->volume . '|' . $first->issue, collect())
-                            ->first();
+                        $matchingIssueRecords = $issueRecords
+                            ->get($first->volume . '|' . $first->issue, collect());
+                        $issueRecord = $matchingIssueRecords->first();
+                        $coverIssueRecord = $matchingIssueRecords
+                            ->first(fn (Issue $issue) => ! empty($issue->cover_image)) ?: $issueRecord;
 
                         return (object) [
                             'year' => $first->year,
@@ -90,7 +92,7 @@ class PublicationController extends Controller
                             'papers' => $papers,
                             'article_count' => $papers->count(),
                             'published_at' => $issueRecord?->publish_date,
-                            'cover_image' => $issueRecord?->cover_image,
+                            'cover_image' => $coverIssueRecord?->cover_image,
                             'is_current' => $currentIssueKeys->has($first->volume . '|' . $first->issue),
                         ];
                     })
@@ -158,11 +160,9 @@ class PublicationController extends Controller
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        $archiveIssue = $this->matchingIssue($request->volume, $request->issue);
-
-        if ($request->hasFile('cover_image') && ! $archiveIssue) {
+        if ($request->hasFile('cover_image') && ! Schema::hasTable('issues')) {
             return back()
-                ->withErrors(['cover_image' => 'Create the matching Issue first before uploading its archive cover.'])
+                ->withErrors(['cover_image' => 'The issues table is not available. Please run migrations before uploading archive covers.'])
                 ->withInput();
         }
 
@@ -181,6 +181,13 @@ class PublicationController extends Controller
         Publication::create($data);
 
         if ($request->hasFile('cover_image')) {
+            $archiveIssue = $this->issueForCover(
+                $request->volume,
+                $request->issue,
+                $request->issue_range,
+                $request->year
+            );
+
             $archiveIssue->update([
                 'cover_image' => $request->file('cover_image')->store('issue-covers', 'public'),
             ]);
@@ -224,11 +231,9 @@ class PublicationController extends Controller
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        $archiveIssue = $this->matchingIssue($request->volume, $request->issue);
-
-        if ($request->hasFile('cover_image') && ! $archiveIssue) {
+        if ($request->hasFile('cover_image') && ! Schema::hasTable('issues')) {
             return back()
-                ->withErrors(['cover_image' => 'Create the matching Issue first before uploading its archive cover.'])
+                ->withErrors(['cover_image' => 'The issues table is not available. Please run migrations before uploading archive covers.'])
                 ->withInput();
         }
 
@@ -252,6 +257,13 @@ class PublicationController extends Controller
         $publication->update($data);
 
         if ($request->hasFile('cover_image')) {
+            $archiveIssue = $this->issueForCover(
+                $request->volume,
+                $request->issue,
+                $request->issue_range,
+                $request->year
+            );
+
             // Keep the previous cover file so replacing an image never removes existing data.
             $archiveIssue->update([
                 'cover_image' => $request->file('cover_image')->store('issue-covers', 'public'),
@@ -408,6 +420,26 @@ class PublicationController extends Controller
             ->where('number', (string) $issue)
             ->latest('id')
             ->first();
+    }
+
+    private function issueForCover($volume, $issue, ?string $issueRange = null, $year = null): ?Issue
+    {
+        $existingIssue = $this->matchingIssue($volume, $issue);
+
+        if ($existingIssue) {
+            return $existingIssue;
+        }
+
+        if (! Schema::hasTable('issues')) {
+            return null;
+        }
+
+        return Issue::create([
+            'title' => $issueRange ?: 'Volume ' . $volume . ' - Issue ' . $issue,
+            'volume' => (string) $volume,
+            'number' => (string) $issue,
+            'year' => $year ? (string) $year : null,
+        ]);
     }
 
 }

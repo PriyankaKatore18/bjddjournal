@@ -40,8 +40,8 @@
 
         {{-- Publish Date --}}
         <div class="col-md-6 mb-3">
-          <label class="form-label fw-semibold">Publish Date <span class="text-danger">*</span></label>
-          <input type="date" name="publish_date" class="form-control" required>
+          <label class="form-label fw-semibold">Publish Date</label>
+          <input type="date" name="publish_date" class="form-control">
         </div>
       </div>
 

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Issue;
+use App\Models\Publication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class IssueController extends Controller
@@ -14,7 +16,14 @@ class IssueController extends Controller
      */
     public function index()
     {
-        $issues = Issue::orderBy('created_at', 'desc')->paginate(10);
+        $this->ensurePublicationIssuesExist();
+
+        $issues = Issue::orderByDesc('year')
+            ->orderByDesc('volume')
+            ->orderByDesc('number')
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
         return view('admin.issues.index', compact('issues'));
     }
 
@@ -219,5 +228,38 @@ class IssueController extends Controller
             }
         }
         return redirect()->back()->with('error', 'Certificate file not found.');
+    }
+
+    private function ensurePublicationIssuesExist(): void
+    {
+        if (! Schema::hasTable('issues') || ! Schema::hasTable('publications')) {
+            return;
+        }
+
+        Publication::query()
+            ->select('id', 'volume', 'issue', 'issue_range', 'year')
+            ->whereNotNull('volume')
+            ->whereNotNull('issue')
+            ->orderByDesc('year')
+            ->orderByDesc('volume')
+            ->orderByDesc('issue')
+            ->orderBy('id')
+            ->get()
+            ->groupBy(fn (Publication $publication) => $publication->volume . '|' . $publication->issue)
+            ->each(function ($publications) {
+                $publication = $publications->first();
+
+                Issue::firstOrCreate(
+                    [
+                        'volume' => (string) $publication->volume,
+                        'number' => (string) $publication->issue,
+                    ],
+                    [
+                        'title' => $publication->issue_range ?: 'Volume ' . $publication->volume . ' - Issue ' . $publication->issue,
+                        'year' => $publication->year ? (string) $publication->year : null,
+                        'downloads_count' => 0,
+                    ]
+                );
+            });
     }
 }

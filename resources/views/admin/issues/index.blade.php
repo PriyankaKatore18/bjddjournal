@@ -80,7 +80,13 @@
               <span class="text-muted small">Not uploaded</span>
             @endif
           </td>
-          <td>{{ \Carbon\Carbon::parse($issue->publish_date)->format('M d, Y') }}</td>
+          <td>
+            @if($issue->publish_date)
+              {{ \Carbon\Carbon::parse($issue->publish_date)->format('M d, Y') }}
+            @else
+              <span class="text-muted small">-</span>
+            @endif
+          </td>
           <td>
             <a href="{{ route('admin.issues.edit',$issue) }}" 
                class="btn btn-sm" 

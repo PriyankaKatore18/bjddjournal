@@ -46,8 +46,8 @@
       <div class="row">
         {{-- Publish Date --}}
         <div class="col-md-6 mb-3">
-          <label class="form-label fw-semibold">Publish Date <span class="text-danger">*</span></label>
-          <input type="date" name="publish_date" class="form-control" required value="{{ old('publish_date', $issue->publish_date) }}">
+          <label class="form-label fw-semibold">Publish Date</label>
+          <input type="date" name="publish_date" class="form-control" value="{{ old('publish_date', $issue->publish_date) }}">
         </div>
 
         {{-- Registration ID --}}

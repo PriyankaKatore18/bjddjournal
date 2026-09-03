@@ -235,7 +235,7 @@
 				@elseif($archiveIssue)
 					<small class="text-muted d-block mt-2">No archive cover uploaded yet.</small>
 				@else
-					<small class="text-danger d-block mt-2">Create the matching Issue record before uploading an archive cover.</small>
+					<small class="text-muted d-block mt-2">No matching issue record exists yet. Uploading a cover will create it automatically.</small>
 				@endif
 			</div>
 
