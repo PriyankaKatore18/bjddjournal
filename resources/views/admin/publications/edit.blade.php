@@ -91,6 +91,25 @@
 				<div class="form-text">Provide a concise summary of the paper.</div>
 			</div>
 
+			<div class="row">
+				<div class="col-md-3 mb-3">
+					<label class="form-label fw-semibold">Received Date</label>
+					<input type="date" name="received_at" class="form-control" value="{{ old('received_at', optional($publication->received_at)->format('Y-m-d')) }}">
+				</div>
+				<div class="col-md-3 mb-3">
+					<label class="form-label fw-semibold">Revised Date</label>
+					<input type="date" name="revised_at" class="form-control" value="{{ old('revised_at', optional($publication->revised_at)->format('Y-m-d')) }}">
+				</div>
+				<div class="col-md-3 mb-3">
+					<label class="form-label fw-semibold">Accepted Date</label>
+					<input type="date" name="accepted_at" class="form-control" value="{{ old('accepted_at', optional($publication->accepted_at)->format('Y-m-d')) }}">
+				</div>
+				<div class="col-md-3 mb-3">
+					<label class="form-label fw-semibold">Published Online</label>
+					<input type="date" name="published_online_at" class="form-control" value="{{ old('published_online_at', optional($publication->published_online_at)->format('Y-m-d')) }}">
+				</div>
+			</div>
+
 
 			<div class="mb-3">
 				<label>Keywords</label>

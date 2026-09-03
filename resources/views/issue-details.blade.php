@@ -89,6 +89,24 @@
         color: #17221c;
     }
 
+    .issue-download {
+        display: inline-block;
+        margin-top: 16px;
+        border: 1px solid #06452d;
+        border-radius: 4px;
+        padding: 8px 12px;
+        color: #fff;
+        background: #06452d;
+        font-size: .82rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .issue-download:hover {
+        border-color: #c47d18;
+        background: #0b6b42;
+    }
+
     .article-heading {
         display: flex;
         justify-content: space-between;
@@ -309,6 +327,9 @@
                     <span><strong>ISSN:</strong> {{ $issueIssn }}</span>
                 @endif
             </div>
+            @if($issueMeta?->published_paper_pdf && Storage::disk('public')->exists($issueMeta->published_paper_pdf))
+                <a class="issue-download" href="{{ route('issues.viewPdf', $issueMeta) }}" target="_blank" rel="noopener">Download Full Issue PDF</a>
+            @endif
         </div>
     </section>
 
@@ -360,7 +381,7 @@
             <div class="article-actions">
                 <a href="{{ route('article.details', ['publicationKey' => ArticleHelper::routeKey($paper)]) }}">View Article</a>
                 @if($pdfExists)
-                    <a href="{{ route('publications.viewPdf', $paper->id) }}" target="_blank" rel="noopener">Download PDF</a>
+                    <a href="{{ route('publications.download', $paper->id) }}">Download PDF</a>
                 @endif
                 @if($doiUrl)
                     <a href="{{ $doiUrl }}" target="_blank" rel="noopener">View DOI</a>

@@ -98,6 +98,33 @@
 				</div>
 			</div>
 
+			<div class="row mb-4">
+				<div class="col-md-3">
+					<div class="mb-3">
+						<label class="form-label fw-semibold">Received Date</label>
+						<input type="date" name="received_at" class="form-control" value="{{ old('received_at') }}">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="mb-3">
+						<label class="form-label fw-semibold">Revised Date</label>
+						<input type="date" name="revised_at" class="form-control" value="{{ old('revised_at') }}">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="mb-3">
+						<label class="form-label fw-semibold">Accepted Date</label>
+						<input type="date" name="accepted_at" class="form-control" value="{{ old('accepted_at') }}">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="mb-3">
+						<label class="form-label fw-semibold">Published Online</label>
+						<input type="date" name="published_online_at" class="form-control" value="{{ old('published_online_at') }}">
+					</div>
+				</div>
+			</div>
+
 			<div class="mb-3">
 				<label>Keywords</label>
 				<textarea

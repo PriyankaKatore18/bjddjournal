@@ -23,11 +23,16 @@ class Publication extends Model
         'crossref_doi',
         'page_nos',
         'download_count', 
+        'view_count',
         'paper_url',
         'paper_pdf',
         'abstract', 
         'keywords',
         'certificate_path', 
+        'received_at',
+        'revised_at',
+        'accepted_at',
+        'published_online_at',
     ];
 
     protected $casts = [
@@ -35,5 +40,10 @@ class Publication extends Model
         'volume' => 'integer',
         'issue' => 'integer',
         'download_count' => 'integer',
+        'view_count' => 'integer',
+        'received_at' => 'date',
+        'revised_at' => 'date',
+        'accepted_at' => 'date',
+        'published_online_at' => 'date',
     ];
 }

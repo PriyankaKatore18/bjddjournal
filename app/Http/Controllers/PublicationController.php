@@ -144,6 +144,10 @@ class PublicationController extends Controller
             'year' => 'required|integer',
             'abstract' => 'nullable|string',
             'keywords' => 'nullable|string',
+            'received_at' => 'nullable|date',
+            'revised_at' => 'nullable|date',
+            'accepted_at' => 'nullable|date',
+            'published_online_at' => 'nullable|date',
             'paper_pdf' => 'nullable|mimes:pdf|max:20480',
             'certificate' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
@@ -157,7 +161,7 @@ class PublicationController extends Controller
                 ->withInput();
         }
 
-        $data = $request->except(['download_count', 'paper_pdf', 'certificate', 'cover_image']);
+        $data = $request->except(['download_count', 'view_count', 'paper_pdf', 'certificate', 'cover_image']);
 
         if ($request->hasFile('paper_pdf')) {
             $data['paper_pdf'] = $request->file('paper_pdf')->store('publications', 'public');
@@ -201,6 +205,10 @@ class PublicationController extends Controller
             'year' => 'required|integer',
             'abstract' => 'nullable|string',
             'keywords' => 'nullable|string',
+            'received_at' => 'nullable|date',
+            'revised_at' => 'nullable|date',
+            'accepted_at' => 'nullable|date',
+            'published_online_at' => 'nullable|date',
             'paper_pdf' => 'nullable|mimes:pdf|max:20480',
             'certificate' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
@@ -214,7 +222,7 @@ class PublicationController extends Controller
                 ->withInput();
         }
 
-        $data = $request->except(['download_count', 'paper_pdf', 'certificate', 'cover_image']);
+        $data = $request->except(['download_count', 'view_count', 'paper_pdf', 'certificate', 'cover_image']);
 
         if ($request->hasFile('paper_pdf')) {
             // Delete old PDF if exists
@@ -273,6 +281,19 @@ class PublicationController extends Controller
         );
     }
 
+    public function trackDownloadAndDownload(Publication $publication)
+    {
+        if (! $publication->paper_pdf || ! Storage::disk('public')->exists($publication->paper_pdf)) {
+            return redirect()->back()->with('error', 'PDF file not found.');
+        }
+
+        if (Schema::hasColumn('publications', 'download_count')) {
+            $publication->increment('download_count');
+        }
+
+        return Storage::disk('public')->download($publication->paper_pdf);
+    }
+
     public function issueDetails($volume, $issue)
     {
         $papers = Publication::where('volume', $volume)
@@ -318,10 +339,38 @@ class PublicationController extends Controller
                 ->setStatusCode(301);
         }
 
+        $relatedArticles = Publication::query()
+            ->where('volume', $publication->volume)
+            ->where('issue', $publication->issue)
+            ->orderBy('id')
+            ->get();
+
+        $articleIndex = $relatedArticles->search(
+            fn (Publication $article) => $article->getKey() === $publication->getKey()
+        );
+
+        $previousArticle = $articleIndex !== false && $articleIndex > 0
+            ? $relatedArticles->get($articleIndex - 1)
+            : null;
+        $nextArticle = $articleIndex !== false
+            ? $relatedArticles->get($articleIndex + 1)
+            : null;
+
+        $moreArticles = $relatedArticles
+            ->reject(fn (Publication $article) => $article->getKey() === $publication->getKey())
+            ->values();
+
+        if (Schema::hasColumn('publications', 'view_count')) {
+            $publication->increment('view_count');
+        }
+
         return view('article-details', [
             'publication' => $publication,
             'citations' => ArticleHelper::citations($publication),
             'articleKey' => $canonicalKey,
+            'previousArticle' => $previousArticle,
+            'nextArticle' => $nextArticle,
+            'moreArticles' => $moreArticles,
         ]);
     }
 

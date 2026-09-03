@@ -500,7 +500,7 @@
                         <div class="article-actions">
                             <a href="{{ route('article.details', ['publicationKey' => ArticleHelper::routeKey($publication)]) }}">View Article</a>
                             @if($pdfExists)
-                                <a href="{{ route('publications.viewPdf', $publication->id) }}" target="_blank" rel="noopener">Download PDF</a>
+                                <a href="{{ route('publications.download', $publication->id) }}">Download PDF</a>
                             @endif
                             @if($doiUrl)
                                 <a href="{{ $doiUrl }}" target="_blank" rel="noopener">View DOI</a>

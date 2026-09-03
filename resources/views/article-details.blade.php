@@ -30,7 +30,7 @@
 
     .article-layout {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 250px;
+        grid-template-columns: minmax(0, 1fr) 290px;
         gap: 24px;
         align-items: start;
     }
@@ -205,6 +205,229 @@
         border-color: #c47d18;
     }
 
+    .article-sidebar-section {
+        border-top: 1px solid #dce5df;
+        margin-top: 18px;
+        padding-top: 16px;
+    }
+
+    .article-sidebar-section h2 {
+        color: #06452d;
+        font-size: .98rem;
+        margin: 0 0 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #a9c5b5;
+    }
+
+    .article-detail-list {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+    }
+
+    .article-detail-item dt {
+        color: #59665f;
+        font-size: .68rem;
+        font-weight: 800;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+    }
+
+    .article-detail-item dd {
+        color: #17221c;
+        font-size: .82rem;
+        line-height: 1.4;
+        margin: 2px 0 0;
+        overflow-wrap: anywhere;
+    }
+
+    .article-history {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .article-history-item {
+        display: grid;
+        grid-template-columns: 9px minmax(0, 1fr);
+        gap: 9px;
+        align-items: start;
+        color: #34443a;
+        font-size: .82rem;
+    }
+
+    .article-history-item::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        margin-top: 4px;
+        border: 2px solid #0b6b42;
+        border-radius: 50%;
+        box-sizing: border-box;
+    }
+
+    .article-history-item strong {
+        display: block;
+        color: #17221c;
+        font-size: .78rem;
+    }
+
+    .article-history-item span {
+        color: #59665f;
+    }
+
+    .article-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .article-metric {
+        border: 1px solid #dce5df;
+        border-radius: 4px;
+        padding: 10px 8px;
+        text-align: center;
+    }
+
+    .article-metric strong,
+    .article-metric span {
+        display: block;
+    }
+
+    .article-metric strong {
+        color: #59665f;
+        font-size: .68rem;
+        line-height: 1.3;
+    }
+
+    .article-metric span {
+        color: #0b6b42;
+        font-size: 1.35rem;
+        font-weight: 800;
+        margin-top: 3px;
+    }
+
+    .metrics-note {
+        color: #66746c;
+        font-size: .72rem;
+        line-height: 1.4;
+        margin-top: 8px;
+    }
+
+    .share-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .share-links a,
+    .share-button {
+        display: block;
+        width: 100%;
+        border: 1px solid #9bb3a4;
+        border-radius: 4px;
+        padding: 7px 6px;
+        color: #06452d;
+        background: #fff;
+        font: inherit;
+        font-size: .76rem;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .share-button {
+        margin-bottom: 7px;
+        color: #fff;
+        background: #06452d;
+        border-color: #06452d;
+    }
+
+    .share-links a:hover,
+    .share-button:hover {
+        border-color: #c47d18;
+    }
+
+    .article-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .article-nav-link {
+        min-width: 0;
+        border: 1px solid #dce5df;
+        border-radius: 5px;
+        padding: 12px;
+        color: #06452d;
+        text-decoration: none;
+    }
+
+    .article-nav-link.next {
+        text-align: right;
+    }
+
+    .article-nav-link span,
+    .related-card span {
+        display: block;
+        color: #66746c;
+        font-size: .72rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .article-nav-link strong {
+        display: block;
+        overflow-wrap: anywhere;
+    }
+
+    .related-section {
+        margin-top: 28px;
+    }
+
+    .related-section h2 {
+        color: #06452d;
+        font-size: 1.25rem;
+        border-bottom: 1px solid #a9c5b5;
+        margin: 0 0 14px;
+        padding-bottom: 8px;
+    }
+
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .related-card {
+        min-width: 0;
+        border: 1px solid #dce5df;
+        border-radius: 5px;
+        padding: 14px;
+        background: #fff;
+        text-decoration: none;
+    }
+
+    .related-card h3 {
+        color: #06452d;
+        font-size: .98rem;
+        line-height: 1.4;
+        margin: 0 0 7px;
+        overflow-wrap: anywhere;
+    }
+
+    .related-card p {
+        color: #59665f;
+        font-size: .8rem;
+        line-height: 1.45;
+        margin: 0;
+        overflow-wrap: anywhere;
+    }
+
     .citation-controls {
         display: flex;
         gap: 8px;
@@ -299,6 +522,15 @@
         .metadata-item:nth-child(2n) {
             border-right: 0;
         }
+
+        .article-nav,
+        .related-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .article-nav-link.next {
+            text-align: left;
+        }
     }
 </style>
 @endpush
@@ -310,6 +542,11 @@
     $keywords = preg_split('/[,;]+/', (string) $publication->keywords, -1, PREG_SPLIT_NO_EMPTY);
     $pdfExists = $publication->paper_pdf && Storage::disk('public')->exists($publication->paper_pdf);
     $certificateExists = $publication->certificate_path && Storage::disk('public')->exists($publication->certificate_path);
+    $lastUpdated = $publication->updated_at ?: $publication->created_at;
+    $publishedOnlineAt = $publication->published_online_at ?: $lastUpdated;
+    $articleIssn = $publication->eissn ?: '3139-1486 (Online)';
+    $shareTitle = rawurlencode($publication->paper_title);
+    $shareUrl = rawurlencode($canonicalArticleUrl);
 @endphp
 
 <main class="article-page">
@@ -376,12 +613,31 @@
                     <div><strong>Copyright</strong><br>BODHIVRUKSHA JOURNAL OF DIVERSE DISCIPLINE</div>
                 </div>
             </section>
+
+            @if($previousArticle || $nextArticle)
+                <nav class="article-nav" aria-label="Article navigation">
+                    @if($previousArticle)
+                        <a class="article-nav-link" href="{{ route('article.details', ['publicationKey' => ArticleHelper::routeKey($previousArticle)]) }}">
+                            <span>Previous Article</span>
+                            <strong>{{ $previousArticle->paper_title }}</strong>
+                        </a>
+                    @else
+                        <div></div>
+                    @endif
+                    @if($nextArticle)
+                        <a class="article-nav-link next" href="{{ route('article.details', ['publicationKey' => ArticleHelper::routeKey($nextArticle)]) }}">
+                            <span>Next Article</span>
+                            <strong>{{ $nextArticle->paper_title }}</strong>
+                        </a>
+                    @endif
+                </nav>
+            @endif
         </article>
 
         <aside class="article-tools" aria-label="Article tools">
             <h2>Article Tools</h2>
             @if($pdfExists)
-                <a class="tool-link tool-link-primary" href="{{ route('publications.viewPdf', $publication->id) }}" target="_blank" rel="noopener">Download PDF</a>
+                <a class="tool-link tool-link-primary" href="{{ route('publications.download', $publication->id) }}">Download PDF</a>
             @endif
             @if($certificateExists)
                 <a class="tool-link" href="{{ asset('storage/' . ltrim($publication->certificate_path, '/')) }}" target="_blank" rel="noopener">Download Certificate</a>
@@ -392,10 +648,69 @@
             @if($publication->paper_url)
                 <a class="tool-link" href="{{ $publication->paper_url }}" target="_blank" rel="noopener">Published Paper URL</a>
             @endif
+            <a class="tool-link" href="#citation-title">Cite This Article</a>
             <button class="tool-button" type="button" id="copy-article-link">Copy Article Link</button>
             <div class="citation-status" id="link-status" aria-live="polite"></div>
+
+            <section class="article-sidebar-section" aria-labelledby="article-details-title">
+                <h2 id="article-details-title">Article Details</h2>
+                <dl class="article-detail-list">
+                    <div class="article-detail-item"><dt>Article Type</dt><dd>Research Article</dd></div>
+                    <div class="article-detail-item"><dt>Publication</dt><dd>Peer Reviewed Journal</dd></div>
+                    <div class="article-detail-item"><dt>ISSN</dt><dd>{{ $articleIssn }}</dd></div>
+                    <div class="article-detail-item"><dt>Publisher</dt><dd>BODHIVRUKSHA Publication</dd></div>
+                    <div class="article-detail-item"><dt>Frequency</dt><dd>Bi-monthly</dd></div>
+                    <div class="article-detail-item"><dt>Language</dt><dd>English</dd></div>
+                    <div class="article-detail-item"><dt>Last Updated</dt><dd>{{ optional($lastUpdated)->format('d F Y') ?: 'Not recorded' }}</dd></div>
+                </dl>
+            </section>
+
+            <section class="article-sidebar-section" aria-labelledby="article-history-title">
+                <h2 id="article-history-title">Article History</h2>
+                <ul class="article-history">
+                    <li class="article-history-item"><div><strong>Received</strong><span>{{ optional($publication->received_at)->format('d F Y') ?: 'Not recorded' }}</span></div></li>
+                    <li class="article-history-item"><div><strong>Revised</strong><span>{{ optional($publication->revised_at)->format('d F Y') ?: 'Not recorded' }}</span></div></li>
+                    <li class="article-history-item"><div><strong>Accepted</strong><span>{{ optional($publication->accepted_at)->format('d F Y') ?: 'Not recorded' }}</span></div></li>
+                    <li class="article-history-item"><div><strong>Published Online</strong><span>{{ optional($publishedOnlineAt)->format('d F Y') ?: 'Not recorded' }}</span></div></li>
+                </ul>
+            </section>
+
+            <section class="article-sidebar-section" aria-labelledby="article-metrics-title">
+                <h2 id="article-metrics-title">Article Metrics</h2>
+                <div class="article-metrics">
+                    <div class="article-metric"><strong>Article Views</strong><span>{{ number_format((int) ($publication->view_count ?? 0)) }}</span></div>
+                    <div class="article-metric"><strong>PDF Downloads</strong><span>{{ number_format((int) ($publication->download_count ?? 0)) }}</span></div>
+                </div>
+                <div class="metrics-note">Metrics are updated in real time.</div>
+            </section>
+
+            <section class="article-sidebar-section" aria-labelledby="share-article-title">
+                <h2 id="share-article-title">Share This Article</h2>
+                <button class="share-button" type="button" id="share-article">Share Article</button>
+                <div class="share-links">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" target="_blank" rel="noopener">Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $shareUrl }}" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://wa.me/?text={{ $shareTitle }}%20{{ $shareUrl }}" target="_blank" rel="noopener">WhatsApp</a>
+                    <a href="mailto:?subject={{ $shareTitle }}&body={{ $shareUrl }}">Email</a>
+                </div>
+            </section>
         </aside>
     </div>
+
+    @if($moreArticles->isNotEmpty())
+        <section class="related-section" aria-labelledby="related-articles-title">
+            <h2 id="related-articles-title">More from Volume {{ $publication->volume }}, Issue {{ $publication->issue }}</h2>
+            <div class="related-grid">
+                @foreach($moreArticles as $relatedArticle)
+                    <a class="related-card" href="{{ route('article.details', ['publicationKey' => ArticleHelper::routeKey($relatedArticle)]) }}">
+                        <span>{{ $relatedArticle->page_nos ? 'Pages ' . $relatedArticle->page_nos : 'Research Article' }}</span>
+                        <h3>{{ $relatedArticle->paper_title }}</h3>
+                        <p>{{ implode(', ', array_slice(ArticleHelper::authors($relatedArticle->author_name), 0, 2)) }}</p>
+                    </a>
+                @endforeach
+            </div>
+        </section>
+    @endif
 </main>
 
 <script>
@@ -405,6 +720,7 @@
         const citationOutput = document.getElementById('citation-output');
         const citationStatus = document.getElementById('citation-status');
         const linkStatus = document.getElementById('link-status');
+        const shareButton = document.getElementById('share-article');
 
         styleSelect.addEventListener('change', function () {
             citationOutput.textContent = citations[this.value] || '';
@@ -439,6 +755,20 @@
         document.getElementById('copy-article-link').addEventListener('click', function () {
             copyText(@json($canonicalArticleUrl), linkStatus);
         });
+
+        if (shareButton) {
+            if (navigator.share) {
+                shareButton.addEventListener('click', function () {
+                    navigator.share({
+                        title: @json($publication->paper_title),
+                        text: 'Read this article from BJDD Journal',
+                        url: @json($canonicalArticleUrl)
+                    }).catch(function () {});
+                });
+            } else {
+                shareButton.hidden = true;
+            }
+        }
     });
 </script>
 @endsection
