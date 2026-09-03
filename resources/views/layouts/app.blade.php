@@ -164,49 +164,46 @@
         .visitor-counter-wrap {
             display: flex;
             justify-content: center;
-            margin: 22px 0 6px;
+            margin: 22px 0 10px;
         }
 
         .visitor-counter {
             display: inline-flex;
-            align-items: stretch;
-            overflow: hidden;
-            border: 2px solid #c47d18;
-            border-radius: 999px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, .18);
-        }
-
-        .visitor-counter-label,
-        .visitor-counter-value {
-            display: inline-flex;
-            align-items: center;
-            min-height: 48px;
-            padding: 8px 18px;
-            font-weight: 800;
-            letter-spacing: .02em;
+            flex-direction: column;
+            min-width: 172px;
+            padding: 9px 16px 10px;
+            border: 1px solid #263142;
+            border-radius: 4px;
+            background: #202936;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .14);
+            text-align: center;
         }
 
         .visitor-counter-label {
-            color: #06452d;
-            background: #fff;
+            color: #c47d18;
+            font-size: .82rem;
+            font-weight: 800;
+            letter-spacing: .01em;
+            line-height: 1.3;
+        }
+
+        .visitor-counter-label i {
+            margin-right: 5px;
         }
 
         .visitor-counter-value {
+            display: block;
+            margin-top: 4px;
             color: #fff;
-            background: #c47d18;
-            font-size: 1.15rem;
+            font-size: 1rem;
+            line-height: 1.3;
         }
 
         @media (max-width: 430px) {
-            .visitor-counter-label,
-            .visitor-counter-value {
-                min-height: 42px;
-                padding: 7px 13px;
-                font-size: .9rem;
-            }
-
-            .visitor-counter-value {
-                font-size: 1rem;
+            .visitor-counter {
+                min-width: 160px;
+                padding-right: 13px;
+                padding-left: 13px;
             }
         }
 
@@ -569,8 +566,8 @@
 
                     <div class="visitor-counter-wrap">
                         <div class="visitor-counter" aria-label="Total visitors">
-                            <span class="visitor-counter-label">Total Visitors</span>
-                            <span class="visitor-counter-value">{{ number_format((int) ($visitorCount ?? 0)) }}</span>
+                            <span class="visitor-counter-label"><i class="bi bi-eye" aria-hidden="true"></i>Today's Visitors:</span>
+                            <span class="visitor-counter-value">{{ \App\Models\VisitorCounter::formatIndian((int) ($todayVisitorCount ?? 0)) }}</span>
                         </div>
                     </div>
 

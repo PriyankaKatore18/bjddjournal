@@ -22,15 +22,35 @@ class TrackVisitor
                 $counter = VisitorCounter::query()->create(['total_visits' => 0]);
             }
 
-            if (! $request->hasSession() || ! $request->session()->has(self::SESSION_KEY)) {
+            $hasTodayColumns = Schema::hasColumn('visitor_counters', 'today_visits')
+                && Schema::hasColumn('visitor_counters', 'visit_date');
+            $today = now()->toDateString();
+            $sessionKey = self::SESSION_KEY . '_' . $today;
+
+            if ($hasTodayColumns && $counter->visit_date?->toDateString() !== $today) {
+                $counter->update([
+                    'today_visits' => 0,
+                    'visit_date' => $today,
+                ]);
+            }
+
+            if (! $request->hasSession() || ! $request->session()->has($sessionKey)) {
+                if ($hasTodayColumns) {
+                    $counter->increment('today_visits');
+                }
+
                 $counter->increment('total_visits');
 
                 if ($request->hasSession()) {
-                    $request->session()->put(self::SESSION_KEY, true);
+                    $request->session()->put($sessionKey, true);
                 }
             }
 
-            View::share('visitorCount', (int) $counter->fresh()->total_visits);
+            $counter = $counter->fresh();
+            View::share('visitorCount', (int) $counter->total_visits);
+            View::share('todayVisitorCount', $hasTodayColumns
+                ? (int) $counter->today_visits
+                : (int) $counter->total_visits);
         }
 
         return $next($request);
