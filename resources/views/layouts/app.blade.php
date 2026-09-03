@@ -171,7 +171,7 @@
             display: inline-flex;
             align-items: stretch;
             overflow: hidden;
-            border: 2px solid #b23563;
+            border: 2px solid #c47d18;
             border-radius: 999px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, .18);
         }
@@ -187,13 +187,13 @@
         }
 
         .visitor-counter-label {
-            color: #111827;
+            color: #06452d;
             background: #fff;
         }
 
         .visitor-counter-value {
             color: #fff;
-            background: #b23563;
+            background: #c47d18;
             font-size: 1.15rem;
         }
 
