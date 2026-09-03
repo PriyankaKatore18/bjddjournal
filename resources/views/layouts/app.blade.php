@@ -161,6 +161,55 @@
             transform: scale(1.1);
         }
 
+        .visitor-counter-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 22px 0 6px;
+        }
+
+        .visitor-counter {
+            display: inline-flex;
+            align-items: stretch;
+            overflow: hidden;
+            border: 2px solid #b23563;
+            border-radius: 999px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .18);
+        }
+
+        .visitor-counter-label,
+        .visitor-counter-value {
+            display: inline-flex;
+            align-items: center;
+            min-height: 48px;
+            padding: 8px 18px;
+            font-weight: 800;
+            letter-spacing: .02em;
+        }
+
+        .visitor-counter-label {
+            color: #111827;
+            background: #fff;
+        }
+
+        .visitor-counter-value {
+            color: #fff;
+            background: #b23563;
+            font-size: 1.15rem;
+        }
+
+        @media (max-width: 430px) {
+            .visitor-counter-label,
+            .visitor-counter-value {
+                min-height: 42px;
+                padding: 7px 13px;
+                font-size: .9rem;
+            }
+
+            .visitor-counter-value {
+                font-size: 1rem;
+            }
+        }
+
         @keyframes blink {
             0% {
                 opacity: 1;
@@ -517,6 +566,13 @@
                     </div>
 
                     <hr style="border-color:#374151;">
+
+                    <div class="visitor-counter-wrap">
+                        <div class="visitor-counter" aria-label="Total visitors">
+                            <span class="visitor-counter-label">Total Visitors</span>
+                            <span class="visitor-counter-value">{{ number_format((int) ($visitorCount ?? 0)) }}</span>
+                        </div>
+                    </div>
 
                     <div class="text-center mt-3">
 
