@@ -149,13 +149,20 @@
 
 			<div class="row">
 				{{-- Page Numbers --}}
-				<div class="col-md-6 mb-3">
+				<div class="col-md-4 mb-3">
 					<label class="form-label fw-semibold">Page Numbers</label>
 					<input type="text" name="page_nos" class="form-control" value="{{ old('page_nos', $publication->page_nos) }}">
 				</div>
 
+				{{-- Current Article Views --}}
+				<div class="col-md-4 mb-3">
+					<label class="form-label fw-semibold">Current Article Views</label>
+					<input type="text" class="form-control bg-light" value="{{ $publication->view_count ?? 0 }}" readonly>
+					<div class="form-text">This count is updated automatically per visitor session.</div>
+				</div>
+
 				{{-- Current Download Count --}}
-				<div class="col-md-6 mb-3">
+				<div class="col-md-4 mb-3">
 					<label class="form-label fw-semibold">Current Download Count</label>
 					<input type="text" class="form-control bg-light" value="{{ $publication->download_count }}" readonly>
 					<div class="form-text">This count is updated automatically.</div>
