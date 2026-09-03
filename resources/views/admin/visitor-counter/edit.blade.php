@@ -25,14 +25,14 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Today's Visitors</label>
-                            <input type="number" name="today_visits" class="form-control" min="0" step="1" required value="{{ old('today_visits', $counter->today_visits ?? 0) }}">
-                            <div class="form-text">This number appears in the public footer and continues increasing with new daily visitors.</div>
+                            <label class="form-label fw-semibold">Total Visitors</label>
+                            <input type="number" name="total_visits" class="form-control" min="0" step="1" required value="{{ old('total_visits', $counter->total_visits ?? 0) }}">
+                            <div class="form-text">This number appears in the public footer and continues increasing with new visitors.</div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Current Total Visitors</label>
-                            <input type="text" class="form-control bg-light" readonly value="{{ \App\Models\VisitorCounter::formatIndian((int) ($counter->total_visits ?? 0)) }}">
-                            <div class="form-text">The total count is preserved and cannot be changed here.</div>
+                            <label class="form-label fw-semibold">Today's Visitors</label>
+                            <input type="text" class="form-control bg-light" readonly value="{{ \App\Models\VisitorCounter::formatIndian((int) ($counter->today_visits ?? 0)) }}">
+                            <div class="form-text">This daily count is tracked automatically.</div>
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="d-flex gap-2 justify-content-center">
-                        <button class="btn" type="submit" style="background-color:#00004d; color:#fff; font-weight:600; border-radius:6px; padding:8px 14px; font-size:0.9rem;">Save Visitor Count</button>
+                        <button class="btn" type="submit" style="background-color:#00004d; color:#fff; font-weight:600; border-radius:6px; padding:8px 14px; font-size:0.9rem;">Save Total Visitors</button>
                         <a href="{{ route('admin.dashboard') }}" class="btn" style="background-color:#cc7a00; color:#fff; font-weight:600; border-radius:6px; padding:8px 14px; font-size:0.9rem;">Cancel</a>
                     </div>
                 </form>

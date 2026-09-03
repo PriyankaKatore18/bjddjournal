@@ -23,29 +23,28 @@ class VisitorCounterController extends Controller
     {
         if (! $this->counterAvailable()) {
             return back()->withErrors([
-                'today_visits' => 'Visitor counter database fields are not available yet. Run the visitor counter migrations first.',
+                'total_visits' => 'Visitor counter database fields are not available yet. Run the visitor counter migrations first.',
             ]);
         }
 
         $validated = $request->validate([
-            'today_visits' => 'required|integer|min:0',
+            'total_visits' => 'required|integer|min:0',
         ]);
 
         $counter = VisitorCounter::query()->find(1);
 
         if (! $counter) {
             return back()->withErrors([
-                'today_visits' => 'Visitor counter record was not found.',
+                'total_visits' => 'Visitor counter record was not found.',
             ]);
         }
 
         $counter->update([
-            'today_visits' => $validated['today_visits'],
-            'visit_date' => now()->toDateString(),
+            'total_visits' => $validated['total_visits'],
         ]);
 
         return redirect()->route('admin.visitor-counter.edit')
-            ->with('success', "Today's visitor count updated successfully.");
+            ->with('success', 'Total visitor count updated successfully.');
     }
 
     private function counterAvailable(): bool

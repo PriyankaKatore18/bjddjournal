@@ -566,8 +566,8 @@
 
                     <div class="visitor-counter-wrap">
                         <div class="visitor-counter" aria-label="Total visitors">
-                            <span class="visitor-counter-label"><i class="bi bi-eye" aria-hidden="true"></i>Today's Visitors:</span>
-                            <span class="visitor-counter-value">{{ \App\Models\VisitorCounter::formatIndian((int) ($todayVisitorCount ?? 0)) }}</span>
+                            <span class="visitor-counter-label"><i class="bi bi-eye" aria-hidden="true"></i>Total Visitors:</span>
+                            <span class="visitor-counter-value">{{ \App\Models\VisitorCounter::formatIndian((int) ($visitorCount ?? 0)) }}</span>
                         </div>
                     </div>
 
