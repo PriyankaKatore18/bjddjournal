@@ -6,6 +6,7 @@ use App\Models\Publication;
 use App\Models\IndexPartner;
 use App\Models\CurrentIssue;
 use App\Models\Issue;
+use App\Models\BusinessSetting;
 use App\Support\ArticleHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -83,12 +84,15 @@ class PublicationController extends Controller
                         $issueRecord = $matchingIssueRecords->first();
                         $coverIssueRecord = $matchingIssueRecords
                             ->first(fn (Issue $issue) => ! empty($issue->cover_image)) ?: $issueRecord;
+                        $displayIssueRecord = $coverIssueRecord ?: $issueRecord;
 
                         return (object) [
                             'year' => $first->year,
                             'volume' => $first->volume,
                             'issue' => $first->issue,
                             'issue_range' => $first->issue_range,
+                            'title' => $displayIssueRecord?->title ?: $first->issue_range,
+                            'description' => $displayIssueRecord?->abstract,
                             'papers' => $papers,
                             'article_count' => $papers->count(),
                             'published_at' => $issueRecord?->publish_date,
@@ -112,13 +116,15 @@ class PublicationController extends Controller
             ->pluck('volume');
 
         $partners = IndexPartner::latest()->get();
+        $archiveSettings = $this->archiveSettings();
 
         return view('archive', compact(
             'archiveIssues',
             'years',
             'volumes',
             'filters',
-            'partners'
+            'partners',
+            'archiveSettings'
         ));
     }
 
@@ -368,6 +374,26 @@ class PublicationController extends Controller
         $blogs = Blog::latest()->paginate(9);
 
         return view('blogs', compact('blogs'));
+    }
+
+    private function archiveSettings(): array
+    {
+        $defaults = [
+            'archive_title' => 'Publication Archive',
+            'archive_description' => 'Browse published articles by year, volume, and issue.',
+        ];
+
+        if (! Schema::hasTable('business_settings')) {
+            return $defaults;
+        }
+
+        $settings = BusinessSetting::whereIn('key', array_keys($defaults))
+            ->pluck('value', 'key');
+
+        return [
+            'archive_title' => $settings->get('archive_title', $defaults['archive_title']),
+            'archive_description' => $settings->get('archive_description', $defaults['archive_description']),
+        ];
     }
 
 }

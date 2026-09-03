@@ -15,6 +15,7 @@ use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\Admin\JournalTeamController;
 use App\Http\Controllers\Admin\IndexPartnerController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\ArchiveController;
 use App\Models\JournalTeamMember;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\File;
@@ -128,6 +129,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/issues/{issue}/edit', [IssueController::class, 'edit'])->name('issues.edit');
         Route::put('/issues/{issue}', [IssueController::class, 'update'])->name('issues.update');
         Route::delete('/issues/{issue}', [IssueController::class, 'destroy'])->name('issues.destroy');
+
+        Route::get('/archive', [ArchiveController::class, 'edit'])->name('archive.edit');
+        Route::put('/archive', [ArchiveController::class, 'update'])->name('archive.update');
 
         // Reviewers
         Route::get('/reviewers', [ReviewerController::class, 'index'])->name('reviewers.index');

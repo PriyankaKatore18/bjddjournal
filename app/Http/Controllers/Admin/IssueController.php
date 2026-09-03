@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CurrentIssue;
 use App\Models\Issue;
-use App\Models\Publication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -16,16 +16,20 @@ class IssueController extends Controller
      */
     public function index()
     {
-        $this->ensurePublicationIssuesExist();
+        $query = Issue::query();
 
-        $publicationCounts = $this->publicationIssueCounts();
-        $issues = Issue::orderByDesc('year')
-            ->orderByDesc('volume')
-            ->orderByDesc('number')
-            ->orderByDesc('created_at')
-            ->paginate(25);
+        if (Schema::hasTable('current_issues')) {
+            $currentIssue = CurrentIssue::where('is_active', true)->first();
 
-        return view('admin.issues.index', compact('issues', 'publicationCounts'));
+            if ($currentIssue) {
+                $query->where('volume', (string) $currentIssue->volume)
+                    ->where('number', (string) $currentIssue->issue);
+            }
+        }
+
+        $issues = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('admin.issues.index', compact('issues'));
     }
 
     /**
@@ -231,81 +235,4 @@ class IssueController extends Controller
         return redirect()->back()->with('error', 'Certificate file not found.');
     }
 
-    private function ensurePublicationIssuesExist(): void
-    {
-        if (! Schema::hasTable('issues') || ! Schema::hasTable('publications')) {
-            return;
-        }
-
-        Publication::query()
-            ->select('id', 'paper_title', 'volume', 'issue', 'issue_range', 'year')
-            ->whereNotNull('volume')
-            ->whereNotNull('issue')
-            ->orderByDesc('year')
-            ->orderByDesc('volume')
-            ->orderByDesc('issue')
-            ->orderBy('id')
-            ->get()
-            ->groupBy(fn (Publication $publication) => $publication->volume . '|' . $publication->issue)
-            ->each(function ($publications) {
-                $publication = $publications->first();
-                $title = $this->issueTitleFromPublication($publication);
-
-                $issue = Issue::firstOrNew([
-                    'volume' => (string) $publication->volume,
-                    'number' => (string) $publication->issue,
-                ]);
-
-                if (! $issue->exists || $this->shouldUsePublicationIssueTitle($issue, $publications)) {
-                    $issue->title = $title;
-                }
-
-                if (! $issue->year && $publication->year) {
-                    $issue->year = (string) $publication->year;
-                }
-
-                if (! $issue->exists) {
-                    $issue->downloads_count = 0;
-                }
-
-                if ($issue->isDirty()) {
-                    $issue->save();
-                }
-            });
-    }
-
-    private function publicationIssueCounts()
-    {
-        if (! Schema::hasTable('publications')) {
-            return collect();
-        }
-
-        return Publication::query()
-            ->selectRaw('volume, issue, COUNT(*) as articles_count')
-            ->whereNotNull('volume')
-            ->whereNotNull('issue')
-            ->groupBy('volume', 'issue')
-            ->get()
-            ->mapWithKeys(fn ($publication) => [
-                $publication->volume . '|' . $publication->issue => (int) $publication->articles_count,
-            ]);
-    }
-
-    private function issueTitleFromPublication(Publication $publication): string
-    {
-        return $publication->issue_range ?: 'Volume ' . $publication->volume . ' - Issue ' . $publication->issue;
-    }
-
-    private function shouldUsePublicationIssueTitle(Issue $issue, $publications): bool
-    {
-        $title = trim((string) $issue->title);
-
-        if ($title === '') {
-            return true;
-        }
-
-        return $publications->contains(
-            fn (Publication $publication) => trim((string) $publication->paper_title) === $title
-        );
-    }
 }

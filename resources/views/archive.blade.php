@@ -251,6 +251,13 @@
         font-size: .83rem;
     }
 
+    .issue-description {
+        color: #59665f;
+        font-size: .86rem;
+        line-height: 1.5;
+        margin: 8px 0 0;
+    }
+
     .issue-articles li {
         margin-top: 4px;
         overflow-wrap: anywhere;
@@ -319,6 +326,8 @@
 
 @section('content')
 @php
+    $archiveTitle = $archiveSettings['archive_title'] ?? 'Publication Archive';
+    $archiveDescription = $archiveSettings['archive_description'] ?? 'Browse published articles by year, volume, and issue.';
     $totalArticles = $archiveIssues->flatten(1)->sum(fn ($archiveIssue) => $archiveIssue->article_count);
     $totalIssues = $archiveIssues->flatten(1)->count();
 @endphp
@@ -355,8 +364,8 @@
         <section>
             <div class="archive-heading">
                 <div>
-                    <h1>Publication Archive</h1>
-                    <p>Browse published articles by year, volume, and issue.</p>
+                    <h1>{{ $archiveTitle }}</h1>
+                    <p>{{ $archiveDescription }}</p>
                 </div>
             </div>
 
@@ -410,7 +419,7 @@
                                         <span class="issue-label issue-label-current">Current issue</span>
                                     @endif
                                 </div>
-                                <h3>{{ $archiveIssue->issue_range ?: 'Issue ' . $archiveIssue->issue }}</h3>
+                                <h3>{{ $archiveIssue->title ?: $archiveIssue->issue_range ?: 'Issue ' . $archiveIssue->issue }}</h3>
                                 <div class="issue-meta">
                                     <span>{{ $archiveIssue->article_count }} article{{ $archiveIssue->article_count === 1 ? '' : 's' }}</span>
                                     @if($archiveIssue->published_at)
@@ -419,6 +428,9 @@
                                         <span>Published {{ $archiveIssue->year }}</span>
                                     @endif
                                 </div>
+                                @if($archiveIssue->description)
+                                    <p class="issue-description">{{ $archiveIssue->description }}</p>
+                                @endif
                                 <ol class="issue-articles">
                                     @foreach($archiveIssue->papers->take(3) as $paper)
                                         <li>{{ $paper->paper_title }}</li>

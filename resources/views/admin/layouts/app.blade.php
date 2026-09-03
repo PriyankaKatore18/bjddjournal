@@ -271,6 +271,9 @@
         <a class="{{ request()->routeIs('admin.issues*') ? 'active' : '' }}" href="{{ route('admin.issues.index') }}">
           <i class="bi bi-journal-bookmark"></i> Issues
         </a>
+        <a class="nav-link {{ request()->routeIs('admin.archive*') ? 'active' : '' }}" href="{{ route('admin.archive.edit') }}">
+          <i class="bi bi-archive"></i> Archive
+        </a>
         <a class="nav-link {{ request()->routeIs('admin.publications*') ? 'active' : '' }}" href="{{ route('admin.publications.index') }}">
           <i class="bi bi-journal-text"></i> Publications
         </a>

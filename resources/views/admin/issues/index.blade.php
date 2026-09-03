@@ -46,8 +46,7 @@
       <thead style="background-color:#00004d; color:#ffffff;">
         <tr>
           
-          <th>Issue</th>
-          <th>Articles</th>
+          <th>Title</th>
           <th>Volume</th>
           <th>Number</th>
           <th>Cover</th>
@@ -57,14 +56,9 @@
       </thead>
       <tbody>
         @forelse($issues as $issue)
-        @php
-          $issueKey = $issue->volume . '|' . $issue->number;
-          $articleCount = $publicationCounts->get($issueKey, 0);
-        @endphp
         <tr>
           
           <td>{{ $issue->title }}</td>
-          <td>{{ $articleCount }}</td>
           <td>
             <span class="badge" 
                   style="background-color:#003300; color:#ffffff; font-size:0.85rem; padding:6px 10px; border-radius:12px;">
@@ -108,7 +102,7 @@
         </tr>
         @empty
         <tr>
-          <td colspan="7" class="text-center" style="color:#cc7a00; font-weight:600;">
+          <td colspan="6" class="text-center" style="color:#cc7a00; font-weight:600;">
             No issues found
           </td>
         </tr>

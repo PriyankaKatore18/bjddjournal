@@ -76,7 +76,7 @@
                                         name="home_cover"
                                         accept=".jpg,.jpeg,.png">
 
-                                    <div class="form-text">For separate covers, use Admin &rarr; Issues &rarr; Edit and upload an Archive Cover Image for each Volume/Issue.</div>
+                                    <div class="form-text">For archive covers, use Admin &rarr; Archive and upload one cover for each Volume/Issue.</div>
 
                                     <!-- <div class="mt-2">
                                         <img src="{{ asset('storage/app/public/home-cover.png') }}"

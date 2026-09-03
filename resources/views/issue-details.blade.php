@@ -300,6 +300,8 @@
     $totalArticles = $papers->total();
     $publishedDate = $issueMeta?->publish_date;
     $issueRange = $firstPaper?->issue_range;
+    $issueTitle = $issueMeta?->title ?: $issueRange;
+    $issueDescription = $issueMeta?->abstract;
     $issueIssn = $firstPaper?->eissn ?: $issueMeta?->approved_eissn;
 @endphp
 
@@ -314,8 +316,11 @@
         @endif
         <div>
             <span class="issue-kicker">Volume {{ $volume }} - Issue {{ $issue }}</span>
-            <h1 id="issue-title">{{ $issueRange ?: 'Published Issue' }}</h1>
+            <h1 id="issue-title">{{ $issueTitle ?: 'Published Issue' }}</h1>
             <p>{{ ArticleHelper::JOURNAL_NAME }}</p>
+            @if($issueDescription)
+                <p>{{ $issueDescription }}</p>
+            @endif
             <div class="issue-stats">
                 @if($publishedDate)
                     <span><strong>Published:</strong> {{ \Carbon\Carbon::parse($publishedDate)->format('d F Y') }}</span>
