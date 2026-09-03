@@ -318,13 +318,30 @@
     <section class="blogs-list" aria-label="BJDD blog articles">
         @forelse($blogs as $blog)
             @php
+                $cleanText = function (?string $value): string {
+                    $text = html_entity_decode(strip_tags($value ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    $text = preg_replace('/(?:[_=\-]{5,}|\.{5,}|(?:\x{2022}){2,})/u', ' ', $text);
+                    $text = preg_replace('/\s+/u', ' ', $text);
+                    $text = preg_replace('/^(?:\s|[._=\-]|\x{2022})+|(?:\s|[._=\-]|\x{2022})+$/u', '', $text);
+
+                    return trim($text);
+                };
+
+                $cleanHtml = function (?string $value): string {
+                    $html = $value ?? '';
+                    $html = preg_replace('/<p[^>]*>\s*(?:&nbsp;|\s|[_=\-.]|\x{2022}){5,}\s*<\/p>/iu', '', $html);
+                    $html = preg_replace('/(?:[_=\-]{5,}|\.{5,}|(?:\x{2022}){2,})/u', ' ', $html);
+
+                    return trim($html);
+                };
+
                 $descriptionHtml = trim($blog->description ?? '');
                 $bodyHtml = $descriptionHtml;
                 $title = 'BJDD Journal Blog';
                 $firstBlock = null;
 
                 if ($descriptionHtml !== '' && preg_match('/<(h[1-6]|p|div)[^>]*>(.*?)<\/\1>/is', $descriptionHtml, $matches)) {
-                    $candidate = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($matches[2]))));
+                    $candidate = $cleanText($matches[2]);
 
                     if ($candidate !== '') {
                         $firstBlock = $candidate;
@@ -332,9 +349,11 @@
                     }
                 }
 
-                $plainDescription = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($descriptionHtml))));
-                $title = $firstBlock ?: \Illuminate\Support\Str::limit($plainDescription ?: $title, 105);
-                $bodyPlain = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($bodyHtml ?: $descriptionHtml))));
+                $plainDescription = $cleanText($descriptionHtml);
+                $title = \Illuminate\Support\Str::limit($firstBlock ?: $plainDescription ?: $title, 105);
+                $articleHtml = $cleanHtml($bodyHtml ?: $descriptionHtml);
+                $bodyPlain = $cleanText($articleHtml);
+                $bodyPlain = preg_replace('/^' . preg_quote($title, '/') . '\s*/iu', '', $bodyPlain);
                 $excerpt = \Illuminate\Support\Str::limit($bodyPlain ?: $title, 260);
                 $publishedDate = optional($blog->created_at)->format('d M Y');
             @endphp
@@ -368,7 +387,7 @@
                     <details class="blog-reader">
                         <summary>Read Article</summary>
                         <div class="blog-copy">
-                            {!! $bodyHtml ?: $descriptionHtml !!}
+                            {!! $articleHtml !!}
                         </div>
                     </details>
                 </div>
