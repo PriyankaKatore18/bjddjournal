@@ -89,6 +89,42 @@
 				</div>
 			</div>
 
+			<div class="row mb-4">
+				<div class="col-md-4">
+					<div class="mb-3">
+						<label class="form-label fw-semibold">Article Type</label>
+						<input type="text" name="article_type" class="form-control" value="{{ old('article_type', 'Research Article') }}">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="mb-3">
+						<label class="form-label fw-semibold">Publication Type</label>
+						<input type="text" name="publication_type" class="form-control" value="{{ old('publication_type', 'Peer Reviewed Journal') }}">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="mb-3">
+						<label class="form-label fw-semibold">Publisher</label>
+						<input type="text" name="publisher" class="form-control" value="{{ old('publisher', 'BODHIVRUKSHA Publication') }}">
+					</div>
+				</div>
+			</div>
+
+			<div class="row mb-4">
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="form-label fw-semibold">Frequency</label>
+						<input type="text" name="frequency" class="form-control" value="{{ old('frequency', 'Bi-monthly') }}">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="form-label fw-semibold">Language</label>
+						<input type="text" name="language" class="form-control" value="{{ old('language', 'English') }}">
+					</div>
+				</div>
+			</div>
+
 			{{-- ADDED: Abstract Field --}}
 			<div class="mb-4">
 				<div class="mb-3">

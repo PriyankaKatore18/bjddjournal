@@ -92,6 +92,32 @@
 			</div>
 
 			<div class="row">
+				<div class="col-md-4 mb-3">
+					<label class="form-label fw-semibold">Article Type</label>
+					<input type="text" name="article_type" class="form-control" value="{{ old('article_type', $publication->article_type ?: 'Research Article') }}">
+				</div>
+				<div class="col-md-4 mb-3">
+					<label class="form-label fw-semibold">Publication Type</label>
+					<input type="text" name="publication_type" class="form-control" value="{{ old('publication_type', $publication->publication_type ?: 'Peer Reviewed Journal') }}">
+				</div>
+				<div class="col-md-4 mb-3">
+					<label class="form-label fw-semibold">Publisher</label>
+					<input type="text" name="publisher" class="form-control" value="{{ old('publisher', $publication->publisher ?: 'BODHIVRUKSHA Publication') }}">
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6 mb-3">
+					<label class="form-label fw-semibold">Frequency</label>
+					<input type="text" name="frequency" class="form-control" value="{{ old('frequency', $publication->frequency ?: 'Bi-monthly') }}">
+				</div>
+				<div class="col-md-6 mb-3">
+					<label class="form-label fw-semibold">Language</label>
+					<input type="text" name="language" class="form-control" value="{{ old('language', $publication->language ?: 'English') }}">
+				</div>
+			</div>
+
+			<div class="row">
 				<div class="col-md-3 mb-3">
 					<label class="form-label fw-semibold">Received Date</label>
 					<input type="date" name="received_at" class="form-control" value="{{ old('received_at', optional($publication->received_at)->format('Y-m-d')) }}">

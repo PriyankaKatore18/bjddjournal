@@ -142,6 +142,11 @@ class PublicationController extends Controller
             'registration_id' => 'required|string',
             'published_paper_id' => 'required|string',
             'year' => 'required|integer',
+            'article_type' => 'nullable|string|max:255',
+            'publication_type' => 'nullable|string|max:255',
+            'publisher' => 'nullable|string|max:255',
+            'frequency' => 'nullable|string|max:255',
+            'language' => 'nullable|string|max:255',
             'abstract' => 'nullable|string',
             'keywords' => 'nullable|string',
             'received_at' => 'nullable|date',
@@ -203,6 +208,11 @@ class PublicationController extends Controller
             'registration_id' => 'required|string',
             'published_paper_id' => 'required|string',
             'year' => 'required|integer',
+            'article_type' => 'nullable|string|max:255',
+            'publication_type' => 'nullable|string|max:255',
+            'publisher' => 'nullable|string|max:255',
+            'frequency' => 'nullable|string|max:255',
+            'language' => 'nullable|string|max:255',
             'abstract' => 'nullable|string',
             'keywords' => 'nullable|string',
             'received_at' => 'nullable|date',
@@ -325,7 +335,7 @@ class PublicationController extends Controller
         ));
     }
 
-    public function articleDetails(string $publicationKey)
+    public function articleDetails(Request $request, string $publicationKey)
     {
         $publication = ArticleHelper::findByRouteKey($publicationKey);
 
@@ -360,8 +370,15 @@ class PublicationController extends Controller
             ->reject(fn (Publication $article) => $article->getKey() === $publication->getKey())
             ->values();
 
-        if (Schema::hasColumn('publications', 'view_count')) {
+        $articleViewKey = 'bjdd_article_viewed_' . $publication->getKey();
+
+        if (Schema::hasColumn('publications', 'view_count')
+            && (! $request->hasSession() || ! $request->session()->has($articleViewKey))) {
             $publication->increment('view_count');
+
+            if ($request->hasSession()) {
+                $request->session()->put($articleViewKey, true);
+            }
         }
 
         return view('article-details', [

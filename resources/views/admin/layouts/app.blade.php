@@ -252,10 +252,6 @@
           </a>
         </li>
 
-        <a class="{{ request()->routeIs('admin.visitor-counter.*') ? 'active' : '' }}" href="{{ route('admin.visitor-counter.edit') }}">
-          <i class="bi bi-eye"></i> Visitor Counter
-        </a>
-
         <a class="{{ request()->routeIs('admin.submissions*') ? 'active' : '' }}" href="{{ route('admin.submissions.index') }}">
           <i class="bi bi-journal-text"></i> Submissions
         </a>

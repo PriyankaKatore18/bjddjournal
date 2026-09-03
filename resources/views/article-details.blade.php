@@ -545,6 +545,11 @@
     $lastUpdated = $publication->updated_at ?: $publication->created_at;
     $publishedOnlineAt = $publication->published_online_at ?: $lastUpdated;
     $articleIssn = $publication->eissn ?: '3139-1486 (Online)';
+    $articleType = $publication->article_type ?: 'Research Article';
+    $publicationType = $publication->publication_type ?: 'Peer Reviewed Journal';
+    $publisher = $publication->publisher ?: 'BODHIVRUKSHA Publication';
+    $frequency = $publication->frequency ?: 'Bi-monthly';
+    $language = $publication->language ?: 'English';
     $shareTitle = rawurlencode($publication->paper_title);
     $shareUrl = rawurlencode($canonicalArticleUrl);
 @endphp
@@ -655,12 +660,12 @@
             <section class="article-sidebar-section" aria-labelledby="article-details-title">
                 <h2 id="article-details-title">Article Details</h2>
                 <dl class="article-detail-list">
-                    <div class="article-detail-item"><dt>Article Type</dt><dd>Research Article</dd></div>
-                    <div class="article-detail-item"><dt>Publication</dt><dd>Peer Reviewed Journal</dd></div>
+                    <div class="article-detail-item"><dt>Article Type</dt><dd>{{ $articleType }}</dd></div>
+                    <div class="article-detail-item"><dt>Publication</dt><dd>{{ $publicationType }}</dd></div>
                     <div class="article-detail-item"><dt>ISSN</dt><dd>{{ $articleIssn }}</dd></div>
-                    <div class="article-detail-item"><dt>Publisher</dt><dd>BODHIVRUKSHA Publication</dd></div>
-                    <div class="article-detail-item"><dt>Frequency</dt><dd>Bi-monthly</dd></div>
-                    <div class="article-detail-item"><dt>Language</dt><dd>English</dd></div>
+                    <div class="article-detail-item"><dt>Publisher</dt><dd>{{ $publisher }}</dd></div>
+                    <div class="article-detail-item"><dt>Frequency</dt><dd>{{ $frequency }}</dd></div>
+                    <div class="article-detail-item"><dt>Language</dt><dd>{{ $language }}</dd></div>
                     <div class="article-detail-item"><dt>Last Updated</dt><dd>{{ optional($lastUpdated)->format('d F Y') ?: 'Not recorded' }}</dd></div>
                 </dl>
             </section>
