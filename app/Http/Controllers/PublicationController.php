@@ -157,14 +157,7 @@ class PublicationController extends Controller
             'published_online_at' => 'nullable|date',
             'paper_pdf' => 'nullable|mimes:pdf|max:20480',
             'certificate' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
-            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
-
-        if ($request->hasFile('cover_image') && ! Schema::hasTable('issues')) {
-            return back()
-                ->withErrors(['cover_image' => 'The issues table is not available. Please run migrations before uploading archive covers.'])
-                ->withInput();
-        }
 
         $data = $request->except(['download_count', 'view_count', 'paper_pdf', 'certificate', 'cover_image']);
 
@@ -180,28 +173,13 @@ class PublicationController extends Controller
 
         Publication::create($data);
 
-        if ($request->hasFile('cover_image')) {
-            $archiveIssue = $this->issueForCover(
-                $request->volume,
-                $request->issue,
-                $request->issue_range,
-                $request->year
-            );
-
-            $archiveIssue->update([
-                'cover_image' => $request->file('cover_image')->store('issue-covers', 'public'),
-            ]);
-        }
-
         return redirect()->route('admin.publications.index')
             ->with('success', 'Publication added successfully.');
     }
 
     public function edit(Publication $publication)
     {
-        $archiveIssue = $this->matchingIssue($publication->volume, $publication->issue);
-
-        return view('admin.publications.edit', compact('publication', 'archiveIssue'));
+        return view('admin.publications.edit', compact('publication'));
     }
 
     public function update(Request $request, Publication $publication)
@@ -228,14 +206,7 @@ class PublicationController extends Controller
             'published_online_at' => 'nullable|date',
             'paper_pdf' => 'nullable|mimes:pdf|max:20480',
             'certificate' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
-            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
-
-        if ($request->hasFile('cover_image') && ! Schema::hasTable('issues')) {
-            return back()
-                ->withErrors(['cover_image' => 'The issues table is not available. Please run migrations before uploading archive covers.'])
-                ->withInput();
-        }
 
         $data = $request->except(['download_count', 'view_count', 'paper_pdf', 'certificate', 'cover_image']);
 
@@ -255,20 +226,6 @@ class PublicationController extends Controller
         }
 
         $publication->update($data);
-
-        if ($request->hasFile('cover_image')) {
-            $archiveIssue = $this->issueForCover(
-                $request->volume,
-                $request->issue,
-                $request->issue_range,
-                $request->year
-            );
-
-            // Keep the previous cover file so replacing an image never removes existing data.
-            $archiveIssue->update([
-                'cover_image' => $request->file('cover_image')->store('issue-covers', 'public'),
-            ]);
-        }
 
         return redirect()->route('admin.publications.index')
             ->with('success', 'Publication updated successfully.');
@@ -323,12 +280,15 @@ class PublicationController extends Controller
             ->orderBy('id')
             ->paginate(5);
 
-        $issueMeta = Schema::hasTable('issues')
+        $issueRecords = Schema::hasTable('issues')
             ? Issue::where('volume', $volume)
                 ->where('number', $issue)
                 ->orderByDesc('publish_date')
-                ->first()
-            : null;
+                ->get()
+            : collect();
+
+        $issueMeta = $issueRecords->first(fn (Issue $issue) => ! empty($issue->cover_image))
+            ?: $issueRecords->first();
 
         $currentIssue = Schema::hasTable('current_issues')
             ? CurrentIssue::active()
@@ -408,38 +368,6 @@ class PublicationController extends Controller
         $blogs = Blog::latest()->paginate(9);
 
         return view('blogs', compact('blogs'));
-    }
-
-    private function matchingIssue($volume, $issue): ?Issue
-    {
-        if (! Schema::hasTable('issues')) {
-            return null;
-        }
-
-        return Issue::where('volume', (string) $volume)
-            ->where('number', (string) $issue)
-            ->latest('id')
-            ->first();
-    }
-
-    private function issueForCover($volume, $issue, ?string $issueRange = null, $year = null): ?Issue
-    {
-        $existingIssue = $this->matchingIssue($volume, $issue);
-
-        if ($existingIssue) {
-            return $existingIssue;
-        }
-
-        if (! Schema::hasTable('issues')) {
-            return null;
-        }
-
-        return Issue::create([
-            'title' => $issueRange ?: 'Volume ' . $volume . ' - Issue ' . $issue,
-            'volume' => (string) $volume,
-            'number' => (string) $issue,
-            'year' => $year ? (string) $year : null,
-        ]);
     }
 
 }

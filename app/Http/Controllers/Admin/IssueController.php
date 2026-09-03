@@ -18,13 +18,14 @@ class IssueController extends Controller
     {
         $this->ensurePublicationIssuesExist();
 
+        $publicationCounts = $this->publicationIssueCounts();
         $issues = Issue::orderByDesc('year')
             ->orderByDesc('volume')
             ->orderByDesc('number')
             ->orderByDesc('created_at')
-            ->paginate(10);
+            ->paginate(25);
 
-        return view('admin.issues.index', compact('issues'));
+        return view('admin.issues.index', compact('issues', 'publicationCounts'));
     }
 
     /**
@@ -237,7 +238,7 @@ class IssueController extends Controller
         }
 
         Publication::query()
-            ->select('id', 'volume', 'issue', 'issue_range', 'year')
+            ->select('id', 'paper_title', 'volume', 'issue', 'issue_range', 'year')
             ->whereNotNull('volume')
             ->whereNotNull('issue')
             ->orderByDesc('year')
@@ -248,18 +249,63 @@ class IssueController extends Controller
             ->groupBy(fn (Publication $publication) => $publication->volume . '|' . $publication->issue)
             ->each(function ($publications) {
                 $publication = $publications->first();
+                $title = $this->issueTitleFromPublication($publication);
 
-                Issue::firstOrCreate(
-                    [
-                        'volume' => (string) $publication->volume,
-                        'number' => (string) $publication->issue,
-                    ],
-                    [
-                        'title' => $publication->issue_range ?: 'Volume ' . $publication->volume . ' - Issue ' . $publication->issue,
-                        'year' => $publication->year ? (string) $publication->year : null,
-                        'downloads_count' => 0,
-                    ]
-                );
+                $issue = Issue::firstOrNew([
+                    'volume' => (string) $publication->volume,
+                    'number' => (string) $publication->issue,
+                ]);
+
+                if (! $issue->exists || $this->shouldUsePublicationIssueTitle($issue, $publications)) {
+                    $issue->title = $title;
+                }
+
+                if (! $issue->year && $publication->year) {
+                    $issue->year = (string) $publication->year;
+                }
+
+                if (! $issue->exists) {
+                    $issue->downloads_count = 0;
+                }
+
+                if ($issue->isDirty()) {
+                    $issue->save();
+                }
             });
+    }
+
+    private function publicationIssueCounts()
+    {
+        if (! Schema::hasTable('publications')) {
+            return collect();
+        }
+
+        return Publication::query()
+            ->selectRaw('volume, issue, COUNT(*) as articles_count')
+            ->whereNotNull('volume')
+            ->whereNotNull('issue')
+            ->groupBy('volume', 'issue')
+            ->get()
+            ->mapWithKeys(fn ($publication) => [
+                $publication->volume . '|' . $publication->issue => (int) $publication->articles_count,
+            ]);
+    }
+
+    private function issueTitleFromPublication(Publication $publication): string
+    {
+        return $publication->issue_range ?: 'Volume ' . $publication->volume . ' - Issue ' . $publication->issue;
+    }
+
+    private function shouldUsePublicationIssueTitle(Issue $issue, $publications): bool
+    {
+        $title = trim((string) $issue->title);
+
+        if ($title === '') {
+            return true;
+        }
+
+        return $publications->contains(
+            fn (Publication $publication) => trim((string) $publication->paper_title) === $title
+        );
     }
 }

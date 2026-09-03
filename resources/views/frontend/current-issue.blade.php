@@ -397,7 +397,7 @@
     $issueNumber = $currentIssue?->issue ?: $firstPublication?->issue;
     $issueDate = $currentIssue?->month_year ?: $firstPublication?->issue_range ?: $firstPublication?->year;
     $issueIssn = $currentIssue?->e_issn ?: $firstPublication?->eissn;
-    $issueRecord = $issues->first();
+    $issueRecord = $issues->first(fn ($issue) => ! empty($issue->cover_image)) ?: $issues->first();
 @endphp
 
 <main class="current-page">

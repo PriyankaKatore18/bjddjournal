@@ -789,10 +789,13 @@
 
                 $currentIssueRecord = null;
                 if ($currentIssue && \Illuminate\Support\Facades\Schema::hasTable('issues')) {
-                $currentIssueRecord = \App\Models\Issue::where('volume', $currentIssue->volume)
+                $currentIssueRecords = \App\Models\Issue::where('volume', $currentIssue->volume)
                     ->where('number', $currentIssue->issue)
                     ->latest()
-                    ->first();
+                    ->get();
+
+                $currentIssueRecord = $currentIssueRecords->first(fn ($issue) => ! empty($issue->cover_image))
+                    ?: $currentIssueRecords->first();
                 }
 
                 $homeCover = \App\Models\BusinessSetting::where('key', 'home_cover')->first();
