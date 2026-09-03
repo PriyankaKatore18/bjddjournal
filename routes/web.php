@@ -15,6 +15,7 @@ use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\Admin\JournalTeamController;
 use App\Http\Controllers\Admin\IndexPartnerController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\VisitorCounterController;
 use App\Models\JournalTeamMember;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\File;
@@ -88,6 +89,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Visitor counter
+        Route::get('/visitor-counter', [VisitorCounterController::class, 'edit'])->name('visitor-counter.edit');
+        Route::put('/visitor-counter', [VisitorCounterController::class, 'update'])->name('visitor-counter.update');
 
         // Logout
         Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
