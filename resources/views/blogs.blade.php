@@ -8,25 +8,24 @@
     .blogs-page {
         max-width: 1120px;
         margin: 0 auto;
-        padding: 18px 0 6px;
+        padding: 18px 0 8px;
         color: #14231d;
     }
 
     .blogs-header {
-        margin-bottom: 28px;
-        padding: 30px 30px 28px;
+        margin-bottom: 24px;
+        padding: 28px 30px;
         border: 1px solid #dce7df;
         border-radius: 8px;
-        background: linear-gradient(135deg, #ffffff 0%, #f5faf7 58%, #fff8ea 100%);
-        animation: blogsFadeUp .65s ease both;
+        background: linear-gradient(135deg, #fff 0%, #f5faf7 60%, #fff8ea 100%);
+        animation: blogsFadeUp .55s ease both;
     }
 
     .blogs-kicker {
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 10px;
+        display: inline-block;
+        margin-bottom: 8px;
         color: #b06d05;
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0;
@@ -37,92 +36,94 @@
         color: #00004d;
         font-size: 38px;
         font-weight: 800;
-        line-height: 1.18;
+        line-height: 1.15;
     }
 
     .blogs-subtitle {
-        max-width: 760px;
+        max-width: 780px;
         margin: 12px 0 0;
-        color: #53645e;
+        color: #52625d;
         font-size: 16px;
-        line-height: 1.75;
+        line-height: 1.7;
     }
 
     .blogs-list {
         display: grid;
-        gap: 22px;
+        gap: 18px;
     }
 
-    .blog-entry {
+    .blog-card {
         display: grid;
-        grid-template-columns: minmax(190px, 260px) minmax(0, 1fr);
-        gap: 24px;
-        padding: 24px;
-        border: 1px solid #dce7df;
+        grid-template-columns: 230px minmax(0, 1fr);
+        gap: 22px;
+        padding: 20px;
+        border: 1px solid #cfe3d6;
         border-radius: 8px;
         background: #fff;
         box-shadow: 0 12px 28px rgba(25, 42, 34, .08);
         opacity: 0;
-        transform: translateY(16px);
-        animation: blogsFadeUp .7s ease both;
+        transform: translateY(14px);
+        animation: blogsFadeUp .62s ease both;
         animation-delay: var(--delay, 0ms);
-        transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+        transition: border-color .24s ease, box-shadow .24s ease, transform .24s ease;
     }
 
-    .blog-entry:hover {
-        border-color: #b9d5c5;
-        box-shadow: 0 18px 36px rgba(25, 42, 34, .12);
+    .blog-card:hover {
+        border-color: #92c8a6;
+        box-shadow: 0 18px 34px rgba(25, 42, 34, .12);
         transform: translateY(-3px);
     }
 
-    .blog-media {
-        position: relative;
-        min-height: 210px;
+    .blog-thumb-link {
+        display: block;
         overflow: hidden;
         border-radius: 6px;
         background: #eef6f1;
         aspect-ratio: 4 / 3;
     }
 
-    .blog-media img {
+    .blog-thumb-link img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
         display: block;
-        transition: transform .45s ease;
+        object-fit: cover;
+        transition: transform .42s ease;
     }
 
-    .blog-entry:hover .blog-media img {
+    .blog-card:hover .blog-thumb-link img {
         transform: scale(1.04);
     }
 
-    .blog-media-placeholder {
+    .blog-thumb-placeholder {
         height: 100%;
         display: grid;
         place-items: center;
-        padding: 24px;
         color: #06452d;
-        text-align: center;
+        font-size: 15px;
         font-weight: 800;
+        text-align: center;
     }
 
-    .blog-media-placeholder i {
+    .blog-thumb-placeholder i {
         display: block;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         color: #b06d05;
-        font-size: 34px;
+        font-size: 32px;
     }
 
-    .blog-body {
+    .blog-card-body {
+        display: flex;
         min-width: 0;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .blog-meta {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 9px;
-        color: #62716b;
+        gap: 12px;
+        margin-bottom: 8px;
+        color: #64746f;
         font-size: 13px;
         font-weight: 700;
     }
@@ -133,80 +134,57 @@
         gap: 6px;
     }
 
-    .blog-heading {
-        margin: 0 0 12px;
-        color: #073d2a;
+    .blog-card-title {
+        margin: 0 0 10px;
         font-size: 24px;
         font-weight: 800;
-        line-height: 1.35;
+        line-height: 1.32;
+    }
+
+    .blog-card-title a {
+        display: -webkit-box;
+        overflow: hidden;
+        color: #073d2a;
+        text-decoration: none;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .blog-card-title a:hover {
+        color: #b06d05;
     }
 
     .blog-excerpt {
+        display: -webkit-box;
+        overflow: hidden;
         margin: 0 0 16px;
-        color: #42514c;
+        color: #43534e;
         font-size: 15px;
-        line-height: 1.8;
+        line-height: 1.75;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
     }
 
-    .blog-reader {
-        border-top: 1px solid #e5eee8;
-        padding-top: 14px;
-    }
-
-    .blog-reader summary {
+    .blog-read-link {
         width: max-content;
         max-width: 100%;
-        list-style: none;
-        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         border-radius: 6px;
         background: #06452d;
         color: #fff;
         padding: 10px 18px;
+        font-size: 14px;
         font-weight: 800;
-        transition: background .25s ease, transform .25s ease;
+        text-decoration: none;
+        transition: background .22s ease, transform .22s ease;
     }
 
-    .blog-reader summary::-webkit-details-marker {
-        display: none;
-    }
-
-    .blog-reader summary:hover {
+    .blog-read-link:hover {
         background: #b06d05;
-        transform: translateY(-1px);
-    }
-
-    .blog-reader[open] summary {
-        margin-bottom: 18px;
-        background: #00004d;
-    }
-
-    .blog-copy {
-        color: #2f3f39;
-        font-size: 15px;
-        line-height: 1.9;
-        animation: blogsSoftReveal .32s ease both;
-    }
-
-    .blog-copy p,
-    .blog-copy ul,
-    .blog-copy ol {
-        margin-bottom: 15px;
-    }
-
-    .blog-copy h1,
-    .blog-copy h2,
-    .blog-copy h3,
-    .blog-copy h4 {
-        margin: 22px 0 10px;
-        color: #073d2a;
-        font-weight: 800;
-        line-height: 1.35;
-    }
-
-    .blog-copy img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 6px;
+        color: #fff;
+        transform: translateX(2px);
     }
 
     .blogs-empty {
@@ -220,7 +198,7 @@
     }
 
     .blogs-pagination {
-        margin-top: 28px;
+        margin-top: 26px;
     }
 
     .blogs-pagination .pagination {
@@ -244,19 +222,7 @@
     @keyframes blogsFadeUp {
         from {
             opacity: 0;
-            transform: translateY(16px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes blogsSoftReveal {
-        from {
-            opacity: 0;
-            transform: translateY(8px);
+            transform: translateY(14px);
         }
 
         to {
@@ -267,15 +233,14 @@
 
     @media (prefers-reduced-motion: reduce) {
         .blogs-header,
-        .blog-entry,
-        .blog-copy,
-        .blog-media img,
-        .blog-reader summary {
+        .blog-card,
+        .blog-thumb-link img,
+        .blog-read-link {
             animation: none;
             transition: none;
         }
 
-        .blog-entry {
+        .blog-card {
             opacity: 1;
             transform: none;
         }
@@ -290,17 +255,13 @@
             font-size: 30px;
         }
 
-        .blog-entry {
+        .blog-card {
             grid-template-columns: 1fr;
-            gap: 18px;
-            padding: 18px;
+            gap: 16px;
+            padding: 16px;
         }
 
-        .blog-media {
-            min-height: 220px;
-        }
-
-        .blog-heading {
+        .blog-card-title {
             font-size: 21px;
         }
     }
@@ -317,79 +278,38 @@
 
     <section class="blogs-list" aria-label="BJDD blog articles">
         @forelse($blogs as $blog)
-            @php
-                $cleanText = function (?string $value): string {
-                    $text = html_entity_decode(strip_tags($value ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                    $text = preg_replace('/(?:[_=\-]{5,}|\.{5,}|(?:\x{2022}){2,})/u', ' ', $text);
-                    $text = preg_replace('/\s+/u', ' ', $text);
-                    $text = preg_replace('/^(?:\s|[._=\-]|\x{2022})+|(?:\s|[._=\-]|\x{2022})+$/u', '', $text);
-
-                    return trim($text);
-                };
-
-                $cleanHtml = function (?string $value): string {
-                    $html = $value ?? '';
-                    $html = preg_replace('/<p[^>]*>\s*(?:&nbsp;|\s|[_=\-.]|\x{2022}){5,}\s*<\/p>/iu', '', $html);
-                    $html = preg_replace('/(?:[_=\-]{5,}|\.{5,}|(?:\x{2022}){2,})/u', ' ', $html);
-
-                    return trim($html);
-                };
-
-                $descriptionHtml = trim($blog->description ?? '');
-                $bodyHtml = $descriptionHtml;
-                $title = 'BJDD Journal Blog';
-                $firstBlock = null;
-
-                if ($descriptionHtml !== '' && preg_match('/<(h[1-6]|p|div)[^>]*>(.*?)<\/\1>/is', $descriptionHtml, $matches)) {
-                    $candidate = $cleanText($matches[2]);
-
-                    if ($candidate !== '') {
-                        $firstBlock = $candidate;
-                        $bodyHtml = preg_replace('/<(h[1-6]|p|div)[^>]*>.*?<\/\1>/is', '', $descriptionHtml, 1);
-                    }
-                }
-
-                $plainDescription = $cleanText($descriptionHtml);
-                $title = \Illuminate\Support\Str::limit($firstBlock ?: $plainDescription ?: $title, 105);
-                $articleHtml = $cleanHtml($bodyHtml ?: $descriptionHtml);
-                $bodyPlain = $cleanText($articleHtml);
-                $bodyPlain = preg_replace('/^' . preg_quote($title, '/') . '\s*/iu', '', $bodyPlain);
-                $excerpt = \Illuminate\Support\Str::limit($bodyPlain ?: $title, 260);
-                $publishedDate = optional($blog->created_at)->format('d M Y');
-            @endphp
-
-            <article class="blog-entry" style="--delay: {{ $loop->index * 90 }}ms;">
-                <div class="blog-media">
+            <article class="blog-card" style="--delay: {{ $loop->index * 80 }}ms;">
+                <a class="blog-thumb-link" href="{{ route('blogs.show', $blog) }}" aria-label="Read {{ $blog->display_title }}">
                     @if($blog->image)
-                        <img src="{{ asset('storage/app/public/'.$blog->image) }}" alt="{{ $title }}">
+                        <img src="{{ asset('storage/app/public/'.$blog->image) }}" alt="{{ $blog->display_title }}">
                     @else
-                        <div class="blog-media-placeholder">
-                            <div>
+                        <span class="blog-thumb-placeholder">
+                            <span>
                                 <i class="bi bi-journal-richtext" aria-hidden="true"></i>
-                                <span>BJDD Journal</span>
-                            </div>
-                        </div>
+                                BJDD Journal
+                            </span>
+                        </span>
                     @endif
-                </div>
+                </a>
 
-                <div class="blog-body">
+                <div class="blog-card-body">
                     <div class="blog-meta">
-                        <span><i class="bi bi-calendar3" aria-hidden="true"></i>{{ $publishedDate ?: 'BJDD Blog' }}</span>
+                        <span><i class="bi bi-calendar3" aria-hidden="true"></i>{{ optional($blog->created_at)->format('d M Y') ?: 'BJDD Blog' }}</span>
                         <span><i class="bi bi-bookmark" aria-hidden="true"></i>Academic Blog</span>
                     </div>
 
-                    <h2 class="blog-heading">{{ $title }}</h2>
+                    <h2 class="blog-card-title">
+                        <a href="{{ route('blogs.show', $blog) }}">{{ $blog->display_title }}</a>
+                    </h2>
 
-                    @if($excerpt)
-                        <p class="blog-excerpt">{{ $excerpt }}</p>
+                    @if($blog->excerpt)
+                        <p class="blog-excerpt">{{ $blog->excerpt }}</p>
                     @endif
 
-                    <details class="blog-reader">
-                        <summary>Read Article</summary>
-                        <div class="blog-copy">
-                            {!! $articleHtml !!}
-                        </div>
-                    </details>
+                    <a class="blog-read-link" href="{{ route('blogs.show', $blog) }}">
+                        Read Article
+                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </a>
                 </div>
             </article>
         @empty

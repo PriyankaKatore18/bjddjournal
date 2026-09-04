@@ -72,6 +72,7 @@ Route::view('/policy', 'policy')->name('policy');
 
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/blogs', [PageController::class, 'blogs'])->name('blogs');
+Route::get('/blogs/{blog}', [PageController::class, 'blogShow'])->name('blogs.show');
 
 
 Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');

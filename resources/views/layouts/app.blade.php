@@ -394,7 +394,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('blogs') ? 'active' : '' }}"
+                                <a class="nav-link {{ request()->routeIs('blogs*') ? 'active' : '' }}"
                                     href="{{ route('blogs') }}">
                                     Blogs
                                 </a>

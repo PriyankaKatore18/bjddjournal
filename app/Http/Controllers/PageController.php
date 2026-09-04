@@ -17,4 +17,9 @@ class PageController extends Controller
 
         return view('blogs', compact('blogs'));
     }
+
+    public function blogShow(Blog $blog)
+    {
+        return view('blog-show', compact('blog'));
+    }
 }
