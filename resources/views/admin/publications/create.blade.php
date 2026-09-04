@@ -30,19 +30,19 @@
 				<div class="col-md-4">
 					<div class="mb-3">
 						<label class="form-label fw-semibold">Volume *</label>
-						<input type="number" name="volume" class="form-control" required>
+						<input type="number" name="volume" class="form-control" value="{{ old('volume', $currentIssueDefaults['volume'] ?? '') }}" required>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="mb-3">
 						<label class="form-label fw-semibold">Issue *</label>
-						<input type="number" name="issue" class="form-control" required>
+						<input type="number" name="issue" class="form-control" value="{{ old('issue', $currentIssueDefaults['issue'] ?? '') }}" required>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="mb-3">
 						<label class="form-label fw-semibold">Issue Range *</label>
-						<input type="text" name="issue_range" class="form-control" required>
+						<input type="text" name="issue_range" class="form-control" value="{{ old('issue_range', $currentIssueDefaults['issue_range'] ?? '') }}" required>
 					</div>
 				</div>
 			</div>
@@ -51,7 +51,7 @@
 				<div class="col-md-4">
 					<div class="mb-3">
 						<label class="form-label fw-semibold">Year *</label>
-						<input type="number" name="year" class="form-control" required>
+						<input type="number" name="year" class="form-control" value="{{ old('year', $currentIssueDefaults['year'] ?? '') }}" required>
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -72,7 +72,7 @@
 				<div class="col-md-4">
 					<div class="mb-3">
 						<label class="form-label fw-semibold">eISSN</label>
-						<input type="text" name="eissn" class="form-control">
+						<input type="text" name="eissn" class="form-control" value="{{ old('eissn', $currentIssueDefaults['eissn'] ?? '') }}">
 					</div>
 				</div>
 				<div class="col-md-4">

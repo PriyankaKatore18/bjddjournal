@@ -15,29 +15,9 @@ class CurrentIssueController extends Controller
 {
     public function index()
     {
-        $latestAdminIssue = Schema::hasTable('issues')
-            ? Issue::query()
-                ->whereNotNull('volume')
-                ->whereNotNull('number')
-                ->orderByDesc('publish_date')
-                ->orderByDesc('year')
-                ->orderByDesc('volume')
-                ->orderByDesc('number')
-                ->orderByDesc('created_at')
-                ->first()
-            : null;
-
-        $currentIssue = $latestAdminIssue
-            ? $this->currentIssueFromIssue($latestAdminIssue)
-            : null;
-
-        $savedCurrentIssue = Schema::hasTable('current_issues')
+        $currentIssue = Schema::hasTable('current_issues')
             ? CurrentIssue::active()->latest()->first()
             : null;
-
-        if (! $currentIssue && $savedCurrentIssue) {
-            $currentIssue = $savedCurrentIssue;
-        }
 
         if (! $currentIssue) {
             $latestPublication = Publication::query()
@@ -53,6 +33,22 @@ class CurrentIssueController extends Controller
                     'month_year' => $latestPublication->issue_range,
                     'e_issn' => $latestPublication->eissn,
                 ];
+            }
+        }
+
+        if (! $currentIssue && Schema::hasTable('issues')) {
+            $latestAdminIssue = Issue::query()
+                ->whereNotNull('volume')
+                ->whereNotNull('number')
+                ->orderByDesc('publish_date')
+                ->orderByDesc('year')
+                ->orderByDesc('volume')
+                ->orderByDesc('number')
+                ->orderByDesc('created_at')
+                ->first();
+
+            if ($latestAdminIssue) {
+                $currentIssue = $this->currentIssueFromIssue($latestAdminIssue);
             }
         }
 

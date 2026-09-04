@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CurrentIssue;
 use App\Models\BusinessSetting;
+use App\Models\Issue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -74,7 +75,7 @@ class CurrentIssueController extends Controller
         CurrentIssue::query()->update(['is_active' => false]);
 
 
-        CurrentIssue::create([
+        $currentIssue = CurrentIssue::create([
             'volume' => $request->volume,
             'issue' => $request->issue,
             'month_year' => $request->month_year,
@@ -83,7 +84,49 @@ class CurrentIssueController extends Controller
             'is_active' => true,
         ]);
 
+        $this->syncIssueRecord($currentIssue);
+
         return redirect()->route('admin.current-issue.edit')
             ->with('success', 'Current issue updated successfully!');
+    }
+
+    private function syncIssueRecord(CurrentIssue $currentIssue): void
+    {
+        if (! Schema::hasTable('issues')) {
+            return;
+        }
+
+        $issue = Issue::firstOrNew([
+            'volume' => (string) $currentIssue->volume,
+            'number' => (string) $currentIssue->issue,
+        ]);
+
+        $issue->title = $currentIssue->month_year
+            ?: 'Volume ' . $currentIssue->volume . ' - Issue ' . $currentIssue->issue;
+
+        if (Schema::hasColumn('issues', 'approved_eissn')) {
+            $issue->approved_eissn = $currentIssue->e_issn;
+        }
+
+        if (Schema::hasColumn('issues', 'year')) {
+            $issue->year = $this->yearFromText($currentIssue->month_year) ?: $issue->year;
+        }
+
+        if (! $issue->exists && Schema::hasColumn('issues', 'downloads_count')) {
+            $issue->downloads_count = 0;
+        }
+
+        if ($issue->isDirty()) {
+            $issue->save();
+        }
+    }
+
+    private function yearFromText(?string $value): ?string
+    {
+        if (preg_match('/\b(19|20)\d{2}\b/', (string) $value, $matches)) {
+            return $matches[0];
+        }
+
+        return null;
     }
 }

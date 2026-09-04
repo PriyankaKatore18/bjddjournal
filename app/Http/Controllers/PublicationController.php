@@ -226,7 +226,9 @@ class PublicationController extends Controller
 
     public function create()
     {
-        return view('admin.publications.create');
+        return view('admin.publications.create', [
+            'currentIssueDefaults' => $this->currentIssueDefaults(),
+        ]);
     }
 
     public function store(Request $request)
@@ -267,7 +269,9 @@ class PublicationController extends Controller
 
         $data['download_count'] = 0;
 
-        Publication::create($data);
+        $publication = Publication::create($data);
+
+        $this->syncIssueRecordForPublication($publication);
 
         return redirect()->route('admin.publications.index')
             ->with('success', 'Publication added successfully.');
@@ -322,6 +326,8 @@ class PublicationController extends Controller
         }
 
         $publication->update($data);
+
+        $this->syncIssueRecordForPublication($publication->refresh());
 
         return redirect()->route('admin.publications.index')
             ->with('success', 'Publication updated successfully.');
@@ -464,6 +470,94 @@ class PublicationController extends Controller
         $blogs = Blog::latest()->paginate(9);
 
         return view('blogs', compact('blogs'));
+    }
+
+    private function currentIssueDefaults(): array
+    {
+        if (! Schema::hasTable('current_issues')) {
+            return [];
+        }
+
+        $currentIssue = CurrentIssue::active()->latest()->first();
+
+        if (! $currentIssue) {
+            return [];
+        }
+
+        $year = $this->yearFromText($currentIssue->month_year);
+
+        if (! $year && $currentIssue->last_submission_date) {
+            $year = $currentIssue->last_submission_date->format('Y');
+        }
+
+        return [
+            'volume' => $currentIssue->volume,
+            'issue' => $currentIssue->issue,
+            'issue_range' => $currentIssue->month_year,
+            'year' => $year,
+            'eissn' => $currentIssue->e_issn,
+        ];
+    }
+
+    private function syncIssueRecordForPublication(Publication $publication): void
+    {
+        if (! Schema::hasTable('issues') || ! $publication->volume || ! $publication->issue) {
+            return;
+        }
+
+        $issue = Issue::firstOrNew([
+            'volume' => (string) $publication->volume,
+            'number' => (string) $publication->issue,
+        ]);
+
+        if (! $issue->exists || $this->shouldUsePublicationIssueTitle($issue, $publication)) {
+            $issue->title = $publication->issue_range
+                ?: 'Volume ' . $publication->volume . ' - Issue ' . $publication->issue;
+        }
+
+        if (Schema::hasColumn('issues', 'year') && ! $issue->year && $publication->year) {
+            $issue->year = (string) $publication->year;
+        }
+
+        if (Schema::hasColumn('issues', 'approved_eissn') && ! $issue->approved_eissn && $publication->eissn) {
+            $issue->approved_eissn = $publication->eissn;
+        }
+
+        if (Schema::hasColumn('issues', 'publish_date') && ! $issue->publish_date && $publication->published_online_at) {
+            $issue->publish_date = $publication->published_online_at;
+        }
+
+        if (! $issue->exists && Schema::hasColumn('issues', 'downloads_count')) {
+            $issue->downloads_count = 0;
+        }
+
+        if ($issue->isDirty()) {
+            $issue->save();
+        }
+    }
+
+    private function shouldUsePublicationIssueTitle(Issue $issue, Publication $publication): bool
+    {
+        $title = trim((string) $issue->title);
+
+        if ($title === '') {
+            return true;
+        }
+
+        if ($title === trim((string) $publication->paper_title)) {
+            return true;
+        }
+
+        return preg_match('/^Volume\s+\d+\s+-\s+Issue\s+\d+$/i', $title) === 1;
+    }
+
+    private function yearFromText(?string $value): ?string
+    {
+        if (preg_match('/\b(19|20)\d{2}\b/', (string) $value, $matches)) {
+            return $matches[0];
+        }
+
+        return null;
     }
 
     private function archiveSettings(): array
