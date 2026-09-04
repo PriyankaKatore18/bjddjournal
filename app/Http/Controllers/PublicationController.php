@@ -44,12 +44,40 @@ class PublicationController extends Controller
             $query->where('volume', $filters['volume']);
         }
 
+        $issueRecordList = collect();
         $issueRecords = collect();
 
         if (Schema::hasTable('issues')) {
-            $issueRecords = Issue::query()
+            $issueQuery = Issue::query();
+
+            if ($filters['search'] !== '') {
+                $search = $filters['search'];
+                $issueQuery->where(function ($builder) use ($search) {
+                    $builder->where('title', 'like', "%{$search}%")
+                        ->orWhere('abstract', 'like', "%{$search}%")
+                        ->orWhere('published_paper_id', 'like', "%{$search}%")
+                        ->orWhere('registration_id', 'like', "%{$search}%")
+                        ->orWhere('crossref_doi_member_id', 'like', "%{$search}%");
+                });
+            }
+
+            if ($filters['year'] !== null && $filters['year'] !== '') {
+                $issueQuery->where('year', $filters['year']);
+            }
+
+            if ($filters['volume'] !== null && $filters['volume'] !== '') {
+                $issueQuery->where('volume', $filters['volume']);
+            }
+
+            $issueRecordList = $issueQuery
+                ->orderByDesc('year')
+                ->orderByDesc('volume')
+                ->orderByDesc('number')
                 ->orderByDesc('publish_date')
-                ->get()
+                ->orderByDesc('created_at')
+                ->get();
+
+            $issueRecords = $issueRecordList
                 ->groupBy(fn (Issue $issue) => $issue->volume . '|' . $issue->number);
         }
 
@@ -63,12 +91,19 @@ class PublicationController extends Controller
                 ]);
         }
 
-        $archiveIssues = $query
+        $publicationRecords = $query
             ->orderByDesc('year')
             ->orderByDesc('volume')
             ->orderByDesc('issue')
             ->orderBy('id')
-            ->get()
+            ->get();
+
+        $publicationIssueKeys = $publicationRecords
+            ->mapWithKeys(fn (Publication $publication) => [
+                $publication->volume . '|' . $publication->issue => true,
+            ]);
+
+        $archiveIssues = $publicationRecords
             ->groupBy(fn (Publication $publication) => (string) ($publication->year ?: 'Other'))
             ->map(function ($yearPublications) use ($issueRecords, $currentIssueKeys) {
                 return $yearPublications
@@ -103,17 +138,72 @@ class PublicationController extends Controller
                     ->values();
             });
 
+        $issueRecordList
+            ->filter(fn (Issue $issue) => $issue->volume && $issue->number)
+            ->reject(fn (Issue $issue) => $publicationIssueKeys->has($issue->volume . '|' . $issue->number))
+            ->groupBy(function (Issue $issue) {
+                if ($issue->year) {
+                    return (string) $issue->year;
+                }
+
+                return $issue->publish_date
+                    ? (string) date('Y', strtotime($issue->publish_date))
+                    : 'Other';
+            })
+            ->each(function ($standaloneIssues, $year) use (&$archiveIssues, $currentIssueKeys) {
+                $mappedIssues = $standaloneIssues->map(function (Issue $issue) use ($currentIssueKeys) {
+                    return (object) [
+                        'year' => $issue->year ?: ($issue->publish_date ? date('Y', strtotime($issue->publish_date)) : null),
+                        'volume' => $issue->volume,
+                        'issue' => $issue->number,
+                        'issue_range' => $issue->title,
+                        'title' => $issue->title,
+                        'description' => $issue->abstract,
+                        'papers' => collect(),
+                        'article_count' => 0,
+                        'published_at' => $issue->publish_date,
+                        'cover_image' => $issue->cover_image,
+                        'is_current' => $currentIssueKeys->has($issue->volume . '|' . $issue->number),
+                    ];
+                });
+
+                $archiveIssues->put(
+                    $year,
+                    $archiveIssues->get($year, collect())->concat($mappedIssues)->values()
+                );
+            });
+
+        $archiveIssues = $archiveIssues->sortKeysDesc();
+
         $years = Publication::query()
             ->whereNotNull('year')
             ->distinct()
             ->orderByDesc('year')
             ->pluck('year');
 
+        if (Schema::hasTable('issues')) {
+            $years = $years
+                ->merge(Issue::query()->whereNotNull('year')->distinct()->pluck('year'))
+                ->filter()
+                ->unique()
+                ->sortDesc()
+                ->values();
+        }
+
         $volumes = Publication::query()
             ->whereNotNull('volume')
             ->distinct()
             ->orderByDesc('volume')
             ->pluck('volume');
+
+        if (Schema::hasTable('issues')) {
+            $volumes = $volumes
+                ->merge(Issue::query()->whereNotNull('volume')->distinct()->pluck('volume'))
+                ->filter()
+                ->unique()
+                ->sortDesc()
+                ->values();
+        }
 
         $partners = IndexPartner::latest()->get();
         $archiveSettings = $this->archiveSettings();

@@ -48,8 +48,8 @@ class IssueController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'abstract' => 'nullable|string', // Added
-            'volume' => 'nullable|string|max:50',
-            'number' => 'nullable|string|max:50',
+            'volume' => 'required|string|max:50',
+            'number' => 'required|string|max:50',
             'publish_date' => 'nullable|date',
             'registration_id' => 'nullable|string|max:100',
             'published_paper_id' => 'nullable|string|max:100',
@@ -89,9 +89,11 @@ class IssueController extends Controller
             $data['cover_image'] = $request->file('cover_image')->store('issue-covers', 'public');
         }
 
-        Issue::create($data);
+        $issue = Issue::create($data);
 
-        return redirect()->route('admin.issues.index')->with('success', 'Issue created successfully.');
+        $this->publishAsCurrentIssue($issue);
+
+        return redirect()->route('admin.issues.index')->with('success', 'Issue created and published on the frontend.');
     }
 
     /**
@@ -110,8 +112,8 @@ class IssueController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'abstract' => 'nullable|string', // Added
-            'volume' => 'nullable|string|max:50',
-            'number' => 'nullable|string|max:50',
+            'volume' => 'required|string|max:50',
+            'number' => 'required|string|max:50',
             'publish_date' => 'nullable|date',
             'registration_id' => 'nullable|string|max:100',
             'published_paper_id' => 'nullable|string|max:100',
@@ -164,7 +166,9 @@ class IssueController extends Controller
 
         $issue->update($data);
 
-        return redirect()->route('admin.issues.edit', $issue)->with('success', 'Issue updated successfully.');
+        $this->publishAsCurrentIssue($issue);
+
+        return redirect()->route('admin.issues.edit', $issue)->with('success', 'Issue updated and published on the frontend.');
     }
 
     /**
@@ -183,6 +187,9 @@ class IssueController extends Controller
         }
 
         $issue->delete();
+
+        $this->publishLatestAvailableIssue();
+
         return redirect()->route('admin.issues.index')->with('success', 'Issue deleted successfully.');
     }
 
@@ -233,6 +240,56 @@ class IssueController extends Controller
             }
         }
         return redirect()->back()->with('error', 'Certificate file not found.');
+    }
+
+    private function publishAsCurrentIssue(Issue $issue): void
+    {
+        if (! Schema::hasTable('current_issues') || ! $issue->volume || ! $issue->number) {
+            return;
+        }
+
+        CurrentIssue::query()->update(['is_active' => false]);
+
+        $data = [
+            'volume' => (string) $issue->volume,
+            'issue' => (string) $issue->number,
+            'month_year' => $issue->title ?: 'Volume ' . $issue->volume . ' - Issue ' . $issue->number,
+            'is_active' => true,
+        ];
+
+        if (Schema::hasColumn('current_issues', 'e_issn')) {
+            $data['e_issn'] = $issue->approved_eissn ?: 'Applied / Under Process';
+        }
+
+        if (Schema::hasColumn('current_issues', 'last_submission_date')) {
+            $data['last_submission_date'] = $issue->publish_date ?: null;
+        }
+
+        CurrentIssue::create($data);
+    }
+
+    private function publishLatestAvailableIssue(): void
+    {
+        if (! Schema::hasTable('current_issues')) {
+            return;
+        }
+
+        $latestIssue = Issue::query()
+            ->whereNotNull('volume')
+            ->whereNotNull('number')
+            ->orderByDesc('publish_date')
+            ->orderByDesc('year')
+            ->orderByDesc('volume')
+            ->orderByDesc('number')
+            ->orderByDesc('created_at')
+            ->first();
+
+        if ($latestIssue) {
+            $this->publishAsCurrentIssue($latestIssue);
+            return;
+        }
+
+        CurrentIssue::query()->update(['is_active' => false]);
     }
 
 }

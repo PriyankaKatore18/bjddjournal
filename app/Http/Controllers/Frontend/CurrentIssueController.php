@@ -15,9 +15,29 @@ class CurrentIssueController extends Controller
 {
     public function index()
     {
-        $currentIssue = Schema::hasTable('current_issues')
+        $latestAdminIssue = Schema::hasTable('issues')
+            ? Issue::query()
+                ->whereNotNull('volume')
+                ->whereNotNull('number')
+                ->orderByDesc('publish_date')
+                ->orderByDesc('year')
+                ->orderByDesc('volume')
+                ->orderByDesc('number')
+                ->orderByDesc('created_at')
+                ->first()
+            : null;
+
+        $currentIssue = $latestAdminIssue
+            ? $this->currentIssueFromIssue($latestAdminIssue)
+            : null;
+
+        $savedCurrentIssue = Schema::hasTable('current_issues')
             ? CurrentIssue::active()->latest()->first()
             : null;
+
+        if (! $currentIssue && $savedCurrentIssue) {
+            $currentIssue = $savedCurrentIssue;
+        }
 
         if (! $currentIssue) {
             $latestPublication = Publication::query()
@@ -48,7 +68,8 @@ class CurrentIssueController extends Controller
         $issues = collect();
 
         if (Schema::hasTable('issues')) {
-            $issuesQuery = Issue::orderBy('created_at', 'desc');
+            $issuesQuery = Issue::orderByDesc('created_at')
+                ->orderByDesc('publish_date');
 
             if ($currentIssue) {
                 $issuesQuery->where('volume', $currentIssue->volume)
@@ -66,6 +87,16 @@ class CurrentIssueController extends Controller
             'currentIssue',
             'partners'
         ));
+    }
+
+    private function currentIssueFromIssue(Issue $issue): object
+    {
+        return (object) [
+            'volume' => $issue->volume,
+            'issue' => $issue->number,
+            'month_year' => $issue->title ?: 'Volume ' . $issue->volume . ' - Issue ' . $issue->number,
+            'e_issn' => $issue->approved_eissn,
+        ];
     }
 
 

@@ -397,7 +397,8 @@
     $issueNumber = $currentIssue?->issue ?: $firstPublication?->issue;
     $issueDate = $currentIssue?->month_year ?: $firstPublication?->issue_range ?: $firstPublication?->year;
     $issueIssn = $currentIssue?->e_issn ?: $firstPublication?->eissn;
-    $issueRecord = $issues->first(fn ($issue) => ! empty($issue->cover_image)) ?: $issues->first();
+    $issueRecord = $issues->first();
+    $coverIssueRecord = $issues->first(fn ($issue) => ! empty($issue->cover_image)) ?: $issueRecord;
 @endphp
 
 <main class="current-page">
@@ -437,8 +438,8 @@
 
             @if($issueVolume && $issueNumber)
                 <section class="current-overview" aria-labelledby="current-issue-title">
-                    @if($issueRecord?->cover_image)
-                        <img class="current-cover" src="{{ ArticleHelper::issueCoverUrl($issueRecord->cover_image) }}" alt="Volume {{ $issueVolume }} Issue {{ $issueNumber }} cover">
+                    @if($coverIssueRecord?->cover_image)
+                        <img class="current-cover" src="{{ ArticleHelper::issueCoverUrl($coverIssueRecord->cover_image) }}" alt="Volume {{ $issueVolume }} Issue {{ $issueNumber }} cover">
                     @else
                         <div class="current-cover current-cover-placeholder" role="img" aria-label="No cover uploaded">No cover uploaded</div>
                     @endif
