@@ -81,10 +81,12 @@
 
     .blog-featured-image {
         width: 100%;
-        max-height: 470px;
+        height: auto;
+        max-height: none;
         display: block;
-        object-fit: cover;
-        background: #eef6f1;
+        object-fit: contain;
+        background: #f8fbf9;
+        border-bottom: 1px solid #e2eee7;
     }
 
     .blog-article-body {

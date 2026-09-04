@@ -78,7 +78,8 @@
         display: block;
         overflow: hidden;
         border-radius: 6px;
-        background: #eef6f1;
+        border: 1px solid #e2eee7;
+        background: #f8fbf9;
         aspect-ratio: 4 / 3;
     }
 
@@ -86,12 +87,12 @@
         width: 100%;
         height: 100%;
         display: block;
-        object-fit: cover;
+        object-fit: contain;
         transition: transform .42s ease;
     }
 
     .blog-card:hover .blog-thumb-link img {
-        transform: scale(1.04);
+        transform: scale(1.02);
     }
 
     .blog-thumb-placeholder {
