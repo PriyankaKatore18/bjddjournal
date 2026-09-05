@@ -112,20 +112,88 @@ class Blog extends Model
 
     private function plainTextToHtml(string $text): string
     {
-        $paragraphs = preg_split('/\R+/u', trim($text)) ?: [];
+        $paragraphs = preg_split('/\R/u', trim($text)) ?: [];
+        $paragraphs = array_values(array_filter(array_map(
+            fn ($paragraph) => $this->cleanText($paragraph),
+            $paragraphs
+        )));
         $html = '';
+        $count = count($paragraphs);
 
-        foreach ($paragraphs as $paragraph) {
-            $paragraph = $this->cleanText($paragraph);
+        for ($i = 0; $i < $count; $i++) {
+            $paragraph = $paragraphs[$i];
 
-            if ($paragraph === '') {
+            if ($this->isSectionHeading($paragraph)) {
+                $html .= '<h2>' . $this->escapeHtml($paragraph) . '</h2>';
                 continue;
             }
 
-            $html .= '<p>' . htmlspecialchars($paragraph, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</p>';
+            $html .= '<p>' . $this->escapeHtml($paragraph) . '</p>';
+
+            if ($this->introducesList($paragraph) && $this->hasListAfter($paragraphs, $i + 1)) {
+                $html .= '<ul>';
+
+                while (($paragraphs[$i + 1] ?? null) && $this->isListItemCandidate($paragraphs[$i + 1])) {
+                    $i++;
+                    $html .= '<li>' . $this->escapeHtml($this->normalizeListItem($paragraphs[$i])) . '</li>';
+                }
+
+                $html .= '</ul>';
+            }
         }
 
         return $html;
+    }
+
+    private function escapeHtml(string $value): string
+    {
+        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    private function introducesList(string $line): bool
+    {
+        return Str::endsWith($line, ':');
+    }
+
+    private function hasListAfter(array $paragraphs, int $index): bool
+    {
+        return isset($paragraphs[$index]) && $this->isListItemCandidate($paragraphs[$index]);
+    }
+
+    private function isSectionHeading(string $line): bool
+    {
+        if (Str::length($line) > 130 || Str::endsWith($line, ':')) {
+            return false;
+        }
+
+        if (preg_match('/^step\s+\d+\s*[:.-]/iu', $line)) {
+            return true;
+        }
+
+        return Str::endsWith($line, '?')
+            && preg_match('/^(what|why|how|when|where|who|which)\b/iu', $line);
+    }
+
+    private function isListItemCandidate(string $line): bool
+    {
+        if ($this->isSectionHeading($line) || $this->introducesList($line)) {
+            return false;
+        }
+
+        if (preg_match('/^(?:[-*]|\x{2022}|\d+[.)])\s+/u', $line)) {
+            return true;
+        }
+
+        if (Str::length($line) > 120 || preg_match('/[.!?]$/u', $line)) {
+            return false;
+        }
+
+        return str_word_count($line) <= 12;
+    }
+
+    private function normalizeListItem(string $line): string
+    {
+        return trim(preg_replace('/^(?:[-*]|\x{2022}|\d+[.)])\s*/u', '', $line) ?? $line);
     }
 
     private function withoutLeadingTitle(string $html): string
