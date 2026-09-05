@@ -62,16 +62,21 @@
         color: #c47d18;
     }
 
-    .partner-list {
-        display: flex;
-        flex-wrap: wrap;
+    .current-sidebar .partner-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
     }
 
-    .partner-list img {
-        width: 38px;
+    .current-sidebar .partner-list a {
+        min-width: 0;
+    }
+
+    .current-sidebar .partner-list img {
+        width: 100%;
         height: 38px;
         object-fit: contain;
+        box-sizing: border-box;
         border: 1px solid #dce5df;
         border-radius: 4px;
         padding: 4px;
