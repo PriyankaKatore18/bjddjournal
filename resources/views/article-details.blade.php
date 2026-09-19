@@ -547,7 +547,7 @@
     $articleIssn = $publication->eissn ?: '3139-1486 (Online)';
     $articleType = $publication->article_type ?: 'Research Article';
     $publicationType = $publication->publication_type ?: 'Peer Reviewed Journal';
-    $publisher = $publication->publisher ?: 'BODHIVRUKSHA Publication';
+    $publisher = $publication->publisher ?: 'Eagle Leap Publication';
     $frequency = $publication->frequency ?: 'Bi-monthly';
     $language = $publication->language ?: 'English';
     $shareTitle = rawurlencode($publication->paper_title);

@@ -102,7 +102,7 @@
 				</div>
 				<div class="col-md-4 mb-3">
 					<label class="form-label fw-semibold">Publisher</label>
-					<input type="text" name="publisher" class="form-control" value="{{ old('publisher', $publication->publisher ?: 'BODHIVRUKSHA Publication') }}">
+					<input type="text" name="publisher" class="form-control" value="{{ old('publisher', $publication->publisher ?: 'Eagle Leap Publication') }}">
 				</div>
 			</div>
 
