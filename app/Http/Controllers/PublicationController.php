@@ -220,7 +220,7 @@ class PublicationController extends Controller
 
     public function adminIndex()
     {
-        $publications = Publication::orderBy('created_at', 'desc')->paginate(10);
+        $publications = Publication::orderBy('created_at', 'desc')->get();
         return view('admin.publications.index', compact('publications'));
     }
 

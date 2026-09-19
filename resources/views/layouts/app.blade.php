@@ -272,7 +272,7 @@
 
                                 <div class="journal-stats-row d-flex flex-wrap justify-content-center gap-4">
 
-                                    <span>ISSN: 3139-1486 (Online)</span>
+                                    <span>ISSN: 3139-1486 (Online) | ISSN: 3139-9819 (Print)</span>
 
                                     <span>Impact Factor : 6.21</span>
 

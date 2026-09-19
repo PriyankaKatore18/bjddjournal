@@ -146,6 +146,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Contact Submissions
         Route::get('/contact-submissions', [ContactSubmissionController::class, 'index'])->name('contact-submissions.index');
         Route::get('/contact-submissions/{id}', [ContactSubmissionController::class, 'show'])->name('contact-submissions.show');
+        Route::delete('/contact-submissions', [ContactSubmissionController::class, 'destroyAll'])->name('contact-submissions.destroy-all');
         Route::delete('/contact-submissions/{id}', [ContactSubmissionController::class, 'destroy'])->name('contact-submissions.destroy');
 
 

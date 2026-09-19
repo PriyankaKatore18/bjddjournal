@@ -3,6 +3,12 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h4 style="color:#00004d; font-weight:bold;">Contact Submissions</h4>
+  @if($submissions->isNotEmpty())
+    <button type="button" class="btn" id="deleteAllBtn"
+            style="background-color:#dc3545; color:#fff; border:none; border-radius:6px; padding:8px 14px; font-weight:600;">
+      Delete All Contacts
+    </button>
+  @endif
 </div>
 
 @if(session('success'))
@@ -28,6 +34,29 @@
                     @csrf 
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" style="background-color:#dc3545; border:none; border-radius:6px; padding:8px 16px;">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete All Confirmation Modal -->
+<div class="modal fade" id="deleteAllModal" tabindex="-1" aria-labelledby="deleteAllModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.3);">
+            <div class="modal-header" style="background-color:#00004d; color:white; border-top-left-radius:12px; border-top-right-radius:12px;">
+                <h5 class="modal-title" id="deleteAllModalLabel">Delete All Contacts</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding:20px; font-size:1rem;">
+                <p class="mb-0">Are you sure you want to permanently delete all {{ $submissions->total() }} contact submissions? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer" style="border-top:1px solid #eee; padding:15px 20px;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color:#6c757d; border:none; border-radius:6px; padding:8px 16px;">Cancel</button>
+                <form action="{{ route('admin.contact-submissions.destroy-all') }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" style="background-color:#dc3545; border:none; border-radius:6px; padding:8px 16px;">Delete All</button>
                 </form>
             </div>
         </div>
@@ -157,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const deleteModal = document.getElementById('deleteModal');
     const deleteForm = document.getElementById('deleteForm');
     const deleteButtons = document.querySelectorAll('.delete-btn');
+    const deleteAllButton = document.getElementById('deleteAllBtn');
     
     deleteButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -167,6 +197,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const modal = new bootstrap.Modal(deleteModal);
             modal.show();
         });
+    });
+
+    deleteAllButton?.addEventListener('click', function() {
+        const modal = new bootstrap.Modal(document.getElementById('deleteAllModal'));
+        modal.show();
     });
 });
 </script>

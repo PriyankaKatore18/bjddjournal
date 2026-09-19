@@ -218,7 +218,7 @@
 
     .hero-image {
         width: 100%;
-        height: 560px;
+        height: 640px;
         object-fit: cover;
         display: block;
     }
@@ -242,14 +242,123 @@
 
     .hero-features {
         position: absolute;
-        bottom: 90px;
+        bottom: 92px;
         left: 50%;
         transform: translateX(-50%);
         width: 92%;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 18px;
+        gap: 16px;
         z-index: 10;
+    }
+
+    .feature-card {
+        --feature-color: #3430ad;
+        --feature-light: #eef0ff;
+        position: relative;
+        min-height: 275px;
+        padding: 28px 20px 22px;
+        overflow: hidden;
+        text-align: center;
+        color: #102047;
+        background: linear-gradient(145deg, rgba(255, 255, 255, .98), var(--feature-light));
+        border: 2px solid rgba(255, 255, 255, .9);
+        border-radius: 22px;
+        box-shadow: 0 12px 26px rgba(0, 9, 45, .28);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .feature-card::after {
+        content: "";
+        position: absolute;
+        right: -42px;
+        bottom: -52px;
+        width: 140px;
+        height: 115px;
+        background: var(--feature-color);
+        opacity: .9;
+        border-radius: 72% 0 0 0;
+        transform: rotate(-14deg);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 18px 34px rgba(0, 9, 45, .38);
+    }
+
+    .feature-card--gold {
+        --feature-color: #bd8900;
+        --feature-light: #fff8dc;
+    }
+
+    .feature-card--green {
+        --feature-color: #16895e;
+        --feature-light: #e2fff1;
+    }
+
+    .feature-card--red {
+        --feature-color: #c43147;
+        --feature-light: #fff0f3;
+    }
+
+    .feature-icon {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 18px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 30px;
+        background: var(--feature-color);
+        border: 5px solid rgba(255, 255, 255, .72);
+        border-radius: 50%;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, .2);
+    }
+
+    .feature-card h3 {
+        position: relative;
+        z-index: 1;
+        margin: 0;
+        font-size: 21px;
+        font-weight: 800;
+        color: #0c1b44;
+    }
+
+    .feature-card h3::after {
+        content: "";
+        display: block;
+        width: 38px;
+        height: 3px;
+        margin: 12px auto;
+        background: var(--feature-color);
+        border-radius: 10px;
+    }
+
+    .feature-card p {
+        position: relative;
+        z-index: 1;
+        min-height: 50px;
+        margin: 0;
+        color: #4b5873;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    .feature-arrow {
+        position: absolute;
+        z-index: 2;
+        bottom: 20px;
+        left: 50%;
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        background: var(--feature-color);
+        border-radius: 50%;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .18);
+        transform: translateX(-50%);
     }
 
     .hero-buttons {
@@ -301,18 +410,11 @@
         }
 
         .hero-features>div {
-
-            padding: 18px !important;
+            padding: 22px 18px !important;
         }
 
-        .hero-features img {
-
-            height: 40px !important;
-        }
-
-        .hero-features h3 {
-
-            font-size: 18px !important;
+        .feature-card h3 {
+            font-size: 18px;
         }
 
         .hero-buttons {
@@ -360,6 +462,14 @@
             white-space: normal;
             word-break: break-word;
         }
+
+        .feature-card {
+            min-height: 220px;
+        }
+
+        .feature-card p {
+            min-height: auto;
+        }
     }
 </style>
 
@@ -395,8 +505,7 @@
                     margin-bottom:15px;
                     ">
 
-                    ISSN :
-                    3139-1486 (Online)
+                    ISSN: 3139-1486 (Online) | ISSN: 3139-9819 (Print)
 
                     &nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -410,106 +519,33 @@
 
             <div class="hero-features">
 
-                <div style="
-                    background:#24158f;
-                    padding:30px 20px;
-                    border-radius:12px;
-                    text-align:center;
-                    border:4px solid #fff;
-                    ">
+                <article class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-file-circle-check" aria-hidden="true"></i></div>
+                    <h3>Peer Reviewed</h3>
+                    <p>Quality research ensured through rigorous peer review.</p>
+                    <span class="feature-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                </article>
 
-                    <img src="{{ asset('public/assets/img/peer1.png') }}"
-                        style="height:45px;">
+                <article class="feature-card feature-card--gold">
+                    <div class="feature-icon"><i class="fa-solid fa-lock-open" aria-hidden="true"></i></div>
+                    <h3>Open Access</h3>
+                    <p>Research for everyone, without barriers.</p>
+                    <span class="feature-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                </article>
 
-                    <h3 style="
-                        margin-top:18px;
-                        color:#fff;
-                        font-size:22px;
-                        font-weight:700;
-                        ">
+                <article class="feature-card feature-card--green">
+                    <div class="feature-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+                    <h3>Multidisciplinary</h3>
+                    <p>Exploring knowledge across diverse fields.</p>
+                    <span class="feature-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                </article>
 
-                        Peer Reviewed
-
-                    </h3>
-
-                </div>
-
-                <div style="
-                background:#24158f;
-                padding:30px 20px;
-                border-radius:12px;
-                text-align:center;
-                border:4px solid #fff;
-                ">
-
-                    <img src="{{ asset('public/assets/img/open.png') }}"
-                        style="height:45px;">
-
-                    <h3 style="
-                    margin-top:18px;
-                    color:#fff;
-                    font-size:22px;
-                    font-weight:700;
-                    ">
-
-                        Open Access
-
-                    </h3>
-
-                </div>
-
-                <div style="
-                background:#24158f;
-                padding:30px 20px;
-                border-radius:12px;
-                text-align:center;
-                border:4px solid #fff;
-                ">
-
-                    <img src="{{ asset('public/assets/img/multi.png') }}"
-                        style="height:45px;">
-
-                    <h3 style="
-                    margin-top:18px;
-                    color:#fff;
-                    font-size:22px;
-                    font-weight:700;
-                    ">
-
-                        Multidisciplinary
-
-                    </h3>
-
-                </div>
-
-                <div style="
-                    background:#24158f;
-                    padding:30px 20px;
-                    border-radius:12px;
-                    text-align:center;
-                    border:4px solid #fff;
-                    ">
-
-                    <img src="{{ asset('public/assets/img/multiple.png') }}"
-                        style="height:45px;">
-
-                    <h3 style="
-                        margin-top:18px;
-                        color:#fff;
-                        font-size:20px;
-                        font-weight:700;
-                        line-height:1.5;
-                    ">
-
-                        Multiple Languages
-
-                        <br>
-
-                        (English, Hindi, Marathi)
-
-                    </h3>
-
-                </div>
+                <article class="feature-card feature-card--red">
+                    <div class="feature-icon"><i class="fa-solid fa-language" aria-hidden="true"></i></div>
+                    <h3>Multiple Languages</h3>
+                    <p>Publishing in English, Hindi and Marathi.</p>
+                    <span class="feature-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                </article>
 
             </div>
 

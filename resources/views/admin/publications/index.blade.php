@@ -63,56 +63,9 @@
   </div>
 </div>
 
-@if($publications->hasPages())
-<div class="mt-4">
-  <nav aria-label="Publications pagination">
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="text-muted small">
-        Showing {{ $publications->firstItem() }} to {{ $publications->lastItem() }} of {{ $publications->total() }} results
-      </div>
-      <ul class="pagination pagination-sm mb-0">
-        {{-- Previous Page Link --}}
-        @if($publications->onFirstPage())
-          <li class="page-item disabled">
-            <span class="page-link" style="background-color:#f8f9fa; color:#6c757d; border-color:#dee2e6;">Previous</span>
-          </li>
-        @else
-          <li class="page-item">
-            <a class="page-link" href="{{ $publications->previousPageUrl() }}" 
-               style="color:#00004d; border-color:#00004d;">Previous</a>
-          </li>
-        @endif
-
-        {{-- Pagination Elements --}}
-        @foreach($publications->getUrlRange(1, $publications->lastPage()) as $page => $url)
-          @if($page == $publications->currentPage())
-            <li class="page-item active">
-              <span class="page-link" style="background-color:#00004d; border-color:#00004d;">{{ $page }}</span>
-            </li>
-          @else
-            <li class="page-item">
-              <a class="page-link" href="{{ $url }}" 
-                 style="color:#00004d; border-color:#00004d;">{{ $page }}</a>
-            </li>
-          @endif
-        @endforeach
-
-        {{-- Next Page Link --}}
-        @if($publications->hasMorePages())
-          <li class="page-item">
-            <a class="page-link" href="{{ $publications->nextPageUrl() }}" 
-               style="color:#00004d; border-color:#00004d;">Next</a>
-          </li>
-        @else
-          <li class="page-item disabled">
-            <span class="page-link" style="background-color:#f8f9fa; color:#6c757d; border-color:#dee2e6;">Next</span>
-          </li>
-        @endif
-      </ul>
-    </div>
-  </nav>
+<div class="mt-4 text-muted small">
+  Showing all {{ $publications->count() }} results
 </div>
-@endif
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">

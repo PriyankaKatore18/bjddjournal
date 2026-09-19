@@ -30,4 +30,13 @@ class ContactSubmissionController extends Controller
         return redirect()->route('admin.contact-submissions.index')
             ->with('success', 'Submission deleted successfully.');
     }
+
+    // Delete every contact submission at once.
+    public function destroyAll()
+    {
+        $deletedCount = ContactSubmission::query()->delete();
+
+        return redirect()->route('admin.contact-submissions.index')
+            ->with('success', "{$deletedCount} contact submission(s) deleted successfully.");
+    }
 }
