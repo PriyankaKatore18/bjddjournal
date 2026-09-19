@@ -258,6 +258,9 @@
         position: relative;
         min-height: 275px;
         padding: 28px 20px 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         overflow: hidden;
         text-align: center;
         color: #102047;
@@ -346,19 +349,18 @@
     }
 
     .feature-arrow {
-        position: absolute;
+        position: relative;
         z-index: 2;
-        bottom: 20px;
-        left: 50%;
         width: 38px;
         height: 38px;
+        margin-top: 18px;
         display: grid;
         place-items: center;
         color: #fff;
         background: var(--feature-color);
         border-radius: 50%;
         box-shadow: 0 6px 12px rgba(0, 0, 0, .18);
-        transform: translateX(-50%);
+        flex: 0 0 auto;
     }
 
     .hero-buttons {
