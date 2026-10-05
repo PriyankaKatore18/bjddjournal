@@ -447,19 +447,21 @@
         @endif
     </div>
 
-    <!-- Instructions -->
-    <div class="mb-4 p-4 instruction-box">
-        <h2 class="mb-3" style="font-size: 20px; font-weight: bold; color: var(--primary-dark);">Important Instructions</h2>
-        <ul style="line-height: 1.8;">
-            <li>Fill all details carefully. Certificate and journal listing will be generated exactly as per information provided.</li>
-            <li>Fields marked with <span class="text-danger">*</span> are mandatory.</li>
-            <li>Corresponding author (first author) will receive all communications regarding acceptance, payment, and publication.</li>
-            <li>Do not enter names or titles in all capital letters. Use capital letters only at the beginning of each word.</li>
-            <li>The submitted paper must be in <strong>.doc</strong> or <strong>.docx</strong> format only.</li>
-            <li>Mobile number must be exactly 10 digits.</li>
-            <li>The copyright form is requested by email only after acceptance; it is not uploaded here.</li>
-        </ul>
-    </div>
+    @if(!session('paper_id'))
+        <!-- Instructions -->
+        <div class="mb-4 p-4 instruction-box">
+            <h2 class="mb-3" style="font-size: 20px; font-weight: bold; color: var(--primary-dark);">Important Instructions</h2>
+            <ul style="line-height: 1.8;">
+                <li>Fill all details carefully. Certificate and journal listing will be generated exactly as per information provided.</li>
+                <li>Fields marked with <span class="text-danger">*</span> are mandatory.</li>
+                <li>Corresponding author (first author) will receive all communications regarding acceptance, payment, and publication.</li>
+                <li>Do not enter names or titles in all capital letters. Use capital letters only at the beginning of each word.</li>
+                <li>The submitted paper must be in <strong>.doc</strong> or <strong>.docx</strong> format only.</li>
+                <li>Mobile number must be exactly 10 digits.</li>
+                <li>The copyright form is requested by email only after acceptance; it is not uploaded here.</li>
+            </ul>
+        </div>
+    @endif
 
     @if(session('paper_id'))
     <div class="card border-success mb-4 submission-success-card">
