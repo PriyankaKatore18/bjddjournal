@@ -224,7 +224,11 @@ class PaperSubmissionController extends Controller
             'state' => ['nullable', 'string', 'max:100'],
             'country' => ['nullable', 'string', 'max:100'],
             'pincode' => ['nullable', 'digits:6'],
-            'co_authors' => ['nullable', 'json'],
+            'co_authors' => ['nullable', 'array', 'max:3'],
+            'co_authors.*.name' => ['nullable', 'string', 'max:255'],
+            'co_authors.*.designation' => ['nullable', 'string', 'max:255'],
+            'co_authors.*.institute' => ['nullable', 'string', 'max:255'],
+            'co_authors.*.email' => ['nullable', 'email', 'max:255'],
             'file' => ['nullable', 'file', 'mimes:doc,docx', 'max:10240'],
             'plagiarism_report' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'ai_report' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
@@ -234,9 +238,7 @@ class PaperSubmissionController extends Controller
         $data = collect($validated)->except(['file', 'plagiarism_report', 'ai_report'])->all();
         $storedFiles = [];
 
-        if (array_key_exists('co_authors', $data)) {
-            $data['co_authors'] = $data['co_authors'] ? json_decode($data['co_authors'], true) : null;
-        }
+        $data['co_authors'] = $this->cleanCoAuthors($data['co_authors'] ?? []);
 
         try {
             foreach ([
@@ -310,7 +312,11 @@ class PaperSubmissionController extends Controller
             'state' => ['nullable', 'string', 'max:100'],
             'country' => ['nullable', 'string', 'max:100'],
             'pincode' => ['nullable', 'digits:6'],
-            'co_authors' => ['nullable', 'json'],
+            'co_authors' => ['nullable', 'array', 'max:3'],
+            'co_authors.*.name' => ['nullable', 'string', 'max:255'],
+            'co_authors.*.designation' => ['nullable', 'string', 'max:255'],
+            'co_authors.*.institute' => ['nullable', 'string', 'max:255'],
+            'co_authors.*.email' => ['nullable', 'email', 'max:255'],
             'file' => ['required', 'file', 'mimes:doc,docx', 'max:10240'],
             'plagiarism_report' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'ai_report' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
@@ -329,7 +335,7 @@ class PaperSubmissionController extends Controller
             }
 
             $data = collect($validated)->except(['file', 'plagiarism_report', 'ai_report'])->all();
-            $data['co_authors'] = ! empty($data['co_authors']) ? json_decode($data['co_authors'], true) : null;
+            $data['co_authors'] = $this->cleanCoAuthors($data['co_authors'] ?? []);
             $data['file_path'] = $storedFiles['file_path'];
             $data['plagiarism_report_path'] = $storedFiles['plagiarism_report_path'] ?? null;
             $data['ai_report_path'] = $storedFiles['ai_report_path'] ?? null;

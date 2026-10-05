@@ -113,29 +113,29 @@
 
       {{-- Co-Authors --}}
       <div class="mb-3">
-        <label class="form-label fw-semibold">Co-Authors (JSON format)</label>
-        <textarea name="co_authors" class="form-control" rows="4">{{ old('co_authors', $submission->co_authors ? json_encode($submission->co_authors) : '') }}</textarea>
-        <small class="text-muted">Co-authors stored in JSON format. Edit carefully.</small>
-        
-        @if($submission->co_authors && is_array($submission->co_authors))
-          <div class="mt-2">
-            <strong>Current Co-Authors:</strong>
-            <ul class="mb-0">
-              @foreach($submission->co_authors as $coAuthor)
-                @if(!empty($coAuthor['name']))
-                  <li>{{ $coAuthor['name'] }} 
-                    @if(!empty($coAuthor['email']))
-                      ({{ $coAuthor['email'] }})
-                    @endif
-                    @if(!empty($coAuthor['mobile']))
-                      - {{ $coAuthor['mobile'] }}
-                    @endif
-                  </li>
-                @endif
-              @endforeach
-            </ul>
+        <label class="form-label fw-semibold">Co-Authors (Optional)</label>
+        @php($coAuthors = is_array(old('co_authors')) ? old('co_authors') : ($submission->co_authors ?? []))
+        @for($i = 0; $i < 3; $i++)
+          @php($coAuthor = $coAuthors[$i] ?? [])
+          <div class="border rounded p-3 mb-3 bg-light">
+            <div class="fw-semibold mb-2">Co-Author {{ $i + 1 }}</div>
+            <div class="row g-2">
+              <div class="col-md-6">
+                <input type="text" name="co_authors[{{ $i }}][name]" class="form-control" placeholder="Full Name" value="{{ $coAuthor['name'] ?? '' }}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" name="co_authors[{{ $i }}][designation]" class="form-control" placeholder="Designation" value="{{ $coAuthor['designation'] ?? '' }}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" name="co_authors[{{ $i }}][institute]" class="form-control" placeholder="Institute / Organization" value="{{ $coAuthor['institute'] ?? '' }}">
+              </div>
+              <div class="col-md-6">
+                <input type="email" name="co_authors[{{ $i }}][email]" class="form-control" placeholder="Email Address" value="{{ $coAuthor['email'] ?? '' }}">
+              </div>
+            </div>
           </div>
-        @endif
+        @endfor
+        <small class="text-muted">Enter details for up to 3 co-authors. Leave unused sections blank.</small>
       </div>
 
       {{-- File Upload --}}

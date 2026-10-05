@@ -148,9 +148,29 @@
 
       {{-- Co-Authors --}}
       <div class="mb-3">
-        <label class="form-label fw-semibold">Co-Authors (JSON format)</label>
-        <textarea name="co_authors" class="form-control @error('co_authors') is-invalid @enderror" rows="4" placeholder='[{"name": "John Doe", "email": "john@example.com", "mobile": "1234567890"}]'>{{ old('co_authors') }}</textarea>
-        <small class="text-muted">Enter co-authors in JSON format. Example: [{"name": "John Doe", "email": "john@example.com", "mobile": "1234567890"}]</small>
+        <label class="form-label fw-semibold">Co-Authors (Optional)</label>
+        @php($coAuthors = is_array(old('co_authors')) ? old('co_authors') : [])
+        @for($i = 0; $i < 3; $i++)
+          @php($coAuthor = $coAuthors[$i] ?? [])
+          <div class="border rounded p-3 mb-3 bg-light">
+            <div class="fw-semibold mb-2">Co-Author {{ $i + 1 }}</div>
+            <div class="row g-2">
+              <div class="col-md-6">
+                <input type="text" name="co_authors[{{ $i }}][name]" class="form-control" placeholder="Full Name" value="{{ $coAuthor['name'] ?? '' }}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" name="co_authors[{{ $i }}][designation]" class="form-control" placeholder="Designation" value="{{ $coAuthor['designation'] ?? '' }}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" name="co_authors[{{ $i }}][institute]" class="form-control" placeholder="Institute / Organization" value="{{ $coAuthor['institute'] ?? '' }}">
+              </div>
+              <div class="col-md-6">
+                <input type="email" name="co_authors[{{ $i }}][email]" class="form-control" placeholder="Email Address" value="{{ $coAuthor['email'] ?? '' }}">
+              </div>
+            </div>
+          </div>
+        @endfor
+        <small class="text-muted">Enter details for up to 3 co-authors. Leave unused sections blank.</small>
         @error('co_authors')
           <div class="text-danger mt-1 small">{{ $message }}</div>
         @enderror
