@@ -723,7 +723,16 @@
 
                     <div class="info-content">
                         <span>Publication Timeline</span>
-                        <h6>3–5 Days First Decision<br>2–5 Days Online Publication</h6>
+                        <h6>
+                            Submission to First Decision<br>
+                            <span class="timeline-duration">3–5 Days</span><br>
+                            Peer Review &amp; Editorial Decision<br>
+                            <span class="timeline-duration">7–15 Days</span><br>
+                            Submission to Final Acceptance<br>
+                            <span class="timeline-duration">15–25 Days</span><br>
+                            Acceptance to Online Publication<br>
+                            <span class="timeline-duration">2–5 Days</span>
+                        </h6>
                     </div>
                 </div>
 
