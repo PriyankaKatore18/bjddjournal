@@ -149,9 +149,13 @@
       {{-- Co-Authors --}}
       <div class="mb-3">
         <label class="form-label fw-semibold">Co-Authors (Optional)</label>
-        @php($coAuthors = is_array(old('co_authors')) ? old('co_authors') : [])
+        @php
+          $coAuthors = is_array(old('co_authors')) ? old('co_authors') : [];
+        @endphp
         @for($i = 0; $i < 3; $i++)
-          @php($coAuthor = $coAuthors[$i] ?? [])
+          @php
+            $coAuthor = $coAuthors[$i] ?? [];
+          @endphp
           <div class="border rounded p-3 mb-3 bg-light">
             <div class="fw-semibold mb-2">Co-Author {{ $i + 1 }}</div>
             <div class="row g-2">
