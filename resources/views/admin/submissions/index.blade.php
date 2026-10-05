@@ -17,6 +17,12 @@
     </div>
 @endif
 
+@if(session('error'))
+    <div id="errorAlert" class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="position: fixed; top: 20%; left: 50%; transform: translateX(-50%);">
@@ -46,7 +52,8 @@
             <thead style="background-color:#00004d; color:#ffffff;">
                 <tr>
                     
-                    <th style="width: 25%;">Title</th>
+                    <th style="width: 13%;">Paper ID</th>
+                    <th style="width: 22%;">Title</th>
                     <th style="width: 15%;">Research Area</th>
                     <th style="width: 15%;">Main Author</th>
                     <th style="width: 15%;">Email</th>
@@ -59,6 +66,7 @@
                 @forelse($submissions as $submission)
                 <tr>
                     
+                    <td style="word-wrap: break-word;"><strong>{{ $submission->paper_id ?: 'N/A' }}</strong></td>
                     <td style="word-wrap: break-word;">{{ $submission->title }}</td>
                     <td style="word-wrap: break-word;">{{ $submission->research_area }}</td>
                     <td style="word-wrap: break-word;">{{ $submission->author_main_name }}</td>
@@ -76,6 +84,11 @@
                               style="background-color:#003300; color:#ffffff; font-size:0.85rem; padding:6px 10px; border-radius:12px; white-space: normal; text-align: center; display: inline-block; max-width: 100%;">
                             {{ ucfirst($submission->status) }}
                         </span>
+                        @if($submission->email_error)
+                            <div class="small text-danger mt-1">Email failed</div>
+                        @elseif($submission->email_sent_at)
+                            <div class="small text-success mt-1">Email sent</div>
+                        @endif
                     </td>
                     <td>
                         <a href="{{ route('admin.submissions.edit',$submission) }}"
@@ -92,7 +105,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center" style="color:#cc7a00; font-weight:600;">
+                    <td colspan="8" class="text-center" style="color:#cc7a00; font-weight:600;">
                         No submissions found
                     </td>
                 </tr>

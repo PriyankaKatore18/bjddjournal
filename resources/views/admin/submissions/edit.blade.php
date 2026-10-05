@@ -27,6 +27,16 @@
         <input type="text" name="title" class="form-control" required value="{{ old('title', $submission->title) }}">
       </div>
 
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Paper ID</label>
+        <input type="text" class="form-control" value="{{ $submission->paper_id ?: 'Not assigned' }}" readonly>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Previous Paper ID</label>
+        <input type="text" name="previous_paper_id" class="form-control" value="{{ old('previous_paper_id', $submission->previous_paper_id) }}">
+      </div>
+
       {{-- Research Area --}}
       <div class="mb-3">
         <label class="form-label fw-semibold">Research Area <span class="text-danger">*</span></label>
@@ -139,7 +149,7 @@
                 $filename = basename($submission->file_path);
             @endphp
             
-            <a href="{{ route('documents.view', ['filename' => $filename]) }}" 
+            <a href="{{ route('admin.submissions.file', ['submission' => $submission, 'type' => 'manuscript']) }}"
               target="_blank" 
               class="btn btn-info">
                 📄 View Document
@@ -149,15 +159,39 @@
         @endif
       </div>
 
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Plagiarism Report (PDF)</label>
+        <input type="file" name="plagiarism_report" class="form-control" accept="application/pdf,.pdf">
+        @if($submission->plagiarism_report_path)
+          <a class="btn btn-outline-danger btn-sm mt-2" target="_blank" href="{{ route('admin.submissions.file', ['submission' => $submission, 'type' => 'plagiarism-report']) }}">View Plagiarism Report</a>
+        @endif
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">AI Content Detection Report (PDF, optional)</label>
+        <input type="file" name="ai_report" class="form-control" accept="application/pdf,.pdf">
+        @if($submission->ai_report_path)
+          <a class="btn btn-outline-secondary btn-sm mt-2" target="_blank" href="{{ route('admin.submissions.file', ['submission' => $submission, 'type' => 'ai-report']) }}">View AI Report</a>
+        @endif
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Acknowledgement Email</label>
+        @if($submission->email_sent_at)
+          <div class="text-success small">Sent on {{ $submission->email_sent_at->format('d M Y, h:i A') }}</div>
+        @else
+          <div class="text-danger small mb-2">Not sent{{ $submission->email_error ? ': '.$submission->email_error : '' }}</div>
+          <button type="submit" formmethod="POST" formaction="{{ route('admin.submissions.retry-acknowledgement', $submission) }}" class="btn btn-outline-primary btn-sm">Retry Acknowledgement Email</button>
+        @endif
+      </div>
+
       {{-- Status --}}
       <div class="mb-3">
         <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
         <select name="status" class="form-select" required>
-          <option value="submitted" {{ $submission->status == 'submitted' ? 'selected' : '' }}>Submitted</option>
-          <option value="under_review" {{ $submission->status == 'under_review' ? 'selected' : '' }}>Under Review</option>
-          <option value="accepted" {{ $submission->status == 'accepted' ? 'selected' : '' }}>Accepted</option>
-          <option value="rejected" {{ $submission->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
-          <option value="published" {{ $submission->status == 'published' ? 'selected' : '' }}>Published</option>
+          @foreach($statuses as $value => $label)
+            <option value="{{ $value }}" {{ $submission->status == $value ? 'selected' : '' }}>{{ $label }}</option>
+          @endforeach
         </select>
       </div>
 

@@ -436,9 +436,28 @@
             <li>Corresponding author (first author) will receive all communications regarding acceptance, payment, and publication.</li>
             <li>Do not enter names or titles in all capital letters. Use capital letters only at the beginning of each word.</li>
             <li>The submitted paper must be in <strong>.doc</strong> or <strong>.docx</strong> format only.</li>
+            <li>The plagiarism/similarity report is mandatory and must be a PDF. The AI content detection report is optional and must be a PDF.</li>
             <li>Mobile number must be exactly 10 digits.</li>
+            <li>The copyright form is requested by email only after acceptance; it is not uploaded here.</li>
         </ul>
     </div>
+
+    @if(session('paper_id'))
+    <div class="card border-success mb-4">
+        <div class="card-body text-center py-5">
+            <div class="display-5 text-success mb-3"><i class="bi bi-check-circle-fill"></i></div>
+            <h2 class="text-success">Manuscript Submitted Successfully!</h2>
+            <p class="lead mb-3">Thank you for submitting your manuscript to BODHIVRUKSHA JOURNAL OF DIVERSE DISCIPLINE (BJDD).</p>
+            <p class="fs-4 mb-2"><strong>Paper ID: {{ session('paper_id') }}</strong></p>
+            @if(session('email_sent'))
+                <p class="text-success mb-2">An acknowledgement email has been sent to your registered email address.</p>
+            @else
+                <p class="text-warning mb-2">Your manuscript was saved, but the acknowledgement email could not be sent. The editorial team can retry it.</p>
+            @endif
+            <p class="text-muted mb-0">Please save your Paper ID for all future correspondence. This acknowledgement confirms receipt only and does not constitute acceptance for publication.</p>
+        </div>
+    </div>
+    @else
 
     <!-- Step Progress Indicator -->
     <div class="step-progress-wrapper">
@@ -467,6 +486,7 @@
     <div class="step-container">
         <form id="paper-submission-form" action="{{ route('submit.paper.submit') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" name="submission_token" value="{{ old('submission_token', (string) \Illuminate\Support\Str::uuid()) }}">
 
             <!-- ===== STEP 1: Paper Information ===== -->
             <div class="step-content step-active" id="step-1">
@@ -494,6 +514,16 @@
                             <label class="form-label required-field">Upload Paper</label>
                             <input type="file" name="paper_file" class="form-control" required accept=".doc,.docx">
                             <small class="text-muted">.doc or .docx file only (Max: 10MB)</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required-field">Upload Plagiarism Report</label>
+                            <input type="file" name="plagiarism_report" class="form-control" required accept="application/pdf,.pdf">
+                            <small class="text-muted">PDF file only (Max: 10MB). This report is mandatory.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Upload AI Content Detection Report (Optional)</label>
+                            <input type="file" name="ai_report" class="form-control" accept="application/pdf,.pdf">
+                            <small class="text-muted">PDF file only (Max: 10MB). It is not used as an automatic acceptance/rejection decision.</small>
                         </div>
                          <div class="mb-3">
                             <label class="form-label required-field">Area of Research</label>
@@ -639,14 +669,17 @@
                                         <input type="text" name="co_authors[{{ $index }}][name]" class="form-control co-author-name" value="{{ $coAuthor['name'] ?? '' }}" placeholder="Full Name">
                                     </div>
                                     <div class="col-md-4">
+                                        <label class="form-label">Designation</label>
+                                        <input type="text" name="co_authors[{{ $index }}][designation]" class="form-control" value="{{ $coAuthor['designation'] ?? '' }}" placeholder="Designation">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Institute / Organization Name</label>
+                                        <input type="text" name="co_authors[{{ $index }}][institute]" class="form-control" value="{{ $coAuthor['institute'] ?? '' }}" placeholder="Institute / Organization Name">
+                                    </div>
+                                    <div class="col-md-4">
                                         <label class="form-label">Email</label>
                                         <input type="email" name="co_authors[{{ $index }}][email]" class="form-control co-author-email" value="{{ $coAuthor['email'] ?? '' }}" placeholder="Email address">
                                         <div class="error-message">Please provide a valid email address</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Mobile</label>
-                                        <input type="text" name="co_authors[{{ $index }}][mobile]" class="form-control co-author-mobile" value="{{ $coAuthor['mobile'] ?? '' }}" placeholder="Mobile number">
-                                        <div class="phone-error">Please enter exactly 10 digits</div>
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-sm btn-danger remove-author-btn">Remove</button>
@@ -717,9 +750,8 @@
                     <div class="card-body">
                         <div class="verification-box">
                             <div class="d-flex align-items-center mb-2">
-                                <span class="verification-question" id="verification-question"></span>
+                                <span class="verification-question" id="verification-question">{{ $verificationQuestion }}</span>
                                 <input type="text" id="verification_answer" name="verification_answer" class="form-control" style="width: 80px;" required>
-                                <input type="hidden" id="verification_correct_answer" name="verification_correct_answer">
                             </div>
                             <small class="text-muted">Please solve this simple math problem to verify you're human</small>
                             <div class="error-message" id="verification-error">Incorrect answer. Please try again.</div>
@@ -727,19 +759,31 @@
                     </div>
                 </div>
 
-                <!-- Declaration -->
+                <!-- Author Declaration & Consent -->
                 <div class="card mb-4">
-                    <div class="card-header"><i class="bi bi-file-earmark-check me-2"></i> Declaration</div>
+                    <div class="card-header"><i class="bi bi-file-earmark-check me-2"></i> Author Declaration & Consent</div>
                     <div class="card-body">
-                        <p>I hereby declare that the paper submitted is my original work and has not been published elsewhere. I agree to the journal's terms of review, ethics, and publication policies.
-                        </p>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="declaration" name="declaration" required {{ old('declaration') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="declaration">
-                                I agree to the above declaration <span class="text-danger">*</span>
-                            </label>
-                            <div class="error-message" id="declaration-error">You must agree to the declaration</div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input declaration-checkbox" type="checkbox" id="originality_declaration" name="originality_declaration" required {{ old('originality_declaration') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="originality_declaration">I/We declare that the submitted manuscript is original work and has not been previously published or simultaneously submitted to another journal. <span class="text-danger">*</span></label>
                         </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input declaration-checkbox" type="checkbox" id="authorship_consent" name="authorship_consent" required {{ old('authorship_consent') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="authorship_consent">I/We confirm that all listed authors have approved the manuscript and its submission to BJDD. <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input declaration-checkbox" type="checkbox" id="ethics_declaration" name="ethics_declaration" required {{ old('ethics_declaration') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="ethics_declaration">I/We confirm that the manuscript complies with applicable research and publication ethics and that all sources have been appropriately acknowledged. <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input declaration-checkbox" type="checkbox" id="journal_policies" name="journal_policies" required {{ old('journal_policies') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="journal_policies">I/We confirm that we have read and agree to comply with BJDD editorial, peer-review, plagiarism, ethics, and publication policies. <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input declaration-checkbox" type="checkbox" id="final_confirmation" name="final_confirmation" required {{ old('final_confirmation') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="final_confirmation">I/We confirm that all information and documents provided in this submission are true and complete. <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="error-message" id="declaration-error">All declarations are required before submitting.</div>
                     </div>
                 </div>
             </div>
@@ -755,29 +799,21 @@
                     <button type="button" class="btn btn-primary btn-lg px-4" id="nextBtn">
                         <span class="d-none d-sm-inline me-2">Next</span><span class="d-inline d-sm-none me-2">Next</span><i class="bi bi-arrow-right"></i>
                     </button>
-                    <button type="submit" class="btn btn-success btn-lg px-4" id="submitBtn" style="display:none;">
+                    <button type="submit" class="btn btn-success btn-lg px-4" id="submitBtn" style="display:none;" disabled>
                         <i class="bi bi-check-circle me-2"></i> Submit Paper
                     </button>
                 </div>
             </div>
         </form>
     </div>
+    @endif
 </div>
 
 <script>
+if (document.getElementById('paper-submission-form')) {
     let coAuthorCount = {{ old('co_authors') ? count(old('co_authors')) : 0 }};
     const maxCoAuthors = 3;
 
-
-    function generateVerificationQuestion() {
-        const num1 = Math.floor(Math.random() * 10) + 1;
-        const num2 = Math.floor(Math.random() * 10) + 1;
-        const question = `${num1} + ${num2} =`;
-        const answer = num1 + num2;
-
-        document.getElementById('verification-question').textContent = question;
-        document.getElementById('verification_correct_answer').value = answer;
-    }
 
     function validatePhoneNumber(input) {
         const value = input.value.replace(/\D/g, '');
@@ -875,8 +911,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        generateVerificationQuestion();
-
         const successAlert = document.querySelector('.alert-success');
         if (successAlert) {
             setTimeout(() => {
@@ -904,14 +938,17 @@
                         <input type="text" name="co_authors[${coAuthorCount}][name]" class="form-control co-author-name" placeholder="Full Name">
                     </div>
                     <div class="col-md-4">
+                        <label class="form-label">Designation</label>
+                        <input type="text" name="co_authors[${coAuthorCount}][designation]" class="form-control" placeholder="Designation">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Institute / Organization Name</label>
+                        <input type="text" name="co_authors[${coAuthorCount}][institute]" class="form-control" placeholder="Institute / Organization Name">
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label">Email</label>
                         <input type="email" name="co_authors[${coAuthorCount}][email]" class="form-control co-author-email" placeholder="Email address">
                         <div class="error-message">Please provide a valid email address</div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Mobile</label>
-                        <input type="text" name="co_authors[${coAuthorCount}][mobile]" class="form-control co-author-mobile" placeholder="Mobile number">
-                        <div class="phone-error">Please enter exactly 10 digits</div>
                     </div>
                 </div>
                 <button type="button" class="btn btn-sm btn-danger remove-author-btn">Remove</button>
@@ -920,18 +957,8 @@
         wrapper.insertAdjacentHTML('beforeend', html);
 
         const emailInput = wrapper.lastElementChild.querySelector('.co-author-email');
-        const mobileInput = wrapper.lastElementChild.querySelector('.co-author-mobile');
-
         emailInput.addEventListener('blur', function() {
             validateEmail(this, null);
-        });
-
-        mobileInput.addEventListener('input', function() {
-            formatPhoneInput(this);
-        });
-
-        mobileInput.addEventListener('blur', function() {
-            validatePhoneNumber(this);
         });
 
         const removeBtn = wrapper.lastElementChild.querySelector('.remove-author-btn');
@@ -1016,23 +1043,11 @@
         });
     });
 
-    document.querySelectorAll('.co-author-mobile').forEach(input => {
-        input.addEventListener('input', function() {
-            formatPhoneInput(this);
-        });
-
-        input.addEventListener('blur', function() {
-            validatePhoneNumber(this);
-        });
-    });
-
     document.getElementById('paper-submission-form').addEventListener('submit', function(e) {
         let isValid = true;
 
         const verificationInput = document.getElementById('verification_answer');
-        const correctAnswer = document.getElementById('verification_correct_answer').value;
-
-        if (verificationInput.value !== correctAnswer) {
+        if (!verificationInput.value.trim()) {
             verificationInput.classList.add('is-invalid');
             document.getElementById('verification-error').style.display = 'block';
             isValid = false;
@@ -1040,25 +1055,17 @@
                 behavior: 'smooth',
                 block: 'center'
             });
-
-            generateVerificationQuestion();
-            verificationInput.value = '';
         } else {
             verificationInput.classList.remove('is-invalid');
             document.getElementById('verification-error').style.display = 'none';
         }
 
-        const declarationInput = document.getElementById('declaration');
-        if (!declarationInput.checked) {
-            declarationInput.classList.add('is-invalid');
+        const declarations = document.querySelectorAll('.declaration-checkbox');
+        const allDeclarationsChecked = [...declarations].every(input => input.checked);
+        if (!allDeclarationsChecked) {
             document.getElementById('declaration-error').style.display = 'block';
             isValid = false;
-            declarationInput.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
         } else {
-            declarationInput.classList.remove('is-invalid');
             document.getElementById('declaration-error').style.display = 'none';
         }
 
@@ -1077,10 +1084,6 @@
             if (input.value && !validateEmail(input, null)) isValid = false;
         });
 
-        document.querySelectorAll('.co-author-mobile').forEach(input => {
-            if (input.value && !validatePhoneNumber(input)) isValid = false;
-        });
-
         const fileInput = document.querySelector('input[name="paper_file"]');
         const file = fileInput.files[0];
 
@@ -1096,6 +1099,27 @@
                 isValid = false;
             }
         }
+
+        const plagiarismInput = document.querySelector('input[name="plagiarism_report"]');
+        const aiInput = document.querySelector('input[name="ai_report"]');
+        [
+            [plagiarismInput, true],
+            [aiInput, false],
+        ].forEach(([input, required]) => {
+            const report = input.files[0];
+            if (required && !report) {
+                input.classList.add('is-invalid');
+                isValid = false;
+            }
+            if (report) {
+                const fileType = report.name.split('.').pop().toLowerCase();
+                if (fileType !== 'pdf' || report.size > 10 * 1024 * 1024) {
+                    alert('Reports must be PDF files smaller than 10MB.');
+                    input.classList.add('is-invalid');
+                    isValid = false;
+                }
+            }
+        });
 
         if (!isValid) {
             e.preventDefault();
@@ -1186,6 +1210,7 @@
         document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'inline-flex';
         document.getElementById('nextBtn').style.display = currentStep === totalSteps ? 'none' : 'inline-flex';
         document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
+        updateSubmitButton();
 
         const topEl = document.querySelector('.step-progress-wrapper');
         if (topEl) {
@@ -1195,6 +1220,21 @@
             });
         }
     }
+
+    function updateSubmitButton() {
+        const submitButton = document.getElementById('submitBtn');
+        const declarations = document.querySelectorAll('.declaration-checkbox');
+        submitButton.disabled = ![...declarations].every(input => input.checked);
+    }
+
+    document.querySelectorAll('.declaration-checkbox').forEach(input => {
+        input.addEventListener('change', function() {
+            updateSubmitButton();
+            if ([...document.querySelectorAll('.declaration-checkbox')].every(item => item.checked)) {
+                document.getElementById('declaration-error').style.display = 'none';
+            }
+        });
+    });
 
     function navigateToErrorStep(e) {
         const invalidFields = document.querySelectorAll('.is-invalid, .invalid-phone');
@@ -1219,6 +1259,7 @@
             }
         }
     }
+}
 </script>
 @endsection
 

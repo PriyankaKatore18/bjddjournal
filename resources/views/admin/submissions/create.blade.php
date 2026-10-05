@@ -29,6 +29,11 @@
         @enderror
       </div>
 
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Previous Paper ID</label>
+        <input type="text" name="previous_paper_id" class="form-control" value="{{ old('previous_paper_id') }}">
+      </div>
+
       {{-- Research Area --}}
       <div class="mb-3">
         <label class="form-label fw-semibold">Research Area <span class="text-danger">*</span></label>
@@ -160,16 +165,24 @@
         @enderror
       </div>
 
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Plagiarism Report (PDF)</label>
+        <input type="file" name="plagiarism_report" class="form-control" accept="application/pdf,.pdf">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">AI Content Detection Report (PDF, optional)</label>
+        <input type="file" name="ai_report" class="form-control" accept="application/pdf,.pdf">
+      </div>
+
       {{-- Status --}}
       <div class="mb-3">
         <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
         <select name="status" class="form-select @error('status') is-invalid @enderror" required>
           <option value="">Select Status</option>
-          <option value="submitted" {{ old('status')=='submitted' ? 'selected' : '' }}>Submitted</option>
-          <option value="under_review" {{ old('status')=='under_review' ? 'selected' : '' }}>Under Review</option>
-          <option value="accepted" {{ old('status')=='accepted' ? 'selected' : '' }}>Accepted</option>
-          <option value="rejected" {{ old('status')=='rejected' ? 'selected' : '' }}>Rejected</option>
-          <option value="published" {{ old('status')=='published' ? 'selected' : '' }}>Published</option>
+          @foreach($statuses as $value => $label)
+            <option value="{{ $value }}" {{ old('status') == $value ? 'selected' : '' }}>{{ $label }}</option>
+          @endforeach
         </select>
         @error('status')
           <div class="text-danger mt-1 small">{{ $message }}</div>

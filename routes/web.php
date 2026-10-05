@@ -100,6 +100,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/submissions', [PaperSubmissionController::class, 'index'])->name('submissions.index');
         Route::get('/submissions/create', [PaperSubmissionController::class, 'create'])->name('submissions.create');
         Route::post('/submissions', [PaperSubmissionController::class, 'store'])->name('submissions.store');
+        Route::get('/submissions/{submission}/file/{type}', [PaperSubmissionController::class, 'downloadFile'])->name('submissions.file');
+        Route::match(['post', 'put'], '/submissions/{submission}/retry-acknowledgement', [PaperSubmissionController::class, 'retryAcknowledgement'])->name('submissions.retry-acknowledgement');
         Route::get('/submissions/{submission}/edit', [PaperSubmissionController::class, 'edit'])->name('submissions.edit');
         Route::put('/submissions/{submission}', [PaperSubmissionController::class, 'update'])->name('submissions.update');
         Route::delete('/submissions/{submission}', [PaperSubmissionController::class, 'destroy'])->name('submissions.destroy');
