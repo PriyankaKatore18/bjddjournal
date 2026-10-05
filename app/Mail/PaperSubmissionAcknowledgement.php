@@ -20,14 +20,15 @@ class PaperSubmissionAcknowledgement extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Manuscript Submission Acknowledgement - '.$this->submission->paper_id.' | BJDD',
+            subject: 'Manuscript Submission Acknowledgement – '.$this->submission->paper_id,
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.paper-submission-acknowledgement',
+            view: 'emails.paper-submission-acknowledgement',
+            text: 'emails.paper-submission-acknowledgement-text',
         );
     }
 }
