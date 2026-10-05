@@ -722,8 +722,8 @@
                     <i class="fas fa-clock"></i>
 
                     <div class="info-content">
-                        <span>Review Timeline</span>
-                        <h6>3 Days Review<br>2 Days Publication</h6>
+                        <span>Publication Timeline</span>
+                        <h6>3–5 Days First Decision<br>2–5 Days Online Publication</h6>
                     </div>
                 </div>
 

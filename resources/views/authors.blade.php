@@ -355,24 +355,24 @@
                                     <li>Declaration / Undertaking form (if required)</li>
                                 </ul>
                                 
-                                <h5>Review & Publication Timeline</h5>
-                                <div class="timeline">
-                                    <div class="timeline-item">
-                                        <h6>Initial Screening (Within 24 hours):</h6>
-                                        <p>Manuscripts checked for formatting, scope, language clarity, and<b> plagiarism (≤6% allowed).</b></p>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <h6>Peer Review (1–2 working days):</h6>
-                                        <p>Double-blind review by subject experts.</p>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <h6>Acceptance or Revision Notification (Within 1–2 days):</h6>
-                                        <p> Authors informed of acceptance, rejection, or required revisions.</p>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <h6>Publication (Within 1 day post-acceptance):</h6>
-                                        <p> Accepted manuscripts published in the <b>current bi-monthly issue.</b></p>
-                                    </div>
+                                 <h5>Publication Timeline</h5>
+                                 <div class="timeline">
+                                     <div class="timeline-item">
+                                         <h6>Submission to First Decision</h6>
+                                         <p>3–5 Days</p>
+                                     </div>
+                                     <div class="timeline-item">
+                                         <h6>Peer Review &amp; Editorial Decision</h6>
+                                         <p>7–15 Days</p>
+                                     </div>
+                                     <div class="timeline-item">
+                                         <h6>Submission to Final Acceptance</h6>
+                                         <p>15–25 Days</p>
+                                     </div>
+                                     <div class="timeline-item">
+                                         <h6>Acceptance to Online Publication</h6>
+                                         <p>2–5 Days</p>
+                                     </div>
                                 </div>
                             </div>
                         </div>
