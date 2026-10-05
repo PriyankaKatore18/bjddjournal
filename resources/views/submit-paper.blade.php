@@ -437,14 +437,6 @@
 
     <!-- Success / Error Messages -->
     <div id="message-container">
-        @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show text-center">
-            <h4 class="alert-heading">Success!</h4>
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        @endif
-
         @if($errors->any())
         @foreach($errors->all() as $error)
         <div class="alert alert-danger alert-dismissible fade show">
@@ -464,7 +456,6 @@
             <li>Corresponding author (first author) will receive all communications regarding acceptance, payment, and publication.</li>
             <li>Do not enter names or titles in all capital letters. Use capital letters only at the beginning of each word.</li>
             <li>The submitted paper must be in <strong>.doc</strong> or <strong>.docx</strong> format only.</li>
-            <li>Plagiarism/similarity and AI content detection reports may be uploaded as PDF files when available.</li>
             <li>Mobile number must be exactly 10 digits.</li>
             <li>The copyright form is requested by email only after acceptance; it is not uploaded here.</li>
         </ul>
