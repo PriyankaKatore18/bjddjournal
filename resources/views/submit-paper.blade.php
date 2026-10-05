@@ -119,13 +119,41 @@
     }
 
     #message-container {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1050;
-        max-width: 500px;
-        width: 90%;
+        position: relative;
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto 1.5rem;
+    }
+
+    #message-container .alert {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .submission-success-card {
+        max-width: 780px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .submission-success-card .card-body {
+        padding: 3rem 2rem;
+    }
+
+    .submission-success-card h2 {
+        font-size: clamp(1.5rem, 3vw, 2.25rem);
+        margin-bottom: 1rem;
+    }
+
+    .submission-success-card .paper-id {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        margin: 0.5rem 0 1rem;
+        border: 1px solid rgba(0, 51, 0, 0.2);
+        border-radius: 0.5rem;
+        background: #f0fff4;
+        color: var(--success-dark);
+        font-size: 1.25rem;
     }
 
     .remove-author-btn {
@@ -443,12 +471,12 @@
     </div>
 
     @if(session('paper_id'))
-    <div class="card border-success mb-4">
+    <div class="card border-success mb-4 submission-success-card">
         <div class="card-body text-center py-5">
             <div class="display-5 text-success mb-3"><i class="bi bi-check-circle-fill"></i></div>
             <h2 class="text-success">Manuscript Submitted Successfully!</h2>
             <p class="lead mb-3">Thank you for submitting your manuscript to BODHIVRUKSHA JOURNAL OF DIVERSE DISCIPLINE (BJDD).</p>
-            <p class="fs-4 mb-2"><strong>Paper ID: {{ session('paper_id') }}</strong></p>
+            <p class="paper-id"><strong>Paper ID: {{ session('paper_id') }}</strong></p>
             @if(session('email_sent'))
                 <p class="text-success mb-2">An acknowledgement email has been sent to your registered email address.</p>
             @else
