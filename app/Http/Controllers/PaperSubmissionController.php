@@ -45,7 +45,7 @@ class PaperSubmissionController extends Controller
             'previous_paper_id' => ['nullable', 'string', 'max:100'],
             'title' => ['required', 'string', 'max:255'],
             'paper_file' => ['required', 'file', 'mimes:doc,docx', 'max:10240'],
-            'plagiarism_report' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+            'plagiarism_report' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'ai_report' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'research_area' => ['required', 'string', 'max:255'],
             'author_main_name' => ['required', 'string', 'max:255'],
@@ -74,7 +74,6 @@ class PaperSubmissionController extends Controller
             'paper_file.required' => 'The manuscript file is required.',
             'paper_file.mimes' => 'The manuscript must be a DOC or DOCX file.',
             'paper_file.max' => 'The manuscript must not exceed 10 MB.',
-            'plagiarism_report.required' => 'The plagiarism report is required.',
             'plagiarism_report.mimes' => 'The plagiarism report must be a PDF file.',
             'plagiarism_report.max' => 'The plagiarism report must not exceed 10 MB.',
             'ai_report.mimes' => 'The AI content detection report must be a PDF file.',
@@ -113,7 +112,9 @@ class PaperSubmissionController extends Controller
 
         try {
             $storedFiles['file_path'] = $request->file('paper_file')->store('submissions', 'public');
-            $storedFiles['plagiarism_report_path'] = $request->file('plagiarism_report')->store('submissions/reports', 'public');
+            if ($request->hasFile('plagiarism_report')) {
+                $storedFiles['plagiarism_report_path'] = $request->file('plagiarism_report')->store('submissions/reports', 'public');
+            }
 
             if ($request->hasFile('ai_report')) {
                 $storedFiles['ai_report_path'] = $request->file('ai_report')->store('submissions/reports', 'public');
@@ -125,7 +126,7 @@ class PaperSubmissionController extends Controller
                     'previous_paper_id' => $request->input('previous_paper_id'),
                     'title' => $request->input('title'),
                     'file_path' => $storedFiles['file_path'],
-                    'plagiarism_report_path' => $storedFiles['plagiarism_report_path'],
+                    'plagiarism_report_path' => $storedFiles['plagiarism_report_path'] ?? null,
                     'ai_report_path' => $storedFiles['ai_report_path'] ?? null,
                     'research_area' => $request->input('research_area'),
                     'author_main_name' => $request->input('author_main_name'),

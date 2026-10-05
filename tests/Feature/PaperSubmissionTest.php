@@ -79,7 +79,7 @@ class PaperSubmissionTest extends TestCase
         Mail::assertSent(PaperSubmissionAcknowledgement::class, 1);
     }
 
-    public function test_missing_required_report_and_declaration_are_rejected(): void
+    public function test_optional_reports_can_be_omitted_but_declarations_are_required(): void
     {
         Storage::fake('public');
 
@@ -89,9 +89,27 @@ class PaperSubmissionTest extends TestCase
         $this->withSession(['paper_verification_answer' => '11'])
             ->post(route('submit.paper.submit'), $data)
             ->assertRedirect()
-            ->assertSessionHasErrors(['plagiarism_report', 'originality_declaration']);
+            ->assertSessionHasErrors(['originality_declaration'])
+            ->assertSessionDoesntHaveErrors(['plagiarism_report']);
 
         $this->assertDatabaseCount('paper_submissions', 0);
+    }
+
+    public function test_submission_without_reports_is_accepted(): void
+    {
+        Storage::fake('public');
+
+        $data = $this->validSubmission((string) Str::uuid());
+        unset($data['plagiarism_report'], $data['ai_report']);
+
+        $this->withSession(['paper_verification_answer' => '11'])
+            ->post(route('submit.paper.submit'), $data)
+            ->assertRedirect()
+            ->assertSessionHas('paper_id');
+
+        $submission = PaperSubmission::firstOrFail();
+        $this->assertNull($submission->plagiarism_report_path);
+        $this->assertNull($submission->ai_report_path);
     }
 
     private function validSubmission(string $token): array

@@ -464,7 +464,7 @@
             <li>Corresponding author (first author) will receive all communications regarding acceptance, payment, and publication.</li>
             <li>Do not enter names or titles in all capital letters. Use capital letters only at the beginning of each word.</li>
             <li>The submitted paper must be in <strong>.doc</strong> or <strong>.docx</strong> format only.</li>
-            <li>The plagiarism/similarity report is mandatory and must be a PDF. The AI content detection report is optional and must be a PDF.</li>
+            <li>Plagiarism/similarity and AI content detection reports may be uploaded as PDF files when available.</li>
             <li>Mobile number must be exactly 10 digits.</li>
             <li>The copyright form is requested by email only after acceptance; it is not uploaded here.</li>
         </ul>
@@ -544,14 +544,14 @@
                             <small class="text-muted">.doc or .docx file only (Max: 10MB)</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label required-field">Upload Plagiarism Report</label>
-                            <input type="file" name="plagiarism_report" class="form-control" required accept="application/pdf,.pdf">
-                            <small class="text-muted">PDF file only (Max: 10MB). This report is mandatory.</small>
+                            <label class="form-label">Upload Plagiarism Report</label>
+                            <input type="file" name="plagiarism_report" class="form-control" accept="application/pdf,.pdf">
+                            <small class="text-muted">PDF file only (Max: 10MB). You may upload this report if available.</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Upload AI Content Detection Report (Optional)</label>
+                            <label class="form-label">Upload AI Content Detection Report</label>
                             <input type="file" name="ai_report" class="form-control" accept="application/pdf,.pdf">
-                            <small class="text-muted">PDF file only (Max: 10MB). It is not used as an automatic acceptance/rejection decision.</small>
+                            <small class="text-muted">PDF file only (Max: 10MB). You may upload this report if available.</small>
                         </div>
                          <div class="mb-3">
                             <label class="form-label required-field">Area of Research</label>
@@ -1131,7 +1131,7 @@ if (document.getElementById('paper-submission-form')) {
         const plagiarismInput = document.querySelector('input[name="plagiarism_report"]');
         const aiInput = document.querySelector('input[name="ai_report"]');
         [
-            [plagiarismInput, true],
+            [plagiarismInput, false],
             [aiInput, false],
         ].forEach(([input, required]) => {
             const report = input.files[0];
