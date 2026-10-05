@@ -1041,7 +1041,7 @@
             border-top: 5px solid #2563eb;
         ">
                 <h4 style="margin: 0 0 14px; font-size: 18px; font-weight: 700; color: #1e293b;">
-                    e-ISSN
+                    ISSN
                 </h4>
 
                 <p style="margin: 0; color: #475569; font-size: 15px; line-height: 1.8;">
