@@ -1,5 +1,20 @@
 <?php
 
+// Support both Laravel's current MAIL_SCHEME name and the older
+// MAIL_ENCRYPTION name used by many hosting providers.
+$mailPort = (int) env('MAIL_PORT', 2525);
+$mailScheme = env('MAIL_SCHEME', env('MAIL_ENCRYPTION'))
+    ?: ($mailPort === 465 ? 'ssl' : null);
+$mailEhloDomain = env('MAIL_EHLO_DOMAIN');
+
+if (! $mailEhloDomain) {
+    $appHost = parse_url((string) env('APP_URL', ''), PHP_URL_HOST);
+    $fromAddress = (string) env('MAIL_FROM_ADDRESS', '');
+    $atPosition = strrpos($fromAddress, '@');
+    $fromHost = $atPosition !== false ? substr($fromAddress, $atPosition + 1) : null;
+    $mailEhloDomain = $appHost ?: $fromHost ?: 'localhost';
+}
+
 return [
 
     /*
@@ -39,14 +54,14 @@ return [
 
         'smtp' => [
             'transport' => 'smtp',
-            'scheme' => env('MAIL_SCHEME'),
+            'scheme' => $mailScheme,
             'url' => env('MAIL_URL'),
             'host' => env('MAIL_HOST', '127.0.0.1'),
-            'port' => env('MAIL_PORT', 2525),
+            'port' => $mailPort,
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+            'local_domain' => $mailEhloDomain,
         ],
 
         'ses' => [
