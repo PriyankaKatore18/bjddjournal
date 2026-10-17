@@ -114,6 +114,14 @@
         border-color: #06452d;
     }
 
+    .issue-downloads a.disabled {
+        color: #6b7770;
+        background: #f1f4f2;
+        border-color: #cbd7cf;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
     .article-heading {
         display: flex;
         justify-content: space-between;
@@ -393,19 +401,11 @@
                 @if($issueIssn)<span><strong>ISSN:</strong> {{ $issueIssn }}</span>@endif
             </div>
 
-            @if($specialIssue->cover_pdf_path || $specialIssue->index_pdf_path || $specialIssue->full_issue_pdf_path)
-                <div class="issue-downloads" aria-label="Issue PDF downloads">
-                    @if($specialIssue->cover_pdf_path)
-                        <a href="{{ route('special-issues.download-cover', $specialIssue) }}">Download Cover (PDF)</a>
-                    @endif
-                    @if($specialIssue->index_pdf_path)
-                        <a href="{{ route('special-issues.download-index', $specialIssue) }}">Download Index (PDF)</a>
-                    @endif
-                    @if($specialIssue->full_issue_pdf_path)
-                        <a href="{{ route('special-issues.download-full-issue', $specialIssue) }}">Download Full Issue (PDF)</a>
-                    @endif
-                </div>
-            @endif
+            <div class="issue-downloads" aria-label="Issue PDF downloads">
+                <a class="{{ $specialIssue->cover_pdf_path ? '' : 'disabled' }}" href="{{ $specialIssue->cover_pdf_path ? route('special-issues.download-cover', $specialIssue) : '#' }}" @if(!$specialIssue->cover_pdf_path) aria-disabled="true" title="Cover PDF not uploaded" @endif>Download Cover (PDF)</a>
+                <a class="{{ $specialIssue->index_pdf_path ? '' : 'disabled' }}" href="{{ $specialIssue->index_pdf_path ? route('special-issues.download-index', $specialIssue) : '#' }}" @if(!$specialIssue->index_pdf_path) aria-disabled="true" title="Index PDF not uploaded" @endif>Download Index (PDF)</a>
+                <a class="{{ $specialIssue->full_issue_pdf_path ? '' : 'disabled' }}" href="{{ $specialIssue->full_issue_pdf_path ? route('special-issues.download-full-issue', $specialIssue) : '#' }}" @if(!$specialIssue->full_issue_pdf_path) aria-disabled="true" title="Full Issue PDF not uploaded" @endif>Download Full Issue (PDF)</a>
+            </div>
         </div>
     </section>
 
