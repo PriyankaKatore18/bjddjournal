@@ -34,7 +34,7 @@
         </div>
         <div class="col-md-6">
             <label class="form-label fw-semibold">Publisher <span class="text-danger">*</span></label>
-            <input type="text" name="publisher" class="form-control" placeholder="BJDD Journal" value="{{ old('publisher', $record?->publisher ?? 'BJDD Journal') }}" required>
+            <input type="text" name="publisher" class="form-control" placeholder="Eagle Leap Publication" value="{{ old('publisher', $record?->publisher ?? 'Eagle Leap Publication') }}" required>
         </div>
         <div class="col-md-4">
             <label class="form-label fw-semibold">Language <span class="text-danger">*</span></label>
