@@ -384,9 +384,15 @@ class PaperSubmissionController extends Controller
     {
         $sent = $this->sendAcknowledgement($submission);
 
+        if (! $sent) {
+            $submission->refresh();
+        }
+
         return redirect()->back()->with(
             $sent ? 'success' : 'error',
-            $sent ? 'Acknowledgement email sent successfully.' : 'Acknowledgement email could not be sent. Check the mail settings and logs.'
+            $sent
+                ? 'Acknowledgement email sent successfully.'
+                : ($submission->email_error ?: 'Acknowledgement email could not be sent. Check the mail settings and logs.')
         );
     }
 
@@ -401,17 +407,33 @@ class PaperSubmissionController extends Controller
 
             return true;
         } catch (\Throwable $exception) {
+            $errorMessage = $this->mailErrorMessage($exception);
+
             $submission->forceFill([
-                'email_error' => Str::limit($exception->getMessage(), 2000),
+                'email_error' => $errorMessage,
             ])->save();
             Log::error('Paper acknowledgement email failed', [
                 'submission_id' => $submission->id,
                 'paper_id' => $submission->paper_id,
+                'mailer' => config('mail.default'),
+                'mail_host' => config('mail.mailers.smtp.host'),
+                'mail_port' => config('mail.mailers.smtp.port'),
                 'exception' => $exception,
             ]);
 
             return false;
         }
+    }
+
+    private function mailErrorMessage(\Throwable $exception): string
+    {
+        $message = Str::limit(trim($exception->getMessage()), 2000);
+
+        if (preg_match('/\b554\b.*(?:5\.7\.1|outbound sending is disabled)/is', $message)) {
+            return 'Your mail provider rejected this message (SMTP 554 5.7.1: outbound sending is disabled for this account). Enable outbound email/SMTP sending for the mailbox in Hostinger, or configure an active transactional mail provider, then retry.';
+        }
+
+        return $message !== '' ? $message : 'The mail provider rejected the message. Check the mail settings and logs.';
     }
 
     private function cleanCoAuthors(array $coAuthors): ?array

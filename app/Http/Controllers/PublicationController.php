@@ -92,6 +92,7 @@ class PublicationController extends Controller
         }
 
         $publicationRecords = $query
+            ->orderBy('display_order')
             ->orderByDesc('year')
             ->orderByDesc('volume')
             ->orderByDesc('issue')
@@ -220,7 +221,7 @@ class PublicationController extends Controller
 
     public function adminIndex()
     {
-        $publications = Publication::orderBy('created_at', 'desc')->get();
+        $publications = Publication::orderBy('display_order')->orderBy('id')->get();
         return view('admin.publications.index', compact('publications'));
     }
 
@@ -236,6 +237,7 @@ class PublicationController extends Controller
         $request->validate([
             'volume' => 'required|integer',
             'issue' => 'required|integer',
+            'display_order' => 'required|integer|min:0|max:9999',
             'issue_range' => 'required|string',
             'paper_title' => 'required|string',
             'author_name' => 'required|string',
@@ -287,6 +289,7 @@ class PublicationController extends Controller
         $request->validate([
             'volume' => 'required|integer',
             'issue' => 'required|integer',
+            'display_order' => 'required|integer|min:0|max:9999',
             'issue_range' => 'required|string',
             'paper_title' => 'required|string',
             'author_name' => 'required|string',
@@ -379,6 +382,7 @@ class PublicationController extends Controller
     {
         $papers = Publication::where('volume', $volume)
             ->where('issue', $issue)
+            ->orderBy('display_order')
             ->orderBy('id')
             ->paginate(5);
 
@@ -426,6 +430,7 @@ class PublicationController extends Controller
         $relatedArticles = Publication::query()
             ->where('volume', $publication->volume)
             ->where('issue', $publication->issue)
+            ->orderBy('display_order')
             ->orderBy('id')
             ->get();
 

@@ -384,6 +384,11 @@
                                             Archives
                                         </a>
                                     </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('special-issues.index') }}">
+                                            Special Issues &amp; Conferences
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
 

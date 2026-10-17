@@ -21,6 +21,7 @@
     <table class="table table-hover mb-0" style="color:#000000; font-size: 0.9rem;">
       <thead style="background-color:#00004d; color:#ffffff;">
         <tr>
+          <th>Order</th>
           <th>Title</th>
           <th>Author</th>
           <th>Volume/Issue</th>
@@ -31,6 +32,7 @@
       <tbody>
         @forelse($publications as $publication)
         <tr>
+          <td>{{ $publication->display_order }}</td>
           <td>{{ $publication->paper_title }}</td>
           <td>{{ $publication->author_name }}</td>
           <td>Vol. {{ $publication->volume }}, Iss. {{ $publication->issue }}</td>

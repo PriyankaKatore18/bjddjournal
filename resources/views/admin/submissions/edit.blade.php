@@ -184,7 +184,14 @@
         @if($submission->email_sent_at)
           <div class="text-success small">Sent on {{ $submission->email_sent_at->format('d M Y, h:i A') }}</div>
         @else
-          <div class="text-danger small mb-2">Not sent{{ $submission->email_error ? ': '.$submission->email_error : '' }}</div>
+          <div class="alert alert-danger py-2 small mb-2">
+            <strong>Email not sent.</strong>
+            @if($submission->email_error)
+              <div class="mt-1" style="overflow-wrap:anywhere;">{{ $submission->email_error }}</div>
+            @else
+              <div class="mt-1">No delivery attempt has succeeded yet.</div>
+            @endif
+          </div>
           <button type="submit" formmethod="POST" formaction="{{ route('admin.submissions.retry-acknowledgement', $submission) }}" class="btn btn-outline-primary btn-sm">Retry Acknowledgement Email</button>
         @endif
       </div>

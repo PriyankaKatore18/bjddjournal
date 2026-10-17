@@ -277,6 +277,9 @@
         <a class="nav-link {{ request()->routeIs('admin.publications*') ? 'active' : '' }}" href="{{ route('admin.publications.index') }}">
           <i class="bi bi-journal-text"></i> Publications
         </a>
+        <a class="{{ request()->routeIs('admin.special-issues*') ? 'active' : '' }}" href="{{ route('admin.special-issues.index') }}">
+          <i class="bi bi-collection"></i> Special Issues
+        </a>
         <a class="nav-link {{ request()->routeIs('admin.index-partners*') ? 'active' : '' }}"
           href="{{ route('admin.index-partners.index') }}">
           <i class="bi bi-journal-text"></i> Index Partner

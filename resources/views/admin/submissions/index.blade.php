@@ -85,7 +85,9 @@
                             {{ ucfirst($submission->status) }}
                         </span>
                         @if($submission->email_error)
-                            <div class="small text-danger mt-1">Email failed</div>
+                            <div class="small text-danger mt-1" title="{{ $submission->email_error }}">
+                                {{ str_contains(strtolower($submission->email_error), 'outbound') ? 'Provider blocked email' : 'Email failed' }}
+                            </div>
                         @elseif($submission->email_sent_at)
                             <div class="small text-success mt-1">Email sent</div>
                         @endif

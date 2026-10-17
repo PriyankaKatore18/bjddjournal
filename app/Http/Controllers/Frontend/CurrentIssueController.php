@@ -57,6 +57,7 @@ class CurrentIssueController extends Controller
         if ($currentIssue) {
             $publications = Publication::where('volume', $currentIssue->volume)
                 ->where('issue', $currentIssue->issue)
+                ->orderBy('display_order')
                 ->orderBy('id')
                 ->get();
         }

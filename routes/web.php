@@ -16,6 +16,10 @@ use App\Http\Controllers\Admin\JournalTeamController;
 use App\Http\Controllers\Admin\IndexPartnerController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\ArchiveController;
+use App\Http\Controllers\Admin\SpecialIssueController as AdminSpecialIssueController;
+use App\Http\Controllers\Admin\SpecialIssueArticleController as AdminSpecialIssueArticleController;
+use App\Http\Controllers\Admin\SpecialIssueEditorController as AdminSpecialIssueEditorController;
+use App\Http\Controllers\Frontend\SpecialIssueController as FrontendSpecialIssueController;
 use App\Models\JournalTeamMember;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\File;
@@ -32,6 +36,12 @@ Route::get('/authors', function () {
 
 
 Route::get('/current-issue', [CurrentIssueController::class, 'index'])->name('current-issue');
+
+Route::get('/special-issues', [FrontendSpecialIssueController::class, 'index'])->name('special-issues.index');
+Route::get('/special-issues/{specialIssue}', [FrontendSpecialIssueController::class, 'show'])->name('special-issues.show');
+Route::get('/special-issues/{specialIssue}/articles/{article}', [FrontendSpecialIssueController::class, 'article'])->name('special-issues.articles.show');
+Route::get('/special-issues/{specialIssue}/articles/{article}/pdf', [FrontendSpecialIssueController::class, 'pdf'])->name('special-issues.articles.pdf');
+Route::get('/special-issues/{specialIssue}/articles/{article}/certificate', [FrontendSpecialIssueController::class, 'certificate'])->name('special-issues.articles.certificate');
 
 Route::get('/issues/{issue}/download', [IssueController::class, 'downloadPdf'])->name('issues.download');
 
@@ -132,6 +142,31 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/issues/{issue}/edit', [IssueController::class, 'edit'])->name('issues.edit');
         Route::put('/issues/{issue}', [IssueController::class, 'update'])->name('issues.update');
         Route::delete('/issues/{issue}', [IssueController::class, 'destroy'])->name('issues.destroy');
+
+        // Special Issues / Conference Issues (kept separate from regular publications)
+        Route::prefix('special-issues')->name('special-issues.')->group(function () {
+            Route::get('/', [AdminSpecialIssueController::class, 'index'])->name('index');
+            Route::get('/create', [AdminSpecialIssueController::class, 'create'])->name('create');
+            Route::post('/', [AdminSpecialIssueController::class, 'store'])->name('store');
+            Route::get('/{specialIssue}/editorial-details', [AdminSpecialIssueEditorController::class, 'edit'])->name('editorial-details.edit');
+            Route::put('/{specialIssue}/editorial-details', [AdminSpecialIssueEditorController::class, 'updateDetails'])->name('editorial-details.update');
+            Route::post('/{specialIssue}/editorial-details/editors', [AdminSpecialIssueEditorController::class, 'store'])->name('editorial-details.editors.store');
+            Route::get('/{specialIssue}/editorial-details/editors/{editor}/edit', [AdminSpecialIssueEditorController::class, 'editEditor'])->name('editorial-details.editors.edit');
+            Route::put('/{specialIssue}/editorial-details/editors/{editor}', [AdminSpecialIssueEditorController::class, 'update'])->name('editorial-details.editors.update');
+            Route::delete('/{specialIssue}/editorial-details/editors/{editor}', [AdminSpecialIssueEditorController::class, 'destroy'])->name('editorial-details.editors.destroy');
+            Route::get('/{specialIssue}', [AdminSpecialIssueController::class, 'show'])->name('show');
+            Route::get('/{specialIssue}/edit', [AdminSpecialIssueController::class, 'edit'])->name('edit');
+            Route::put('/{specialIssue}', [AdminSpecialIssueController::class, 'update'])->name('update');
+            Route::delete('/{specialIssue}', [AdminSpecialIssueController::class, 'destroy'])->name('destroy');
+
+            Route::get('/{specialIssue}/articles', [AdminSpecialIssueArticleController::class, 'index'])->name('articles.index');
+            Route::get('/{specialIssue}/articles/create', [AdminSpecialIssueArticleController::class, 'create'])->name('articles.create');
+            Route::post('/{specialIssue}/articles', [AdminSpecialIssueArticleController::class, 'store'])->name('articles.store');
+            Route::get('/{specialIssue}/articles/{article}', [AdminSpecialIssueArticleController::class, 'show'])->name('articles.show');
+            Route::get('/{specialIssue}/articles/{article}/edit', [AdminSpecialIssueArticleController::class, 'edit'])->name('articles.edit');
+            Route::put('/{specialIssue}/articles/{article}', [AdminSpecialIssueArticleController::class, 'update'])->name('articles.update');
+            Route::delete('/{specialIssue}/articles/{article}', [AdminSpecialIssueArticleController::class, 'destroy'])->name('articles.destroy');
+        });
 
         Route::get('/archive', [ArchiveController::class, 'edit'])->name('archive.edit');
         Route::put('/archive', [ArchiveController::class, 'update'])->name('archive.update');

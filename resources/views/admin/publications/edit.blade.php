@@ -45,6 +45,14 @@
 			</div>
 
 			<div class="row">
+				<div class="col-md-4 mb-3">
+					<label class="form-label fw-semibold">Display Order</label>
+					<input type="number" name="display_order" class="form-control" min="0" value="{{ old('display_order', $publication->display_order ?? 0) }}" required>
+					<div class="form-text">Lower numbers appear first in the frontend issue.</div>
+				</div>
+			</div>
+
+			<div class="row">
 				{{-- Year --}}
 				<div class="col-md-4 mb-3">
 					<label class="form-label fw-semibold">Year</label>
