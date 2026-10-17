@@ -90,6 +90,30 @@
         color: #17221c;
     }
 
+    .issue-downloads {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 18px;
+    }
+
+    .issue-downloads a {
+        display: inline-block;
+        padding: 8px 12px;
+        border: 1px solid #0b6b42;
+        border-radius: 4px;
+        color: #fff;
+        background: #0b6b42;
+        font-size: .8rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .issue-downloads a:hover {
+        background: #06452d;
+        border-color: #06452d;
+    }
+
     .article-heading {
         display: flex;
         justify-content: space-between;
@@ -368,6 +392,20 @@
                 <span><strong>Total Articles:</strong> {{ $totalArticles }}</span>
                 @if($issueIssn)<span><strong>ISSN:</strong> {{ $issueIssn }}</span>@endif
             </div>
+
+            @if($specialIssue->cover_pdf_path || $specialIssue->index_pdf_path || $specialIssue->full_issue_pdf_path)
+                <div class="issue-downloads" aria-label="Issue PDF downloads">
+                    @if($specialIssue->cover_pdf_path)
+                        <a href="{{ route('special-issues.download-cover', $specialIssue) }}">Download Cover (PDF)</a>
+                    @endif
+                    @if($specialIssue->index_pdf_path)
+                        <a href="{{ route('special-issues.download-index', $specialIssue) }}">Download Index (PDF)</a>
+                    @endif
+                    @if($specialIssue->full_issue_pdf_path)
+                        <a href="{{ route('special-issues.download-full-issue', $specialIssue) }}">Download Full Issue (PDF)</a>
+                    @endif
+                </div>
+            @endif
         </div>
     </section>
 

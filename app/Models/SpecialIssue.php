@@ -20,6 +20,9 @@ class SpecialIssue extends Model
         'mode',
         'status',
         'cover_image',
+        'cover_pdf_path',
+        'index_pdf_path',
+        'full_issue_pdf_path',
         'about_conference',
         'editorial_details',
     ];

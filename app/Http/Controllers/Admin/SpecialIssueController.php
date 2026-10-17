@@ -33,6 +33,12 @@ class SpecialIssueController extends Controller
             $data['cover_image'] = $request->file('cover_image')->store('special-issues/covers', 'public');
         }
 
+        foreach (['cover_pdf', 'index_pdf', 'full_issue_pdf'] as $field) {
+            if ($request->hasFile($field)) {
+                $data[$field . '_path'] = $request->file($field)->store('special-issues/pdfs', 'public');
+            }
+        }
+
         $specialIssue = SpecialIssue::create($data);
 
         return redirect()
@@ -65,6 +71,18 @@ class SpecialIssueController extends Controller
             $data['cover_image'] = $request->file('cover_image')->store('special-issues/covers', 'public');
         }
 
+        foreach (['cover_pdf', 'index_pdf', 'full_issue_pdf'] as $field) {
+            if ($request->hasFile($field)) {
+                $pathField = $field . '_path';
+
+                if ($specialIssue->{$pathField} && Storage::disk('public')->exists($specialIssue->{$pathField})) {
+                    Storage::disk('public')->delete($specialIssue->{$pathField});
+                }
+
+                $data[$pathField] = $request->file($field)->store('special-issues/pdfs', 'public');
+            }
+        }
+
         $specialIssue->update($data);
 
         return redirect()
@@ -82,8 +100,10 @@ class SpecialIssueController extends Controller
             }
         }
 
-        if ($specialIssue->cover_image && Storage::disk('public')->exists($specialIssue->cover_image)) {
-            Storage::disk('public')->delete($specialIssue->cover_image);
+        foreach ([$specialIssue->cover_image, $specialIssue->cover_pdf_path, $specialIssue->index_pdf_path, $specialIssue->full_issue_pdf_path] as $path) {
+            if ($path && Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
         }
 
         $specialIssue->delete();
@@ -106,6 +126,9 @@ class SpecialIssueController extends Controller
             'mode' => 'nullable|string|max:100',
             'status' => 'required|in:draft,publication_in_progress,published,archived',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'cover_pdf' => 'nullable|file|mimes:pdf|max:20480',
+            'index_pdf' => 'nullable|file|mimes:pdf|max:20480',
+            'full_issue_pdf' => 'nullable|file|mimes:pdf|max:51200',
             'about_conference' => 'nullable|string',
             'editorial_details' => 'nullable|string',
         ]);

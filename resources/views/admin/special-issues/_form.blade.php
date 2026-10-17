@@ -66,6 +66,24 @@
                 <img src="{{ asset('storage/' . ltrim($issue->cover_image, '/')) }}" alt="Special issue cover" style="max-height:100px;max-width:180px;object-fit:cover;border-radius:6px;">
             @endif
         </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Cover PDF</label>
+            <input type="file" name="cover_pdf" class="form-control" accept=".pdf">
+            @if($issue?->cover_pdf_path)<div class="small text-muted mt-2">Cover PDF already uploaded. Upload a new PDF to replace it.</div>@endif
+            @error('cover_pdf')<div class="text-danger small">{{ $message }}</div>@enderror
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Index PDF</label>
+            <input type="file" name="index_pdf" class="form-control" accept=".pdf">
+            @if($issue?->index_pdf_path)<div class="small text-muted mt-2">Index PDF already uploaded. Upload a new PDF to replace it.</div>@endif
+            @error('index_pdf')<div class="text-danger small">{{ $message }}</div>@enderror
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Full Issue PDF</label>
+            <input type="file" name="full_issue_pdf" class="form-control" accept=".pdf">
+            @if($issue?->full_issue_pdf_path)<div class="small text-muted mt-2">Full Issue PDF already uploaded. Upload a new PDF to replace it.</div>@endif
+            @error('full_issue_pdf')<div class="text-danger small">{{ $message }}</div>@enderror
+        </div>
         <div class="col-12">
             <label class="form-label fw-semibold">About Conference</label>
             <textarea name="about_conference" class="form-control" rows="6" placeholder="Conference description, objective and publication note...">{{ old('about_conference', $issue?->about_conference) }}</textarea>

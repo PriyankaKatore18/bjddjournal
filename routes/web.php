@@ -39,6 +39,9 @@ Route::get('/current-issue', [CurrentIssueController::class, 'index'])->name('cu
 
 Route::get('/special-issues', [FrontendSpecialIssueController::class, 'index'])->name('special-issues.index');
 Route::get('/special-issues/{specialIssue}', [FrontendSpecialIssueController::class, 'show'])->name('special-issues.show');
+Route::get('/special-issues/{specialIssue}/download-cover', [FrontendSpecialIssueController::class, 'downloadCover'])->name('special-issues.download-cover');
+Route::get('/special-issues/{specialIssue}/download-index', [FrontendSpecialIssueController::class, 'downloadIndex'])->name('special-issues.download-index');
+Route::get('/special-issues/{specialIssue}/download-full-issue', [FrontendSpecialIssueController::class, 'downloadFullIssue'])->name('special-issues.download-full-issue');
 Route::get('/special-issues/{specialIssue}/articles/{article}', [FrontendSpecialIssueController::class, 'article'])->name('special-issues.articles.show');
 Route::get('/special-issues/{specialIssue}/articles/{article}/pdf', [FrontendSpecialIssueController::class, 'pdf'])->name('special-issues.articles.pdf');
 Route::get('/special-issues/{specialIssue}/articles/{article}/certificate', [FrontendSpecialIssueController::class, 'certificate'])->name('special-issues.articles.certificate');
