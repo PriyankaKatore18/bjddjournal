@@ -12,9 +12,10 @@
 </style>
 
 <section class="special-hero">
-    <div class="special-kicker text-warning">BJDD Publication Destination</div>
+    <div class="special-kicker text-warning">BJDD SPECIAL PUBLICATIONS</div>
     <h1 class="mt-2 mb-2">Special Issues &amp; Conferences</h1>
-    <p class="mb-0" style="max-width:720px;color:#e6edff;">Explore conference and editorial special issues published separately from the regular BJDD journal issues.</p>
+    <p class="mb-2" style="max-width:720px;color:#e6edff;">Explore peer-reviewed special issues, conference-associated research publications, and thematic scholarly collections published through the BODHIVRUKSHA JOURNAL OF DIVERSE DISCIPLINE (BJDD).</p>
+    <p class="mb-0" style="color:#e6edff;">Published by <strong>EAGLE LEAP PUBLICATION</strong></p>
 </section>
 
 <div class="row g-4">
