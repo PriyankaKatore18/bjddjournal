@@ -533,8 +533,9 @@
 
                             <ul class="list-unstyled mb-0" style="line-height:1.8;">
                                 <li>
-                                    <a href="https://docs.google.com/document/d/1Z8bpXSTGNcpDuV3F1wpgzWM5pLVHY1X0/edit?usp=sharing&ouid=107421336101958810940&rtpof=true&sd=true"
+                                    <a href="{{ asset('documents/paper-format.docx') }}"
                                         target="_blank"
+                                        rel="noopener"
                                         class="text-decoration-none text-light">
                                         Research Paper Format
                                     </a>

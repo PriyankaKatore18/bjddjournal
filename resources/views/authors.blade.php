@@ -519,12 +519,8 @@
                 </div>
                 <div class="modal-body">
                     <p>Click the button below to download the paper format template:</p>
-                    <a href="https://docs.google.com/document/d/1Z8bpXSTGNcpDuV3F1wpgzWM5pLVHY1X0/export?format=docx" class="btn download-btn w-100" download="BJDD_Paper_Format.docx">
+                    <a href="{{ asset('documents/paper-format.docx') }}" class="btn download-btn w-100" download="BJDD_Paper_Format.docx">
                         <i class="fas fa-download me-2"></i>Download Word Template
-                    </a>
-                    <p class="mt-3">Or view the template online:</p>
-                    <a href="https://docs.google.com/document/d/1Z8bpXSTGNcpDuV3F1wpgzWM5pLVHY1X0/edit?usp=sharing&ouid=107421336101958810940&rtpof=true&sd=true" target="_blank" class="btn btn-outline-primary w-100">
-                        <i class="fas fa-eye me-2"></i>View Online
                     </a>
                 </div>
                 <div class="modal-footer">
