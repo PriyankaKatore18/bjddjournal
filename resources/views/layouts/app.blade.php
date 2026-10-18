@@ -8,7 +8,7 @@
     @stack('head')
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('public/assets/img/logo.jpg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.jpg') }}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -258,7 +258,7 @@
                             <!-- Logo -->
                             <div class="col-lg-2 col-md-2 text-center text-md-start">
 
-                                <img src="{{ asset('public/assets/img/logo.jpg') }}"
+                                <img src="{{ asset('assets/img/logo.jpg') }}"
                                     alt="BJDD Logo"
                                     class="header-logo">
 
@@ -435,7 +435,7 @@
                         <!-- Logo -->
                         <div class="col-lg-3 col-md-6">
 
-                            <img src="{{ asset('public/assets/img/bjdd logo.png') }}"
+                            <img src="{{ asset('assets/img/bjdd logo.png') }}"
                                 style="width:110px;margin-bottom:15px;">
 
                             <h5 style="font-weight:700;">
@@ -583,22 +583,22 @@
                         </h5>
 
                         <a href="https://www.facebook.com/profile.php?id=61581012112879" target="_blank">
-                            <img src="{{ asset('public/assets/img/face.webp') }}"
+                            <img src="{{ asset('assets/img/face.webp') }}"
                                 class="social-icon">
                         </a>
 
                         <a href="https://www.instagram.com/bjdd_journal/" target="_blank">
-                            <img src="{{ asset('public/assets/img/instagram.webp') }}"
+                            <img src="{{ asset('assets/img/instagram.webp') }}"
                                 class="social-icon">
                         </a>
 
                         <a href="https://whatsapp.com/channel/0029Vb6IASSDZ4LZurhPte04" target="_blank">
-                            <img src="{{ asset('public/assets/img/whats.png') }}"
+                            <img src="{{ asset('assets/img/whats.png') }}"
                                 class="social-icon">
                         </a>
 
                         <a href="https://chat.whatsapp.com/KBeW5fB7m8mIEgt23aCNb9" target="_blank">
-                            <img src="{{ asset('public/assets/img/community.png') }}"
+                            <img src="{{ asset('assets/img/community.png') }}"
                                 class="social-icon">
                         </a>
 

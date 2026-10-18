@@ -485,7 +485,7 @@
     <section class="about-bjdd-section">
         <div class="hero-banner">
 
-            <img src="{{ asset('storage/app/public/background-image.jpg') }}"
+            <img src="{{ asset('storage/background-image.jpg') }}"
                 class="hero-image">
 
             <div class="hero-overlay"></div>
@@ -855,7 +855,7 @@
                 <div style="margin-bottom:20px;">
 
                     @if($currentIssueRecord && $currentIssueRecord->cover_image)
-                    <img src="{{ asset('storage/app/public/' . ltrim($currentIssueRecord->cover_image, '/')) }}"
+                    <img src="{{ asset('storage/' . ltrim($currentIssueRecord->cover_image, '/')) }}"
                         alt="Current issue cover"
                         style="
                         width:100%;
@@ -864,7 +864,7 @@
                         border-radius:8px;
                     ">
                     @elseif($homeCover && $homeCover->value)
-                    <img src="{{ asset('storage/app/public/' . $homeCover->value) }}"
+                    <img src="{{ asset('storage/' . $homeCover->value) }}"
                         alt="Home Cover"
                         style="
                         width:100%;
@@ -873,7 +873,7 @@
                         border-radius:8px;
                     ">
                     @else
-                    <img src="{{ asset('storage/app/public/home-cover.png') }}"
+                    <img src="{{ asset('storage/home-cover.png') }}"
                         alt="Default Home Cover"
                         style="
                         width:100%;

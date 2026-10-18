@@ -36,7 +36,7 @@
         <tr>
           <td>
             @if($partner->icon)
-            <img src="{{ asset('storage/app/public/' . $partner->icon) }}"
+            <img src="{{ asset('storage/' . $partner->icon) }}"
               alt="Partner Icon"
               style="width:60px; height:60px; object-fit:contain; border-radius:6px;">
             @else

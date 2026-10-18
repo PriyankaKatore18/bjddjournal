@@ -95,14 +95,14 @@ class ArticleHelper
                 $cover = BusinessSetting::where('key', 'home_cover')->value('value');
 
                 if ($cover) {
-                    return self::$coverUrl = asset('storage/app/public/' . ltrim($cover, '/'));
+                    return self::$coverUrl = asset('storage/' . ltrim($cover, '/'));
                 }
             }
         } catch (\Throwable $exception) {
             // The existing logo remains a safe fallback when optional settings are unavailable.
         }
 
-        return self::$coverUrl = asset('public/assets/img/bjdd logo.png');
+        return self::$coverUrl = asset('assets/img/bjdd logo.png');
     }
 
     public static function issueCoverUrl(?string $coverImage): ?string
@@ -115,7 +115,7 @@ class ArticleHelper
             return $coverImage;
         }
 
-        return asset('storage/app/public/' . ltrim($coverImage, '/'));
+        return asset('storage/' . ltrim($coverImage, '/'));
     }
 
     /** @return array<int, string> */

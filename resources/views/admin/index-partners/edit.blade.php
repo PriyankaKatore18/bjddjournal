@@ -28,7 +28,7 @@
 
         @if($partner->icon)
         <div class="mb-2">
-          <img src="{{ asset('storage/app/public/' . $partner->icon) }}"
+          <img src="{{ asset('storage/' . $partner->icon) }}"
             alt="Partner Icon"
             style="width:80px; height:80px; object-fit:contain; border-radius:6px;">
         </div>

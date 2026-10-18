@@ -39,7 +39,7 @@
                 <br>
 
                 @if($blog->image)
-                <img src="{{ asset('storage/app/public/'.$blog->image) }}"
+                <img src="{{ asset('storage/'.$blog->image) }}"
                     width="150"
                     style="border-radius:10px;">
                 @endif

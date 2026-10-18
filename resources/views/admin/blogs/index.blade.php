@@ -40,7 +40,7 @@
 
                     <td>
                         @if($blog->image)
-                        <img src="{{ asset('storage/app/public/'.$blog->image) }}"
+                        <img src="{{ asset('storage/'.$blog->image) }}"
                             width="70"
                             height="70"
                             style="object-fit:cover;border-radius:8px;">

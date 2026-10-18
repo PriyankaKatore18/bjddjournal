@@ -282,7 +282,7 @@
             <article class="blog-card" style="--delay: {{ $loop->index * 80 }}ms;">
                 <a class="blog-thumb-link" href="{{ route('blogs.show', $blog) }}" aria-label="Read {{ $blog->display_title }}">
                     @if($blog->image)
-                        <img src="{{ asset('storage/app/public/'.$blog->image) }}" alt="{{ $blog->display_title }}">
+                        <img src="{{ asset('storage/'.$blog->image) }}" alt="{{ $blog->display_title }}">
                     @else
                         <span class="blog-thumb-placeholder">
                             <span>

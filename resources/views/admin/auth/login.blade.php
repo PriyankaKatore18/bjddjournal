@@ -68,7 +68,7 @@
     <div class="col-md-7 col-lg-6">
       <div class="card login-card">
         <div class="login-header">
-          <img src="{{ asset('public/assets/img/logo.jpg') }}" alt="BJDD Logo" class="img-fluid" style="height:120px; width:150px; object-fit:contain;">
+          <img src="{{ asset('assets/img/logo.jpg') }}" alt="BJDD Logo" class="img-fluid" style="height:120px; width:150px; object-fit:contain;">
           <h5 class="mb-0 fw-semibold">Admin Login</h5>
           <small class="text-light">BJJD Journal Panel</small>
         </div>

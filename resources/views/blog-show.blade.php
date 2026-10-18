@@ -236,7 +236,7 @@
         </header>
 
         @if($blog->image)
-            <img class="blog-featured-image" src="{{ asset('storage/app/public/'.$blog->image) }}" alt="{{ $blog->display_title }}">
+            <img class="blog-featured-image" src="{{ asset('storage/'.$blog->image) }}" alt="{{ $blog->display_title }}">
         @endif
 
         <div class="blog-article-body">

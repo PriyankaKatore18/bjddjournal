@@ -73,7 +73,7 @@
           </td>
           <td>
             @if($issue->cover_image)
-              <img src="{{ asset('storage/app/public/' . ltrim($issue->cover_image, '/')) }}"
+              <img src="{{ asset('storage/' . ltrim($issue->cover_image, '/')) }}"
                    alt="Issue cover"
                    style="width:42px; height:54px; object-fit:contain; border:1px solid #dce5df; border-radius:3px; padding:2px; background:#fbfdfb;">
             @else

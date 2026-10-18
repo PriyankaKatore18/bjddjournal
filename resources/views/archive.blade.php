@@ -352,7 +352,7 @@
             <div class="partner-list">
                 @forelse($partners as $partner)
                     <a href="{{ $partner->url }}" target="_blank" rel="noopener" aria-label="{{ $partner->name ?? 'Indexing partner' }}">
-                        <img src="{{ asset('storage/app/public/' . $partner->icon) }}" alt="{{ $partner->name ?? 'Indexing partner' }}">
+                        <img src="{{ asset('storage/' . $partner->icon) }}" alt="{{ $partner->name ?? 'Indexing partner' }}">
                     </a>
                 @empty
                     <span class="text-muted small">No partners listed.</span>

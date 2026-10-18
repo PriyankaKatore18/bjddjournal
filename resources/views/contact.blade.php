@@ -420,7 +420,7 @@
         <div class="box">
             <p>Plagiarism is checked by the leading plagiarism checker</p>
 
-             <img src="{{ asset('public/assets/img/plag.png') }}" alt="issn Logo">
+             <img src="{{ asset('assets/img/plag.png') }}" alt="issn Logo">
         </div>
 
         <div class="box call-for-paper">
@@ -617,12 +617,12 @@
     <div class="right-sidebar">
         {{-- <div class="box issn-box">
 
-             <img src="{{ asset('public/assets/img/issn.png') }}" alt="ISSN">
+             <img src="{{ asset('assets/img/issn.png') }}" alt="ISSN">
         </div> --}}
 
         <div class="box doi-box">
 
-            <img src="{{ asset('public/assets/img/doi.png') }}" alt="doi">
+            <img src="{{ asset('assets/img/doi.png') }}" alt="doi">
             <p>DOI is assigned to each research paper published in our journal.</p>
             
         </div>
@@ -638,7 +638,7 @@
         
         <div class="box license-box">
             <p>All research papers published on this website are licensed under <a href="#">Creative Commons Attribution-ShareAlike 4.0 International License</a>, and all rights belong to their respective authors/researchers.</p>
-             {{-- <img src="{{ asset('public/assets/img/issn.png') }}" alt="BJDD Logo"> --}}
+             {{-- <img src="{{ asset('assets/img/issn.png') }}" alt="BJDD Logo"> --}}
         </div>
 
     </div> -->

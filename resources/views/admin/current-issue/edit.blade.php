@@ -79,7 +79,7 @@
                                     <div class="form-text">For archive covers, use Admin &rarr; Archive and upload one cover for each Volume/Issue.</div>
 
                                     <!-- <div class="mt-2">
-                                        <img src="{{ asset('storage/app/public/home-cover.png') }}"
+                                        <img src="{{ asset('storage/home-cover.png') }}"
                                             alt="Current Home Cover"
                                             style="width:150px; height:auto; border-radius:8px;">
                                     </div> -->

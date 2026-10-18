@@ -132,7 +132,7 @@
         <small class="text-muted">Upload a cover for this Volume/Issue. Maximum 5MB.</small>
         @if($issue->cover_image)
           <div class="mt-2 d-flex align-items-start gap-3">
-            <img src="{{ asset('storage/app/public/' . ltrim($issue->cover_image, '/')) }}"
+                                        <img src="{{ asset('storage/' . ltrim($issue->cover_image, '/')) }}"
                  alt="Current issue cover"
                  style="width:110px; height:145px; object-fit:contain; border:1px solid #dce5df; border-radius:4px; padding:4px; background:#fbfdfb;">
             <div>
