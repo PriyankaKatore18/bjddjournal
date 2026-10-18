@@ -13,7 +13,7 @@
     .policy-card summary::after { content: '+'; color: #f59e0b; font-size: 1.5rem; line-height: 1; }
     .policy-card[open] summary { background: #e0f2fe; color: #0f172a; }
     .policy-card[open] summary::after { content: '−'; }
-    .policy-content { padding: 0 26px 22px; color: #4b5563; line-height: 1.7; font-size: .95rem; }
+    .policy-page .policy-content { display: block !important; padding: 0 26px 22px; color: #4b5563; line-height: 1.7; font-size: .95rem; }
     .policy-content p { margin: 16px 0 0; }
     .policy-content h3 { margin: 20px 0 6px; color: #1e3a8a; font-size: 1rem; }
     .policy-content ul { margin: 10px 0 0 20px; padding: 0; }
