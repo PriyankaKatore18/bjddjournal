@@ -222,6 +222,9 @@
                     <a href="#" class="fw-bold" data-bs-toggle="modal" data-bs-target="#paperFormatModal">
                         <i class="fas fa-download me-2"></i>Paper Format (Word File Link)
                     </a>
+                    <a href="{{ asset('documents/copyright-licence-to-publish-agreement.pdf') }}" target="_blank" rel="noopener">
+                        <i class="fas fa-file-pdf me-2"></i>Copyright Form
+                    </a>
                     <a href="{{ route('submit.paper') }}">
                         <i class="fas fa-paper-plane me-2"></i>Submit Paper
                     </a>
