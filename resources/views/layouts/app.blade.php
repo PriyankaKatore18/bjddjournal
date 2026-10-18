@@ -541,7 +541,9 @@
                                 </li>
 
                                 <li>
-                                    <a href="#"
+                                    <a href="{{ asset('documents/copyright-licence-to-publish-agreement.pdf') }}"
+                                        target="_blank"
+                                        rel="noopener"
                                         class="text-decoration-none text-light">
                                         Copyright Form
                                     </a>
