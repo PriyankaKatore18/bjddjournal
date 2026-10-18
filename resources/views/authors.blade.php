@@ -236,30 +236,6 @@
                     </a>
                 </div>
                 
-                <div class="card">
-                    <div class="card-header">Quick Facts</div>
-                    <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Review Time
-                                <span class="badge bg-primary rounded-pill">1-2 Days</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Publication Time
-                                <span class="badge bg-primary rounded-pill">1-2 Days</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Indian Authors Fee
-                                <span class="badge bg-secondary rounded-pill">₹900 INR</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                International Authors Fee
-                                <span class="badge bg-secondary rounded-pill">$14 USD</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
                 <div class="card mt-4">
                     <div class="card-header">Contact Information</div>
                     <div class="card-body">
