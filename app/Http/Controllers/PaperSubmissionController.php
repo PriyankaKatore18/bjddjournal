@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\PaperSubmissionAcknowledgement;
 use App\Models\PaperSubmission;
+use App\Models\SpecialIssue;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,17 +30,46 @@ class PaperSubmissionController extends Controller
     // ---------- FRONTEND ----------
     public function showForm()
     {
+        return $this->renderSubmissionForm();
+    }
+
+    public function showSpecialIssueForm(SpecialIssue $specialIssue)
+    {
+        $this->ensureSpecialIssueAcceptingSubmissions($specialIssue);
+
+        return $this->renderSubmissionForm($specialIssue);
+    }
+
+    private function renderSubmissionForm(?SpecialIssue $specialIssue = null)
+    {
         $firstNumber = random_int(1, 10);
         $secondNumber = random_int(1, 10);
         session(['paper_verification_answer' => (string) ($firstNumber + $secondNumber)]);
 
         return view('submit-paper', [
             'verificationQuestion' => $firstNumber.' + '.$secondNumber.' =',
+            'specialIssue' => $specialIssue,
         ]);
     }
 
     public function submitForm(Request $request)
     {
+        return $this->processSubmission($request);
+    }
+
+    public function submitSpecialIssueForm(Request $request, SpecialIssue $specialIssue)
+    {
+        $this->ensureSpecialIssueAcceptingSubmissions($specialIssue);
+
+        return $this->processSubmission($request, $specialIssue);
+    }
+
+    private function processSubmission(Request $request, ?SpecialIssue $specialIssue = null)
+    {
+        $submissionRoute = $specialIssue
+            ? route('special-issues.submit-paper', $specialIssue)
+            : route('submit.paper');
+
         $validator = Validator::make($request->all(), [
             'submission_token' => ['required', 'uuid'],
             'previous_paper_id' => ['nullable', 'string', 'max:100'],
@@ -102,7 +132,7 @@ class PaperSubmissionController extends Controller
         $existingSubmission = PaperSubmission::where('submission_token', $submissionToken)->first();
 
         if ($existingSubmission) {
-            return redirect()->route('submit.paper')
+            return redirect($submissionRoute)
                 ->with('success', 'This manuscript has already been submitted.')
                 ->with('paper_id', $existingSubmission->paper_id)
                 ->with('email_sent', (bool) $existingSubmission->email_sent_at);
@@ -120,9 +150,10 @@ class PaperSubmissionController extends Controller
                 $storedFiles['ai_report_path'] = $request->file('ai_report')->store('submissions/reports', 'public');
             }
 
-            $submission = DB::transaction(function () use ($request, $submissionToken, $storedFiles) {
+            $submission = DB::transaction(function () use ($request, $submissionToken, $storedFiles, $specialIssue) {
                 $submission = new PaperSubmission();
                 $submission->fill([
+                    'special_issue_id' => $specialIssue?->id,
                     'previous_paper_id' => $request->input('previous_paper_id'),
                     'title' => $request->input('title'),
                     'file_path' => $storedFiles['file_path'],
@@ -162,7 +193,7 @@ class PaperSubmissionController extends Controller
             $existingSubmission = PaperSubmission::where('submission_token', $submissionToken)->first();
 
             if ($existingSubmission) {
-                return redirect()->route('submit.paper')
+                return redirect($submissionRoute)
                     ->with('success', 'This manuscript has already been submitted.')
                     ->with('paper_id', $existingSubmission->paper_id)
                     ->with('email_sent', (bool) $existingSubmission->email_sent_at);
@@ -181,16 +212,24 @@ class PaperSubmissionController extends Controller
         session()->forget('paper_verification_answer');
         $emailSent = $this->sendAcknowledgement($submission);
 
-        return redirect()->route('submit.paper')
+        return redirect($submissionRoute)
             ->with('success', 'Your manuscript has been submitted successfully.')
             ->with('paper_id', $submission->paper_id)
             ->with('email_sent', $emailSent);
     }
 
+    private function ensureSpecialIssueAcceptingSubmissions(SpecialIssue $specialIssue): void
+    {
+        abort_unless(
+            in_array($specialIssue->status, ['publication_in_progress', 'published'], true),
+            404
+        );
+    }
+
     // ---------- ADMIN ----------
     public function index()
     {
-        $submissions = PaperSubmission::latest('submitted_at')->latest()->paginate(10);
+        $submissions = PaperSubmission::with('specialIssue')->latest('submitted_at')->latest()->paginate(10);
 
         return view('admin.submissions.index', compact('submissions'));
     }

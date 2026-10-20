@@ -38,6 +38,8 @@ Route::get('/authors', function () {
 Route::get('/current-issue', [CurrentIssueController::class, 'index'])->name('current-issue');
 
 Route::get('/special-issues', [FrontendSpecialIssueController::class, 'index'])->name('special-issues.index');
+Route::get('/special-issues/{specialIssue}/submit-paper', [PaperSubmissionController::class, 'showSpecialIssueForm'])->name('special-issues.submit-paper');
+Route::post('/special-issues/{specialIssue}/submit-paper', [PaperSubmissionController::class, 'submitSpecialIssueForm'])->name('special-issues.submit-paper.submit');
 Route::get('/special-issues/{specialIssue}', [FrontendSpecialIssueController::class, 'show'])->name('special-issues.show');
 Route::get('/special-issues/{specialIssue}/download-cover', [FrontendSpecialIssueController::class, 'downloadCover'])->name('special-issues.download-cover');
 Route::get('/special-issues/{specialIssue}/download-index', [FrontendSpecialIssueController::class, 'downloadIndex'])->name('special-issues.download-index');

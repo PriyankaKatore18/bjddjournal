@@ -32,7 +32,7 @@
                     <th>Conference</th>
                     <th>Date</th>
                     <th>Status</th>
-                    <th>Articles</th>
+                    <th>Submissions / Articles</th>
                     <th class="text-end">Action</th>
                 </tr>
             </thead>
@@ -57,7 +57,7 @@
                         <td>{{ $specialIssue->type }}</td>
                         <td>{{ $specialIssue->conference_date?->format('d M Y') ?: '—' }}</td>
                         <td><span class="badge {{ $statusClass }} text-capitalize">{{ $statusLabel }}</span></td>
-                        <td>{{ $specialIssue->published_articles_count }} published / {{ $specialIssue->articles_count }} total</td>
+                        <td>{{ $specialIssue->submissions_count }} received<br><span class="text-muted">{{ $specialIssue->published_articles_count }} published / {{ $specialIssue->articles_count }} total</span></td>
                         <td class="text-end text-nowrap">
                             <a href="{{ route('admin.special-issues.show', $specialIssue) }}" class="btn btn-sm btn-primary">Manage</a>
                             <a href="{{ route('admin.special-issues.edit', $specialIssue) }}" class="btn btn-sm btn-outline-primary">Edit</a>

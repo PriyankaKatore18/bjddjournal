@@ -67,7 +67,12 @@
                 <tr>
                     
                     <td style="word-wrap: break-word;"><strong>{{ $submission->paper_id ?: 'N/A' }}</strong></td>
-                    <td style="word-wrap: break-word;">{{ $submission->title }}</td>
+                    <td style="word-wrap: break-word;">
+                        {{ $submission->title }}
+                        @if($submission->specialIssue)
+                            <div class="small text-info mt-1">Special Issue: {{ $submission->specialIssue->title }}</div>
+                        @endif
+                    </td>
                     <td style="word-wrap: break-word;">{{ $submission->research_area }}</td>
                     <td style="word-wrap: break-word;">{{ $submission->author_main_name }}</td>
                     <td style="word-wrap: break-word;">{{ $submission->author_main_email }}</td>

@@ -433,7 +433,17 @@
 </style>
 
 <div class="container my-5">
-    <h1 class="text-center page-header">Submit Research Paper</h1>
+    @if($specialIssue)
+        <div class="text-center mb-4">
+            <div class="text-uppercase small fw-bold text-muted" style="letter-spacing:.08em;">Special Issue Submission</div>
+            <h1 class="page-header mb-2">{{ $specialIssue->title }}</h1>
+            @if($specialIssue->subtitle)
+                <p class="text-muted mb-0">{{ $specialIssue->subtitle }}</p>
+            @endif
+        </div>
+    @else
+        <h1 class="text-center page-header">Submit Research Paper</h1>
+    @endif
 
     <!-- Success / Error Messages -->
     <div id="message-container">
@@ -505,7 +515,7 @@
 
     <!-- Form -->
     <div class="step-container">
-        <form id="paper-submission-form" action="{{ route('submit.paper.submit') }}" method="POST" enctype="multipart/form-data">
+        <form id="paper-submission-form" action="{{ $specialIssue ? route('special-issues.submit-paper.submit', $specialIssue) : route('submit.paper.submit') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="submission_token" value="{{ old('submission_token', (string) \Illuminate\Support\Str::uuid()) }}">
 

@@ -405,6 +405,7 @@
                 <a class="{{ $specialIssue->cover_pdf_path ? '' : 'disabled' }}" href="{{ $specialIssue->cover_pdf_path ? route('special-issues.download-cover', $specialIssue) : '#' }}" @if(!$specialIssue->cover_pdf_path) aria-disabled="true" title="Cover PDF not uploaded" @endif>Download Cover (PDF)</a>
                 <a class="{{ $specialIssue->index_pdf_path ? '' : 'disabled' }}" href="{{ $specialIssue->index_pdf_path ? route('special-issues.download-index', $specialIssue) : '#' }}" @if(!$specialIssue->index_pdf_path) aria-disabled="true" title="Index PDF not uploaded" @endif>Download Index (PDF)</a>
                 <a class="{{ $specialIssue->full_issue_pdf_path ? '' : 'disabled' }}" href="{{ $specialIssue->full_issue_pdf_path ? route('special-issues.download-full-issue', $specialIssue) : '#' }}" @if(!$specialIssue->full_issue_pdf_path) aria-disabled="true" title="Full Issue PDF not uploaded" @endif>Download Full Issue (PDF)</a>
+                <a href="{{ route('special-issues.submit-paper', $specialIssue) }}">Submit Paper to this Issue</a>
             </div>
         </div>
     </section>

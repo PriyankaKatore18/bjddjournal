@@ -36,6 +36,11 @@ class SpecialIssue extends Model
         return $this->hasMany(SpecialIssueArticle::class);
     }
 
+    public function submissions()
+    {
+        return $this->hasMany(PaperSubmission::class);
+    }
+
     public function publishedArticles()
     {
         return $this->articles()->where('status', 'published');

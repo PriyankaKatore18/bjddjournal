@@ -14,6 +14,9 @@
         @if(in_array($specialIssue->status, ['publication_in_progress', 'published'], true) || $specialIssue->published_articles_count > 0)
             <a href="{{ route('special-issues.show', $specialIssue) }}" target="_blank" class="btn btn-outline-primary"><i class="bi bi-box-arrow-up-right me-1"></i> View Frontend</a>
         @endif
+        @if(in_array($specialIssue->status, ['publication_in_progress', 'published'], true))
+            <a href="{{ route('special-issues.submit-paper', $specialIssue) }}" target="_blank" class="btn btn-outline-success"><i class="bi bi-file-earmark-text me-1"></i> Submission Form</a>
+        @endif
         <a href="{{ route('admin.special-issues.editorial-details.edit', $specialIssue) }}" class="btn btn-outline-primary"><i class="bi bi-people me-1"></i> Editorial Details</a>
         <a href="{{ route('admin.special-issues.index') }}" class="btn btn-outline-secondary">Back</a>
     </div>
@@ -25,6 +28,36 @@
 @endif
 
 @include('admin.special-issues._form', ['specialIssue' => $specialIssue])
+
+<div class="card border-0 shadow-sm mt-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <div>
+            <h5 class="mb-1" style="color:#00004d;">Received Submissions</h5>
+            <div class="small text-muted">Papers submitted through this Special Issue's submission form.</div>
+        </div>
+        <span class="badge bg-info text-dark">{{ $specialIssue->submissions_count }} received</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light"><tr><th>Paper ID</th><th>Title</th><th>Author</th><th>Submitted</th><th>Status</th><th class="text-end">Action</th></tr></thead>
+            <tbody>
+                @forelse($submissions as $submission)
+                    <tr>
+                        <td class="fw-semibold">{{ $submission->paper_id ?: 'N/A' }}</td>
+                        <td>{{ $submission->title }}</td>
+                        <td>{{ $submission->author_main_name }}</td>
+                        <td>{{ optional($submission->submitted_at ?: $submission->created_at)->format('d M Y') }}</td>
+                        <td><span class="badge bg-secondary text-capitalize">{{ str_replace('_', ' ', $submission->status) }}</span></td>
+                        <td class="text-end"><a href="{{ route('admin.submissions.edit', $submission) }}" class="btn btn-sm btn-outline-primary">Review</a></td>
+                    </tr>
+                @empty
+                    <tr><td colspan="6" class="text-center text-muted py-4">No submissions received for this issue yet.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    @if($submissions->hasPages())<div class="card-footer bg-white">{{ $submissions->withQueryString()->links() }}</div>@endif
+</div>
 
 <div class="card border-0 shadow-sm mt-4">
     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">

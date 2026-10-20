@@ -11,7 +11,7 @@ class SpecialIssueController extends Controller
 {
     public function index()
     {
-        $specialIssues = SpecialIssue::withCount(['articles', 'publishedArticles'])
+        $specialIssues = SpecialIssue::withCount(['articles', 'publishedArticles', 'submissions'])
             ->latest()
             ->paginate(10);
 
@@ -48,10 +48,11 @@ class SpecialIssueController extends Controller
 
     public function show(SpecialIssue $specialIssue)
     {
-        $specialIssue->loadCount(['articles', 'publishedArticles']);
+        $specialIssue->loadCount(['articles', 'publishedArticles', 'submissions']);
         $articles = $specialIssue->articles()->latest()->paginate(10);
+        $submissions = $specialIssue->submissions()->latest('submitted_at')->paginate(10, ['*'], 'submissions_page');
 
-        return view('admin.special-issues.manage', compact('specialIssue', 'articles'));
+        return view('admin.special-issues.manage', compact('specialIssue', 'articles', 'submissions'));
     }
 
     public function edit(SpecialIssue $specialIssue)

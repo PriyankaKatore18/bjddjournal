@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Mail\PaperSubmissionAcknowledgement;
 use App\Models\PaperSubmission;
+use App\Models\SpecialIssue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
@@ -110,6 +111,30 @@ class PaperSubmissionTest extends TestCase
         $submission = PaperSubmission::firstOrFail();
         $this->assertNull($submission->plagiarism_report_path);
         $this->assertNull($submission->ai_report_path);
+    }
+
+    public function test_submission_can_be_received_for_a_special_issue(): void
+    {
+        Storage::fake('public');
+        Mail::fake();
+
+        $specialIssue = SpecialIssue::create([
+            'special_issue_id' => 'BJDD-SI-2026-001',
+            'type' => 'Special Issue',
+            'title' => 'AI and Emerging Technologies',
+            'status' => 'publication_in_progress',
+        ]);
+
+        $token = (string) Str::uuid();
+        $this->withSession(['paper_verification_answer' => '11'])
+            ->post(route('special-issues.submit-paper.submit', $specialIssue), $this->validSubmission($token))
+            ->assertRedirect(route('special-issues.submit-paper', $specialIssue))
+            ->assertSessionHas('paper_id');
+
+        $this->assertDatabaseHas('paper_submissions', [
+            'submission_token' => $token,
+            'special_issue_id' => $specialIssue->id,
+        ]);
     }
 
     private function validSubmission(string $token): array

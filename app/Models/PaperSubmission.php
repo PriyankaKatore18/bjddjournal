@@ -10,6 +10,7 @@ class PaperSubmission extends Model
     use HasFactory;
 
     protected $fillable = [
+        'special_issue_id',
         'paper_id',
         'previous_paper_id',
         'title',
@@ -56,5 +57,10 @@ class PaperSubmission extends Model
     public function getFileUrlAttribute()
     {
         return $this->file_path ? asset('storage/' . $this->file_path) : null;
+    }
+
+    public function specialIssue()
+    {
+        return $this->belongsTo(SpecialIssue::class);
     }
 }
