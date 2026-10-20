@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Mail\PaperSubmissionAcknowledgement;
+use App\Mail\SpecialIssueSubmissionScreening;
 use App\Models\PaperSubmission;
 use App\Models\SpecialIssue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -135,7 +136,12 @@ class PaperSubmissionTest extends TestCase
             'paper_id' => 'BJDD-'.now()->format('Y').'-SI1-00101',
             'submission_token' => $token,
             'special_issue_id' => $specialIssue->id,
+            'status' => 'editorial_screening',
         ]);
+
+        Mail::assertSent(SpecialIssueSubmissionScreening::class, function ($mail) use ($specialIssue) {
+            return $mail->submission->special_issue_id === $specialIssue->id;
+        });
 
     }
 

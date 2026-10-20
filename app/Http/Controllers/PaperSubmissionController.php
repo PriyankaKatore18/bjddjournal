@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\PaperSubmissionAcknowledgement;
+use App\Mail\SpecialIssueSubmissionScreening;
 use App\Models\PaperSubmission;
 use App\Models\SpecialIssue;
 use Illuminate\Database\QueryException;
@@ -178,7 +179,7 @@ class PaperSubmissionController extends Controller
                     'journal_policies' => true,
                     'final_confirmation' => true,
                     'submission_token' => $submissionToken,
-                    'status' => 'submitted',
+                    'status' => $specialIssue ? 'editorial_screening' : 'submitted',
                     'submitted_at' => now(),
                 ]);
                 $submission->save();
@@ -465,7 +466,11 @@ class PaperSubmissionController extends Controller
     private function sendAcknowledgement(PaperSubmission $submission): bool
     {
         try {
-            Mail::to($submission->author_main_email)->send(new PaperSubmissionAcknowledgement($submission));
+            $mail = $submission->special_issue_id
+                ? new SpecialIssueSubmissionScreening($submission->loadMissing('specialIssue'))
+                : new PaperSubmissionAcknowledgement($submission);
+
+            Mail::to($submission->author_main_email)->send($mail);
             $submission->forceFill([
                 'email_sent_at' => now(),
                 'email_error' => null,
