@@ -14,8 +14,10 @@
         @if(in_array($specialIssue->status, ['publication_in_progress', 'published'], true) || $specialIssue->published_articles_count > 0)
             <a href="{{ route('special-issues.show', $specialIssue) }}" target="_blank" class="btn btn-outline-primary"><i class="bi bi-box-arrow-up-right me-1"></i> View Frontend</a>
         @endif
-        @if(in_array($specialIssue->status, ['publication_in_progress', 'published'], true))
+        @if($specialIssue->acceptsSubmissions())
             <a href="{{ route('special-issues.submit-paper', $specialIssue) }}" target="_blank" class="btn btn-outline-success"><i class="bi bi-file-earmark-text me-1"></i> Submission Form</a>
+        @else
+            <span class="btn btn-outline-secondary disabled" title="Submission form is inactive or past its deadline"><i class="bi bi-file-earmark-x me-1"></i> Form Closed</span>
         @endif
         <a href="{{ route('admin.special-issues.editorial-details.edit', $specialIssue) }}" class="btn btn-outline-primary"><i class="bi bi-people me-1"></i> Editorial Details</a>
         <a href="{{ route('admin.special-issues.index') }}" class="btn btn-outline-secondary">Back</a>

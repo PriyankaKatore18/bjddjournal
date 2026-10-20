@@ -34,6 +34,19 @@
                 @endforeach
             </select>
         </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Submission Form</label>
+            <select name="submission_open" class="form-select">
+                <option value="1" @selected((string) old('submission_open', $issue?->submission_open ?? true) === '1')>Active</option>
+                <option value="0" @selected((string) old('submission_open', $issue?->submission_open ?? true) === '0')>Inactive</option>
+            </select>
+            <div class="form-text">Set Inactive to close submissions manually.</div>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Submission Deadline</label>
+            <input type="date" name="submission_deadline" class="form-control" value="{{ old('submission_deadline', $issue?->submission_deadline?->format('Y-m-d')) }}">
+            <div class="form-text">The form closes automatically after this date.</div>
+        </div>
         <div class="col-12">
             <label class="form-label fw-semibold">Subtitle</label>
             <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $issue?->subtitle) }}">

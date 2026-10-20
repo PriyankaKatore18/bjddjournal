@@ -116,7 +116,7 @@ class SpecialIssueController extends Controller
 
     private function validatedData(Request $request, ?SpecialIssue $specialIssue = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'special_issue_id' => 'required|string|max:100|unique:special_issues,special_issue_id,' . ($specialIssue?->id ?? 'NULL'),
             'type' => 'required|string|max:100',
             'title' => 'required|string|max:255',
@@ -126,6 +126,8 @@ class SpecialIssueController extends Controller
             'conference_date' => 'nullable|date',
             'mode' => 'nullable|string|max:100',
             'status' => 'required|in:draft,publication_in_progress,published,archived',
+            'submission_open' => 'nullable|boolean',
+            'submission_deadline' => 'nullable|date',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'cover_pdf' => 'nullable|file|mimes:pdf|max:20480',
             'index_pdf' => 'nullable|file|mimes:pdf|max:20480',
@@ -133,5 +135,11 @@ class SpecialIssueController extends Controller
             'about_conference' => 'nullable|string',
             'editorial_details' => 'nullable|string',
         ]);
+
+        $data['submission_open'] = $request->has('submission_open')
+            ? $request->boolean('submission_open')
+            : true;
+
+        return $data;
     }
 }

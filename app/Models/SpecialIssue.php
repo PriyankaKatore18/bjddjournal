@@ -19,6 +19,8 @@ class SpecialIssue extends Model
         'conference_date',
         'mode',
         'status',
+        'submission_open',
+        'submission_deadline',
         'cover_image',
         'cover_pdf_path',
         'index_pdf_path',
@@ -29,7 +31,16 @@ class SpecialIssue extends Model
 
     protected $casts = [
         'conference_date' => 'date',
+        'submission_open' => 'boolean',
+        'submission_deadline' => 'date',
     ];
+
+    public function acceptsSubmissions(): bool
+    {
+        return in_array($this->status, ['publication_in_progress', 'published'], true)
+            && $this->submission_open
+            && (! $this->submission_deadline || today()->lte($this->submission_deadline));
+    }
 
     public function articles()
     {

@@ -139,6 +139,28 @@ class PaperSubmissionTest extends TestCase
 
     }
 
+    public function test_special_issue_submission_form_closes_when_inactive_or_past_deadline(): void
+    {
+        $specialIssue = SpecialIssue::create([
+            'special_issue_id' => 'SI2',
+            'type' => 'Special Issue',
+            'title' => 'Closed Special Issue',
+            'status' => 'publication_in_progress',
+            'submission_open' => false,
+        ]);
+
+        $this->get(route('special-issues.submit-paper', $specialIssue))
+            ->assertNotFound();
+
+        $specialIssue->update([
+            'submission_open' => true,
+            'submission_deadline' => now()->subDay()->toDateString(),
+        ]);
+
+        $this->get(route('special-issues.submit-paper', $specialIssue))
+            ->assertNotFound();
+    }
+
     private function validSubmission(string $token): array
     {
         return [

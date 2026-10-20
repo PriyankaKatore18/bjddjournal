@@ -220,10 +220,7 @@ class PaperSubmissionController extends Controller
 
     private function ensureSpecialIssueAcceptingSubmissions(SpecialIssue $specialIssue): void
     {
-        abort_unless(
-            in_array($specialIssue->status, ['publication_in_progress', 'published'], true),
-            404
-        );
+        abort_unless($specialIssue->acceptsSubmissions(), 404);
     }
 
     private function generatePaperId(PaperSubmission $submission, ?SpecialIssue $specialIssue = null): string
