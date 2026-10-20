@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\PaperSubmissionAcknowledgement;
 use App\Mail\SpecialIssueSubmissionScreening;
+use App\Mail\SpecialIssueStatusUpdate;
 use App\Models\PaperSubmission;
 use App\Models\SpecialIssue;
 use Illuminate\Database\QueryException;
@@ -277,6 +278,8 @@ class PaperSubmissionController extends Controller
 
     public function update(Request $request, PaperSubmission $submission)
     {
+        $previousStatus = $submission->status;
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'previous_paper_id' => ['nullable', 'string', 'max:100'],
@@ -301,6 +304,10 @@ class PaperSubmissionController extends Controller
             'plagiarism_report' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'ai_report' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'status' => ['required', 'in:'.implode(',', array_keys(self::STATUSES))],
+            'editorial_remarks' => ['nullable', 'string', 'max:10000'],
+            'publication_fee' => ['nullable', 'numeric', 'min:0'],
+            'payment_link' => ['nullable', 'url', 'max:2048'],
+            'article_url' => ['nullable', 'url', 'max:2048'],
         ]);
 
         $data = collect($validated)->except(['file', 'plagiarism_report', 'ai_report'])->all();
@@ -336,7 +343,18 @@ class PaperSubmissionController extends Controller
 
             $submission->update($data);
 
-            return redirect()->route('admin.submissions.index')->with('success', 'Submission updated successfully.');
+            $statusEmailSent = true;
+
+            if ($submission->special_issue_id && $previousStatus !== $submission->status) {
+                $statusEmailSent = $this->sendStatusUpdateEmail($submission->fresh());
+            }
+
+            return redirect()->route('admin.submissions.index')->with(
+                'success',
+                $statusEmailSent
+                    ? 'Submission updated successfully.'
+                    : 'Submission updated, but the status email could not be sent. Check the mail settings and logs.'
+            );
         } catch (\Throwable $exception) {
             $this->deleteStoredFiles($storedFiles);
             Log::error('Admin submission update failed', ['exception' => $exception]);
@@ -489,6 +507,30 @@ class PaperSubmissionController extends Controller
                 'mailer' => config('mail.default'),
                 'mail_host' => config('mail.mailers.smtp.host'),
                 'mail_port' => config('mail.mailers.smtp.port'),
+                'exception' => $exception,
+            ]);
+
+            return false;
+        }
+    }
+
+    private function sendStatusUpdateEmail(PaperSubmission $submission): bool
+    {
+        if (! array_key_exists($submission->status, SpecialIssueStatusUpdate::subjects())) {
+            return true;
+        }
+
+        try {
+            Mail::to($submission->author_main_email)->send(
+                new SpecialIssueStatusUpdate($submission->loadMissing('specialIssue'))
+            );
+
+            return true;
+        } catch (\Throwable $exception) {
+            Log::error('Special issue status email failed', [
+                'submission_id' => $submission->id,
+                'paper_id' => $submission->paper_id,
+                'status' => $submission->status,
                 'exception' => $exception,
             ]);
 

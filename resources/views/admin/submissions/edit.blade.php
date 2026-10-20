@@ -90,6 +90,27 @@
                required>
       </div>
 
+      <div class="mb-3 p-3 rounded" style="background:#f7f9fc;border:1px solid #dfe5ef;">
+        <label class="form-label fw-semibold">Status Email Details</label>
+        <div class="small text-muted mb-3">These fields are used in the email sent when the status changes.</div>
+        <label class="form-label">Editorial Remarks</label>
+        <textarea name="editorial_remarks" class="form-control mb-3" rows="4" placeholder="Required corrections or editorial decision remarks">{{ old('editorial_remarks', $submission->editorial_remarks) }}</textarea>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Publication Fee</label>
+            <input type="number" name="publication_fee" class="form-control" min="0" step="0.01" value="{{ old('publication_fee', $submission->publication_fee) }}">
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Payment Link</label>
+            <input type="url" name="payment_link" class="form-control" value="{{ old('payment_link', $submission->payment_link) }}" placeholder="https://...">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Published Article URL</label>
+            <input type="url" name="article_url" class="form-control" value="{{ old('article_url', $submission->article_url) }}" placeholder="https://bjddjournal.org/article/...">
+          </div>
+        </div>
+      </div>
+
       {{-- Address --}}
       <div class="mb-3">
         <label class="form-label fw-semibold">Address Line 1</label>

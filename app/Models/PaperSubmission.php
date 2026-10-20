@@ -37,6 +37,10 @@ class PaperSubmission extends Model
         'final_confirmation',
         'submission_token',
         'status',
+        'editorial_remarks',
+        'publication_fee',
+        'payment_link',
+        'article_url',
         'submitted_at',
         'email_sent_at',
         'email_error',
@@ -51,6 +55,7 @@ class PaperSubmission extends Model
         'final_confirmation' => 'boolean',
         'submitted_at' => 'datetime',
         'email_sent_at' => 'datetime',
+        'publication_fee' => 'decimal:2',
     ];
 
     // Add accessor for file URL
