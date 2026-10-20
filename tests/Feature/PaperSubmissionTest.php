@@ -132,9 +132,11 @@ class PaperSubmissionTest extends TestCase
             ->assertSessionHas('paper_id');
 
         $this->assertDatabaseHas('paper_submissions', [
+            'paper_id' => 'BJDD-'.now()->format('Y').'-SI1-00101',
             'submission_token' => $token,
             'special_issue_id' => $specialIssue->id,
         ]);
+
     }
 
     private function validSubmission(string $token): array

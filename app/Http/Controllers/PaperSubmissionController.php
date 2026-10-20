@@ -183,7 +183,7 @@ class PaperSubmissionController extends Controller
                 ]);
                 $submission->save();
 
-                $submission->paper_id = 'BJDD-'.now()->format('Y').'-'.str_pad((string) $submission->id, 5, '0', STR_PAD_LEFT);
+                $submission->paper_id = $this->generatePaperId($submission, $specialIssue);
                 $submission->save();
 
                 return $submission;
@@ -224,6 +224,36 @@ class PaperSubmissionController extends Controller
             in_array($specialIssue->status, ['publication_in_progress', 'published'], true),
             404
         );
+    }
+
+    private function generatePaperId(PaperSubmission $submission, ?SpecialIssue $specialIssue = null): string
+    {
+        if (! $specialIssue) {
+            return 'BJDD-'.now()->format('Y').'-'.str_pad((string) $submission->id, 5, '0', STR_PAD_LEFT);
+        }
+
+        $issueCode = strtoupper(trim((string) $specialIssue->special_issue_id));
+
+        if (preg_match('/\b(SI\d+)\b/i', $issueCode, $matches)) {
+            $issueCode = strtoupper($matches[1]);
+        } elseif (preg_match('/(\d+)$/', $issueCode, $matches)) {
+            $issueCode = 'SI'.$matches[1];
+        } else {
+            $issueCode = 'SI'.$specialIssue->id;
+        }
+
+        $lastSequence = $specialIssue->submissions()
+            ->pluck('paper_id')
+            ->map(function ($paperId) use ($issueCode) {
+                if (preg_match('/^BJDD-\d+-'.preg_quote($issueCode, '/').'-(\d{5})$/i', (string) $paperId, $matches)) {
+                    return (int) $matches[1];
+                }
+
+                return 100;
+            })
+            ->max();
+
+        return 'BJDD-'.now()->format('Y').'-'.$issueCode.'-'.str_pad((string) max(101, $lastSequence + 1), 5, '0', STR_PAD_LEFT);
     }
 
     // ---------- ADMIN ----------
