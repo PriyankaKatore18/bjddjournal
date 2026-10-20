@@ -6,6 +6,16 @@
 
     <h4 class="mb-4 text-center" style="color:#00004d; font-weight:600;">Edit Submission</h4>
 
+    @if($submission->specialIssue)
+      <div class="alert alert-info border-0 shadow-sm mb-4">
+        <div class="small text-uppercase fw-semibold">Submitted under Special Issue</div>
+        <a href="{{ route('admin.special-issues.show', $submission->specialIssue) }}" class="fw-semibold text-decoration-none">
+          {{ $submission->specialIssue->title }}
+        </a>
+        <div class="small text-muted">{{ $submission->specialIssue->special_issue_id }}</div>
+      </div>
+    @endif
+
     @if ($errors->any())
       <div class="alert alert-danger mb-4">
         <ul class="mb-0">
