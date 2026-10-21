@@ -11,7 +11,7 @@ Greetings from the BODHIVRUKSHA JOURNAL OF DIVERSE DISCIPLINE (BJDD).
 MANUSCRIPT DETAILS
 Manuscript ID: {{ $submission->paper_id }}
 Title: {{ $submission->title }}
-Special Issue: {{ $specialIssue?->title ?: 'Special Issue' }}
+{{ $specialIssue ? 'Special Issue' : 'Submission Type' }}: {{ $specialIssue?->title ?: 'Regular Journal Submission' }}
 Current Status: {{ $statusLabel }}
 Status Date: {{ $statusDate }}
 

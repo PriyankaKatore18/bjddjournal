@@ -27,7 +27,7 @@
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border:1px solid #dce5e1;border-radius:6px;overflow:hidden;">
 <tr><td width="42%" style="padding:11px 14px;background:#f0f7f4;border-bottom:1px solid #dce5e1;"><strong>Manuscript ID</strong></td><td style="padding:11px 14px;border-bottom:1px solid #dce5e1;">{{ $submission->paper_id }}</td></tr>
 <tr><td style="padding:11px 14px;background:#f0f7f4;border-bottom:1px solid #dce5e1;"><strong>Title</strong></td><td style="padding:11px 14px;border-bottom:1px solid #dce5e1;">{{ $submission->title }}</td></tr>
-<tr><td style="padding:11px 14px;background:#f0f7f4;border-bottom:1px solid #dce5e1;"><strong>Special Issue</strong></td><td style="padding:11px 14px;border-bottom:1px solid #dce5e1;">{{ $specialIssue?->title ?: 'Special Issue' }}</td></tr>
+<tr><td style="padding:11px 14px;background:#f0f7f4;border-bottom:1px solid #dce5e1;"><strong>{{ $specialIssue ? 'Special Issue' : 'Submission Type' }}</strong></td><td style="padding:11px 14px;border-bottom:1px solid #dce5e1;">{{ $specialIssue?->title ?: 'Regular Journal Submission' }}</td></tr>
 <tr><td style="padding:11px 14px;background:#f0f7f4;border-bottom:1px solid #dce5e1;"><strong>Current Status</strong></td><td style="padding:11px 14px;border-bottom:1px solid #dce5e1;">{{ $statusLabel }}</td></tr>
 <tr><td style="padding:11px 14px;background:#f0f7f4;"><strong>Status Date</strong></td><td style="padding:11px 14px;">{{ $statusDate }}</td></tr>
 </table>

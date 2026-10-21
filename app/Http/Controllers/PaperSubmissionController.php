@@ -345,7 +345,8 @@ class PaperSubmissionController extends Controller
 
             $statusEmailSent = true;
 
-            if ($submission->special_issue_id && $previousStatus !== $submission->status) {
+            // Send the selected status template for both regular and Special Issue submissions.
+            if ($previousStatus !== $submission->status) {
                 $statusEmailSent = $this->sendStatusUpdateEmail($submission->fresh());
             }
 
@@ -527,7 +528,7 @@ class PaperSubmissionController extends Controller
 
             return true;
         } catch (\Throwable $exception) {
-            Log::error('Special issue status email failed', [
+            Log::error('Submission status email failed', [
                 'submission_id' => $submission->id,
                 'paper_id' => $submission->paper_id,
                 'status' => $submission->status,
