@@ -22,10 +22,11 @@
 <div class="card border-0 shadow-sm">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
-            <thead style="background:#00004d;color:#fff;"><tr><th>Paper ID</th><th>Article Title</th><th>Author</th><th>Pages</th><th>Status</th><th class="text-end">Action</th></tr></thead>
+            <thead style="background:#00004d;color:#fff;"><tr><th>Order</th><th>Paper ID</th><th>Article Title</th><th>Author</th><th>Pages</th><th>Status</th><th class="text-end">Action</th></tr></thead>
             <tbody>
                 @forelse($articles as $article)
                     <tr>
+                        <td class="fw-semibold">{{ $article->display_order }}</td>
                         <td class="fw-semibold">{{ $article->paper_id }}</td>
                         <td>{{ $article->article_title }}</td>
                         <td>{{ $article->main_author }}</td>
@@ -41,7 +42,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="text-center text-muted py-5">No articles have been added for this special issue.</td></tr>
+                    <tr><td colspan="7" class="text-center text-muted py-5">No articles have been added for this special issue.</td></tr>
                 @endforelse
             </tbody>
         </table>

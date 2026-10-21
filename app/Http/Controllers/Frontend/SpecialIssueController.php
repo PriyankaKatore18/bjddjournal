@@ -31,7 +31,7 @@ class SpecialIssueController extends Controller
         abort_unless($isVisible, 404);
         $specialIssue->load('editors');
 
-        $articles = $specialIssue->publishedArticles()->latest('published_date')->latest()->paginate(12);
+        $articles = $specialIssue->publishedArticles()->paginate(12);
 
         return view('special-issues.show', compact('specialIssue', 'articles'));
     }

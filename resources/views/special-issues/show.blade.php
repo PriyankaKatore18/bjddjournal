@@ -453,7 +453,7 @@
 
     @forelse($articles as $article)
         @php
-            $articleNumber = (($articles->currentPage() - 1) * $articles->perPage()) + $loop->iteration;
+            $articleNumber = $article->display_order ?: (($articles->currentPage() - 1) * $articles->perPage()) + $loop->iteration;
             $keywords = preg_split('/[,;]+/', (string) $article->keywords, -1, PREG_SPLIT_NO_EMPTY);
             $pdfExists = $article->final_pdf_path && Storage::disk('public')->exists($article->final_pdf_path);
             $certificateExists = $article->certificate_path && Storage::disk('public')->exists($article->certificate_path);

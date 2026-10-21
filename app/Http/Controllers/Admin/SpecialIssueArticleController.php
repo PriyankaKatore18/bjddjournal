@@ -13,14 +13,19 @@ class SpecialIssueArticleController extends Controller
 {
     public function index(SpecialIssue $specialIssue)
     {
-        $articles = $specialIssue->articles()->latest()->paginate(10);
+        $articles = $specialIssue->articles()
+            ->orderBy('display_order')
+            ->orderBy('id')
+            ->paginate(10);
 
         return view('admin.special-issues.articles.index', compact('specialIssue', 'articles'));
     }
 
     public function create(SpecialIssue $specialIssue)
     {
-        return view('admin.special-issues.articles.create', compact('specialIssue'));
+        $nextDisplayOrder = ((int) $specialIssue->articles()->max('display_order')) + 1;
+
+        return view('admin.special-issues.articles.create', compact('specialIssue', 'nextDisplayOrder'));
     }
 
     public function store(Request $request, SpecialIssue $specialIssue)
@@ -110,6 +115,7 @@ class SpecialIssueArticleController extends Controller
     {
         return $request->validate([
             'paper_id' => 'required|string|max:120|unique:special_issue_articles,paper_id,' . ($article?->id ?? 'NULL'),
+            'display_order' => 'required|integer|min:1|max:9999',
             'article_title' => 'required|string|max:255',
             'article_type' => 'required|string|max:100',
             'language' => 'required|string|max:100',

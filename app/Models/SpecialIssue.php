@@ -54,7 +54,10 @@ class SpecialIssue extends Model
 
     public function publishedArticles()
     {
-        return $this->articles()->where('status', 'published');
+        return $this->articles()
+            ->where('status', 'published')
+            ->orderBy('display_order')
+            ->orderBy('id');
     }
 
     public function editors()

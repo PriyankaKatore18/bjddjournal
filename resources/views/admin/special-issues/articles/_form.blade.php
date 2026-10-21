@@ -19,10 +19,16 @@
             <label class="form-label fw-semibold">Special Issue</label>
             <input type="text" class="form-control" value="{{ $specialIssue->title }}" disabled>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label class="form-label fw-semibold">Paper ID <span class="text-danger">*</span></label>
             <input type="text" name="paper_id" class="form-control" value="{{ old('paper_id', $record?->paper_id) }}" required>
             @error('paper_id')<div class="text-danger small">{{ $message }}</div>@enderror
+        </div>
+        <div class="col-md-2">
+            <label class="form-label fw-semibold">Display Order <span class="text-danger">*</span></label>
+            <input type="number" name="display_order" class="form-control" min="1" max="9999" value="{{ old('display_order', $record?->display_order ?? ($nextDisplayOrder ?? 1)) }}" required>
+            <div class="form-text">1 = first article</div>
+            @error('display_order')<div class="text-danger small">{{ $message }}</div>@enderror
         </div>
         <div class="col-12">
             <label class="form-label fw-semibold">Article Title <span class="text-danger">*</span></label>

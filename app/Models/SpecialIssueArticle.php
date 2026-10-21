@@ -29,11 +29,13 @@ class SpecialIssueArticle extends Model
         'abstract',
         'keywords',
         'status',
+        'display_order',
         'download_count',
     ];
 
     protected $casts = [
         'published_date' => 'date',
+        'display_order' => 'integer',
     ];
 
     public function specialIssue()
