@@ -241,6 +241,9 @@
           @endif
         @else
           <div class="text-muted small">No status update email sent yet.</div>
+          @if(array_key_exists($submission->status, \App\Mail\SpecialIssueStatusUpdate::subjects()))
+            <button type="submit" formmethod="POST" formaction="{{ route('admin.submissions.retry-status-email', $submission) }}" class="btn btn-outline-primary btn-sm mt-2">Send Status Email</button>
+          @endif
         @endif
       </div>
 
