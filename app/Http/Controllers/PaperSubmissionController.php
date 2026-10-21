@@ -526,17 +526,46 @@ class PaperSubmissionController extends Controller
                 new SpecialIssueStatusUpdate($submission->loadMissing('specialIssue'))
             );
 
+            $submission->forceFill([
+                'status_email_sent_at' => now(),
+                'status_email_error' => null,
+            ])->save();
+
             return true;
         } catch (\Throwable $exception) {
+            $errorMessage = $this->mailErrorMessage($exception);
+
+            $submission->forceFill([
+                'status_email_error' => $errorMessage,
+            ])->save();
+
             Log::error('Submission status email failed', [
                 'submission_id' => $submission->id,
                 'paper_id' => $submission->paper_id,
                 'status' => $submission->status,
+                'recipient' => $submission->author_main_email,
+                'error' => $errorMessage,
                 'exception' => $exception,
             ]);
 
             return false;
         }
+    }
+
+    public function retryStatusEmail(PaperSubmission $submission)
+    {
+        $sent = $this->sendStatusUpdateEmail($submission->fresh());
+
+        if (! $sent) {
+            $submission->refresh();
+        }
+
+        return redirect()->back()->with(
+            $sent ? 'success' : 'error',
+            $sent
+                ? 'Status email sent successfully.'
+                : ($submission->status_email_error ?: 'Status email could not be sent. Check the mail settings and logs.')
+        );
     }
 
     private function mailErrorMessage(\Throwable $exception): string

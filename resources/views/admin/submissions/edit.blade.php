@@ -227,6 +227,23 @@
         @endif
       </div>
 
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Status Update Email</label>
+        @if($submission->status_email_sent_at)
+          <div class="text-success small">Sent on {{ $submission->status_email_sent_at->format('d M Y, h:i A') }}</div>
+        @elseif($submission->status_email_error)
+          <div class="alert alert-danger py-2 small mb-2">
+            <strong>Status email failed.</strong>
+            <div class="mt-1" style="overflow-wrap:anywhere;">{{ $submission->status_email_error }}</div>
+          </div>
+          @if(array_key_exists($submission->status, \App\Mail\SpecialIssueStatusUpdate::subjects()))
+            <button type="submit" formmethod="POST" formaction="{{ route('admin.submissions.retry-status-email', $submission) }}" class="btn btn-outline-primary btn-sm">Retry Status Email</button>
+          @endif
+        @else
+          <div class="text-muted small">No status update email sent yet.</div>
+        @endif
+      </div>
+
       {{-- Status --}}
       <div class="mb-3">
         <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>

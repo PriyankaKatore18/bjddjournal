@@ -44,6 +44,8 @@ class PaperSubmission extends Model
         'submitted_at',
         'email_sent_at',
         'email_error',
+        'status_email_sent_at',
+        'status_email_error',
     ];
 
     protected $casts = [
@@ -55,6 +57,7 @@ class PaperSubmission extends Model
         'final_confirmation' => 'boolean',
         'submitted_at' => 'datetime',
         'email_sent_at' => 'datetime',
+        'status_email_sent_at' => 'datetime',
         'publication_fee' => 'decimal:2',
     ];
 
