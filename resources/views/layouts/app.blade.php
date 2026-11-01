@@ -224,6 +224,84 @@
         .btn-blink {
             animation: blink 1.5s infinite;
         }
+
+        .indexing-partners-footer {
+            background: #f4f8f5;
+            border-top: 1px solid #dce5df;
+            border-bottom: 1px solid #dce5df;
+            color: #17221c;
+        }
+
+        .indexing-partners-footer h2 {
+            color: #06452d;
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin: 0 0 5px;
+            text-align: center;
+        }
+
+        .indexing-partners-footer-intro,
+        .indexing-partners-footer-empty {
+            color: #59665f;
+            font-size: .95rem;
+            margin: 0 0 18px;
+            text-align: center;
+        }
+
+        .indexing-partners-footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+            align-items: stretch;
+        }
+
+        .indexing-partner-logo-card {
+            align-items: center;
+            background: #fff;
+            border: 1px solid #dce5df;
+            border-radius: 7px;
+            display: flex;
+            justify-content: center;
+            min-height: 86px;
+            padding: 10px;
+            text-decoration: none;
+            transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+        }
+
+        .indexing-partner-logo-card:hover {
+            border-color: #c47d18;
+            box-shadow: 0 4px 12px rgba(6, 69, 45, .12);
+            transform: translateY(-2px);
+        }
+
+        .indexing-partner-logo-card img {
+            display: block;
+            height: 64px;
+            max-width: 100%;
+            object-fit: contain;
+            width: 100%;
+        }
+
+        .indexing-partner-logo-card span {
+            color: #183c2d;
+            font-size: .9rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        @media (max-width: 576px) {
+            .indexing-partners-footer-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .indexing-partner-logo-card {
+                min-height: 78px;
+            }
+
+            .indexing-partner-logo-card img {
+                height: 58px;
+            }
+        }
     </style>
 </head>
 
@@ -427,6 +505,8 @@
                 @yield('content')
             </div>
             <footer style="background:#1f2937;color:#fff;margin-top:50px;">
+
+                @include('partials.indexing-partners')
 
                 <div class="container py-3">
 

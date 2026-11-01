@@ -72,12 +72,12 @@
 
     .archive-sidebar .partner-list img {
         width: 100%;
-        height: 38px;
+        height: 64px;
         object-fit: contain;
         box-sizing: border-box;
         border: 1px solid #dce5df;
         border-radius: 4px;
-        padding: 4px;
+        padding: 6px;
     }
 
     .archive-heading {
