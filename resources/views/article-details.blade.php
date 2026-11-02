@@ -529,6 +529,7 @@
 @section('content')
 @php
     use App\Support\ArticleHelper;
+    $canonicalArticleUrl = route('article.details', ['publicationKey' => $articleKey]);
     $doiUrl = ArticleHelper::doiUrl($publication->crossref_doi);
     $keywords = preg_split('/[,;]+/', (string) $publication->keywords, -1, PREG_SPLIT_NO_EMPTY);
     $pdfExists = $publication->paper_pdf && Storage::disk('public')->exists($publication->paper_pdf);

@@ -75,6 +75,7 @@
 @section('content')
 @php
     use App\Support\ArticleHelper;
+    $specialArticleUrl = route('special-issues.articles.show', [$specialIssue, $article]);
     $doiUrl = ArticleHelper::doiUrl($article->doi);
     $keywords = preg_split('/[,;]+/', (string) $article->keywords, -1, PREG_SPLIT_NO_EMPTY);
     $pdfExists = $article->final_pdf_path && Storage::disk('public')->exists($article->final_pdf_path);
