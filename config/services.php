@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'google' => [
+        'analytics_id' => env('GOOGLE_ANALYTICS_ID', 'G-14G9P78631'),
+        'site_verification' => env('GOOGLE_SITE_VERIFICATION'),
+    ],
+
 ];
