@@ -2,15 +2,6 @@
 
 @section('title', $article->article_title . ' | BJDD Journal')
 
-@push('head')
-@php
-    $specialArticleUrl = route('special-issues.articles.show', [$specialIssue, $article]);
-    $articleDescription = \Illuminate\Support\Str::limit(strip_tags((string) $article->abstract), 155);
-@endphp
-<link rel="canonical" href="{{ $specialArticleUrl }}">
-<meta name="description" content="{{ $articleDescription ?: $article->article_title }}">
-@endpush
-
 @push('styles')
 <style>
     .article-page { max-width: 1220px; margin: 0 auto; padding: 28px 18px 52px; color: #17221c; }

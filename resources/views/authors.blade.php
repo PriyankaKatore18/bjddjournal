@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authors - BJDD Journal</title>
+    <title>Authors | BJDD Journal</title>
+    <meta name="description" content="Author guidelines, paper format, submission information, publication charges and copyright resources for BJDD Journal contributors.">
+    <meta name="keywords" content="BJDD author guidelines, research paper submission, academic paper format, journal publication, paper submission guidelines">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="{{ route('authors') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>

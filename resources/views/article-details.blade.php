@@ -2,15 +2,6 @@
 
 @section('title', $publication->paper_title . ' | BJDD Journal')
 
-@push('head')
-@php
-    $canonicalArticleUrl = route('article.details', ['publicationKey' => $articleKey]);
-    $articleDescription = \Illuminate\Support\Str::limit(strip_tags((string) $publication->abstract), 155);
-@endphp
-<link rel="canonical" href="{{ $canonicalArticleUrl }}">
-<meta name="description" content="{{ $articleDescription ?: $publication->paper_title }}">
-@endpush
-
 @push('styles')
 <style>
     .article-page {

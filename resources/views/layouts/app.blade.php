@@ -2,9 +2,186 @@
 <html lang="en">
 
 <head>
+    @php
+        $currentRoute = request()->route()?->getName();
+        $seoDefaults = [
+            'home' => [
+                'title' => 'BJDD Journal | Peer-Reviewed Multidisciplinary Research Journal',
+                'description' => 'Bodhivruksha Journal of Diverse Discipline (BJDD) is an open-access, peer-reviewed multidisciplinary research journal for original academic research.',
+                'keywords' => 'Bodhivruksha Journal, BJDD Journal, multidisciplinary research journal, peer-reviewed journal, open access journal, academic research',
+            ],
+            'authors' => [
+                'title' => 'Authors | BJDD Journal',
+                'description' => 'Author guidelines, paper format, submission information, publication charges and copyright resources for BJDD Journal contributors.',
+                'keywords' => 'BJDD author guidelines, research paper submission, academic paper format, journal publication, paper submission guidelines',
+            ],
+            'current-issue' => [
+                'title' => 'Current Issue | BJDD Journal',
+                'description' => 'Read the latest published research articles from the Bodhivruksha Journal of Diverse Discipline current issue.',
+                'keywords' => 'BJDD current issue, latest research articles, multidisciplinary journal issue, published research papers',
+            ],
+            'archive' => [
+                'title' => 'Publication Archive | BJDD Journal',
+                'description' => 'Browse the BJDD Journal publication archive by year, volume, issue, title, author and DOI.',
+                'keywords' => 'BJDD publication archive, research paper archive, journal volumes, journal issues, academic articles',
+            ],
+            'archive.issue' => [
+                'title' => 'Published Issue | BJDD Journal',
+                'description' => 'Explore published research articles and issue information from the BJDD Journal publication archive.',
+                'keywords' => 'BJDD journal issue, published research articles, multidisciplinary research papers, journal archive',
+            ],
+            'article.details' => [
+                'title' => 'Research Article | BJDD Journal',
+                'description' => 'Read a peer-reviewed open-access research article published by the Bodhivruksha Journal of Diverse Discipline.',
+                'keywords' => 'BJDD research article, peer-reviewed article, open access research, multidisciplinary academic paper',
+            ],
+            'special-issues.index' => [
+                'title' => 'Special Issues & Conferences | BJDD Journal',
+                'description' => 'Discover BJDD special issues, conference publications and thematic collections of multidisciplinary research.',
+                'keywords' => 'BJDD special issue, academic conference publication, multidisciplinary research conference, thematic research collection',
+            ],
+            'special-issues.show' => [
+                'title' => 'Special Issue | BJDD Journal',
+                'description' => 'Explore a BJDD Journal special issue and its published conference-associated research articles.',
+                'keywords' => 'BJDD special issue articles, conference research papers, published academic research, thematic journal issue',
+            ],
+            'special-issues.articles.show' => [
+                'title' => 'Special Issue Research Article | BJDD Journal',
+                'description' => 'Read an open-access research article published in a BJDD Journal special issue.',
+                'keywords' => 'special issue research article, BJDD conference paper, open access academic article, peer-reviewed research',
+            ],
+            'editors-reviewers' => [
+                'title' => 'Editorial Board | BJDD Journal',
+                'description' => 'Meet the editors and reviewers of the Bodhivruksha Journal of Diverse Discipline.',
+                'keywords' => 'BJDD editorial board, journal editors, academic reviewers, peer review team, research journal',
+            ],
+            'contact' => [
+                'title' => 'Contact BJDD Journal',
+                'description' => 'Contact the BJDD Journal editorial team for submissions, publication enquiries, peer review and academic research support.',
+                'keywords' => 'contact BJDD Journal, journal editorial office, research paper enquiry, publication support',
+            ],
+            'about-journal' => [
+                'title' => 'About BJDD Journal | Bodhivruksha Journal of Diverse Discipline',
+                'description' => 'Learn about BJDD Journal, its multidisciplinary scope, open-access model, peer-review process and academic publishing mission.',
+                'keywords' => 'about BJDD Journal, Bodhivruksha Journal, multidisciplinary journal scope, open access peer review',
+            ],
+            'call-for-papers' => [
+                'title' => 'Call for Papers | BJDD Journal',
+                'description' => 'Submit original research, review papers and multidisciplinary academic studies to the BJDD Journal call for papers.',
+                'keywords' => 'BJDD call for papers, submit research paper, academic publication call, multidisciplinary journal submission',
+            ],
+            'policy' => [
+                'title' => 'Publication Policies | BJDD Journal',
+                'description' => 'Read BJDD Journal publication ethics, peer review, copyright, privacy, open access and research integrity policies.',
+                'keywords' => 'BJDD publication policy, journal ethics, peer review policy, copyright policy, research integrity',
+            ],
+            'faq' => [
+                'title' => 'Frequently Asked Questions | BJDD Journal',
+                'description' => 'Find answers about BJDD Journal submissions, peer review, publication, ISSN, DOI, fees and author services.',
+                'keywords' => 'BJDD Journal FAQ, paper submission questions, publication fees, peer review FAQ, DOI ISSN journal',
+            ],
+            'blogs' => [
+                'title' => 'Academic Research Blogs | BJDD Journal',
+                'description' => 'Read academic publishing, research and multidisciplinary scholarship insights from the BJDD Journal blog.',
+                'keywords' => 'BJDD academic blog, research publishing blog, scholarly communication, multidisciplinary research insights',
+            ],
+            'blogs.show' => [
+                'title' => 'Research Blog | BJDD Journal',
+                'description' => 'Read research and academic publishing insights from the Bodhivruksha Journal of Diverse Discipline blog.',
+                'keywords' => 'BJDD research blog, academic publishing insights, scholarly research article, journal blog',
+            ],
+            'submit.paper' => [
+                'title' => 'Submit a Research Paper | BJDD Journal',
+                'description' => 'Submit your original research paper to BJDD Journal, an open-access peer-reviewed multidisciplinary academic journal.',
+                'keywords' => 'submit research paper, BJDD paper submission, open access journal submission, multidisciplinary journal authors',
+            ],
+        ];
+
+        $seoPage = $seoDefaults[$currentRoute] ?? [
+            'title' => 'BODHIVRUKSHA JOURNAL OF DIVERSE DISCIPLINE (BJDD)',
+            'description' => 'BODHIVRUKSHA JOURNAL OF DIVERSE DISCIPLINE is an open-access, peer-reviewed multidisciplinary research journal published by Eagle Leap Publication.',
+            'keywords' => 'Bodhivruksha Journal, BJDD, academic research journal, peer-reviewed open access journal',
+        ];
+
+        $seoTitle = trim($__env->yieldContent('title')) ?: $seoPage['title'];
+        $seoDescription = trim($__env->yieldContent('meta_description')) ?: $seoPage['description'];
+        $seoKeywords = trim($__env->yieldContent('meta_keywords')) ?: $seoPage['keywords'];
+        $seoCanonical = trim($__env->yieldContent('canonical_url')) ?: url()->current();
+        $seoType = trim($__env->yieldContent('og_type')) ?: (in_array($currentRoute, ['article.details', 'special-issues.articles.show', 'blogs.show'], true) ? 'article' : 'website');
+        $seoImage = asset('assets/img/logo.jpg');
+
+        if ($currentRoute === 'article.details' && isset($publication)) {
+            $seoDescription = \Illuminate\Support\Str::limit(strip_tags((string) $publication->abstract), 155) ?: $seoDescription;
+            $seoKeywords = trim((string) $publication->keywords) ?: $seoKeywords;
+        }
+
+        if ($currentRoute === 'blogs.show' && isset($blog)) {
+            $seoDescription = \Illuminate\Support\Str::limit(strip_tags((string) ($blog->excerpt ?: $blog->content)), 155) ?: $seoDescription;
+        }
+
+        if ($currentRoute === 'special-issues.show' && isset($specialIssue)) {
+            $seoDescription = \Illuminate\Support\Str::limit(strip_tags((string) ($specialIssue->subtitle ?: $specialIssue->about_conference)), 155) ?: $seoDescription;
+        }
+
+        if ($currentRoute === 'special-issues.articles.show' && isset($article)) {
+            $seoDescription = \Illuminate\Support\Str::limit(strip_tags((string) $article->abstract), 155) ?: $seoDescription;
+            $seoKeywords = trim((string) $article->keywords) ?: $seoKeywords;
+        }
+
+        $seoStructuredData = [
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'Periodical',
+                    '@id' => url('/') . '#journal',
+                    'name' => 'BODHIVRUKSHA JOURNAL OF DIVERSE DISCIPLINE',
+                    'url' => url('/'),
+                    'issn' => ['3139-1486', '3139-9819'],
+                    'publisher' => [
+                        '@type' => 'Organization',
+                        'name' => 'Eagle Leap Publication',
+                    ],
+                ],
+                [
+                    '@type' => 'WebSite',
+                    '@id' => url('/') . '#website',
+                    'url' => url('/'),
+                    'name' => 'BJDD Journal',
+                    'publisher' => ['@id' => url('/') . '#organization'],
+                ],
+                [
+                    '@type' => 'Organization',
+                    '@id' => url('/') . '#organization',
+                    'name' => 'Eagle Leap Publication',
+                    'url' => url('/'),
+                    'logo' => $seoImage,
+                ],
+            ],
+        ];
+    @endphp
+
     @stack('styles')
     <meta charset="UTF-8">
-    <title>@yield('title', 'BJDD - Journal')</title>
+    <title>{{ $seoTitle }}</title>
+    <meta name="description" content="{{ $seoDescription }}">
+    <meta name="keywords" content="{{ $seoKeywords }}">
+    <meta name="author" content="BODHIVRUKSHA JOURNAL OF DIVERSE DISCIPLINE">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="{{ $seoCanonical }}">
+
+    <meta property="og:type" content="{{ $seoType }}">
+    <meta property="og:site_name" content="BJDD Journal">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDescription }}">
+    <meta property="og:url" content="{{ $seoCanonical }}">
+    <meta property="og:image" content="{{ $seoImage }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $seoTitle }}">
+    <meta name="twitter:description" content="{{ $seoDescription }}">
+    <meta name="twitter:image" content="{{ $seoImage }}">
+
+    <script type="application/ld+json">@json($seoStructuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
+
     @stack('head')
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

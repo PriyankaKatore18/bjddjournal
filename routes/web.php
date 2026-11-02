@@ -21,9 +21,13 @@ use App\Http\Controllers\Admin\SpecialIssueArticleController as AdminSpecialIssu
 use App\Http\Controllers\Admin\SpecialIssueEditorController as AdminSpecialIssueEditorController;
 use App\Http\Controllers\Frontend\SpecialIssueController as FrontendSpecialIssueController;
 use App\Models\JournalTeamMember;
+use App\Models\Publication;
+use App\Models\SpecialIssue;
+use App\Support\ArticleHelper;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Schema;
 
 // ---------------- Front-end routes ----------------
 Route::get('/', function () {
@@ -33,6 +37,66 @@ Route::get('/', function () {
 Route::get('/authors', function () {
     return view('authors');
 })->name('authors');
+
+Route::get('/sitemap.xml', function () {
+    $urls = collect([
+        ['loc' => route('home'), 'changefreq' => 'weekly', 'priority' => '1.0'],
+        ['loc' => route('about-journal'), 'changefreq' => 'monthly', 'priority' => '0.8'],
+        ['loc' => route('current-issue'), 'changefreq' => 'weekly', 'priority' => '0.9'],
+        ['loc' => route('archive'), 'changefreq' => 'weekly', 'priority' => '0.8'],
+        ['loc' => route('special-issues.index'), 'changefreq' => 'weekly', 'priority' => '0.8'],
+        ['loc' => route('call-for-papers'), 'changefreq' => 'monthly', 'priority' => '0.8'],
+        ['loc' => route('submit.paper'), 'changefreq' => 'monthly', 'priority' => '0.8'],
+        ['loc' => route('authors'), 'changefreq' => 'monthly', 'priority' => '0.7'],
+        ['loc' => route('editors-reviewers'), 'changefreq' => 'monthly', 'priority' => '0.6'],
+        ['loc' => route('blogs'), 'changefreq' => 'weekly', 'priority' => '0.7'],
+        ['loc' => route('contact'), 'changefreq' => 'monthly', 'priority' => '0.5'],
+        ['loc' => route('faq'), 'changefreq' => 'monthly', 'priority' => '0.5'],
+        ['loc' => route('policy'), 'changefreq' => 'yearly', 'priority' => '0.4'],
+    ]);
+
+    if (Schema::hasTable('publications')) {
+        Publication::query()->get()->each(function (Publication $publication) use ($urls): void {
+            $urls->push([
+                'loc' => route('article.details', ['publicationKey' => ArticleHelper::routeKey($publication)]),
+                'lastmod' => $publication->updated_at?->toAtomString(),
+                'changefreq' => 'monthly',
+                'priority' => '0.7',
+            ]);
+        });
+    }
+
+    if (Schema::hasTable('special_issues')) {
+        SpecialIssue::query()
+            ->whereIn('status', ['publication_in_progress', 'published'])
+            ->with(['articles' => fn ($query) => $query->where('status', 'published')])
+            ->get()
+            ->each(function (SpecialIssue $specialIssue) use ($urls): void {
+                $urls->push([
+                    'loc' => route('special-issues.show', ['specialIssue' => $specialIssue]),
+                    'lastmod' => $specialIssue->updated_at?->toAtomString(),
+                    'changefreq' => 'monthly',
+                    'priority' => '0.7',
+                ]);
+
+                foreach ($specialIssue->articles as $article) {
+                    $urls->push([
+                        'loc' => route('special-issues.articles.show', [
+                            'specialIssue' => $specialIssue,
+                            'article' => $article,
+                        ]),
+                        'lastmod' => $article->updated_at?->toAtomString(),
+                        'changefreq' => 'monthly',
+                        'priority' => '0.6',
+                    ]);
+                }
+            });
+    }
+
+    return Response::view('sitemap', compact('urls'), 200, [
+        'Content-Type' => 'application/xml; charset=UTF-8',
+    ]);
+})->name('sitemap');
 
 
 Route::get('/current-issue', [CurrentIssueController::class, 'index'])->name('current-issue');
